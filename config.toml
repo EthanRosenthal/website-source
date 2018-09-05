@@ -1,0 +1,47 @@
+title = "ethan rosenthal"
+baseURL = "http://ethanrosenthal.com"
+tags = ["data science", "machine learning"]
+languageCode = "en-US"
+config = "config.toml"
+theme = "osprey"
+canonifyURLS = true
+googleAnalytics = ""
+disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
+
+
+[Params]
+    tagline = "data, science, etc"
+    author = "Ethan Rosenthal"
+    description = ""
+    logoBig = "/images/profile_pic.jpg"
+    logoSmall = "/images/profile_pic.jpg"
+    favicon = "favicon.ico"
+    opengraphImage = "/images/profile_pic.jpg"
+    twitter = "eprosenthal"
+    linkedin = "ethanrosenthal"
+    github = "EthanRosenthal"
+    email = "ethan@ethanrosenthal.com"
+    googleTagManager = ""
+    highlightJS = true
+    copyright = true
+    credit = true
+    customCSS = false
+    cacheBustCSS = false
+    cacheBustJS = false
+    ajaxFormspree = false
+
+
+[[menu.main]]
+    name = "Data"
+    url  = "https://blog.ethanrosenthal.com"
+    weight = 1
+
+[[menu.main]]
+    name = "Physics"
+    url  = "https://physics.ethanrosenthal.com"
+    weight = 2
+
+[[menu.main]]
+    name = "About"
+    url  = "/#about"
+    weight = 3
