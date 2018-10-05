@@ -8,6 +8,8 @@ canonifyURLS = true
 googleAnalytics = ""
 disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
 
+[permalinks]
+    blog = "/:year/:month/:day/:slug/"
 
 [Params]
     tagline = "data, science, etc"
@@ -32,8 +34,8 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
 
 
 [[menu.main]]
-    name = "Data"
-    url  = "https://blog.ethanrosenthal.com"
+    name = "Blog"
+    url  = "/#blog"
     weight = 1
 
 [[menu.main]]
@@ -45,3 +47,4 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
     name = "About"
     url  = "/#about"
     weight = 3
+
