@@ -1,4 +1,4 @@
-title = "ethan rosenthal"
+title = "Ethan Rosenthal"
 baseURL = "https://ethanrosenthal.com"
 tags = ["data science", "machine learning"]
 languageCode = "en-US"
@@ -12,7 +12,8 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
     blog = "/:year/:month/:day/:slug/"
 
 [Params]
-    tagline = "data, science, etc"
+    headline = "Ethan Rosenthal, PhD"
+    subheadline = "Data Science Consulting"
     author = "Ethan Rosenthal"
     description = ""
     logoBig = "/images/profile_pic2.jpg"
@@ -34,17 +35,17 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
 
 
 [[menu.main]]
-    name = "Blog"
-    url  = "/#blog"
+    name = "Services"
+    url  = "/#services"
     weight = 1
-
-[[menu.main]]
-    name = "Physics"
-    url  = "https://physics.ethanrosenthal.com"
-    weight = 2
 
 [[menu.main]]
     name = "About"
     url  = "/#about"
+    weight = 2
+
+[[menu.main]]
+    name = "Blog"
+    url  = "/#blog"
     weight = 3
 

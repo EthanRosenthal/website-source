@@ -181,6 +181,48 @@ h1, h2, h3 {
 }
 .about {
   width: 100%;
+  background-color: #fff;
+  padding-bottom: $vertical-rhythm * 2;
+  p {
+    @include size(h3);
+    margin-top: $vertical-rhythm;
+  }
+  a {
+    text-shadow: 0.03em 0 #fff,
+    -0.03em 0 #fff,
+    0 0.03em #fff,
+    0 -0.03em #fff,
+    0.06em 0 #fff,
+    -0.06em 0 #fff,
+    0.09em 0 #fff,
+    -0.09em 0 #fff,
+    0.12em 0 #fff,
+    -0.12em 0 #fff,
+    0.15em 0 #fff,
+    -0.15em 0 #fff,
+    0.03em 0.075em #fff,
+    -0.03em 0.075em #fff,
+    0.06em 0.075em #fff,
+    -0.06em 0.075em #fff,
+    0.09em 0.075em #fff,
+    -0.09em 0.075em #fff,
+    0.12em 0.075em #fff,
+    -0.12em 0.075em #fff,
+    0.15em 0.075em #fff,
+    -0.15em 0.075em #fff;
+    background-image: linear-gradient($accent,$accent);
+    background-size: 2px 3px;
+    background-repeat: repeat-x;
+    background-position: 0 95%;
+    text-decoration: none;
+    &:hover {
+      color: $accent;
+    }
+  }
+}
+
+.services {
+  width: 100%;
   background-color: $smoke;
   padding-bottom: $vertical-rhythm * 2;
   p {
@@ -220,6 +262,7 @@ h1, h2, h3 {
     }
   }
 }
+
 .gallery {
   div[class^="col-"], div[class*=" col-"] {
     padding: 0;
@@ -259,6 +302,7 @@ h1, h2, h3 {
 }
 .blog {
   min-height: 100vh;
+  background-color: $smoke;
   h3 {
     margin: 0 0 $vertical-rhythm;
     font-family: $font-body;
