@@ -1,5 +1,5 @@
 title = "Ethan Rosenthal"
-baseURL = "https://ethanrosenthal.com"
+baseURL = "https://www.ethanrosenthal.com"
 tags = ["data science", "machine learning"]
 languageCode = "en-US"
 config = "config.toml"
