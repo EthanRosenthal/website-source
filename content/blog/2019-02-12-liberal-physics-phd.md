@@ -8,13 +8,13 @@ A recent Twitter [thread](https://twitter.com/QuantumHazzard/status/107902427461
 
 In summary, the thread was about the failure of physics PhD programs to provide adequate support for students who go on to non-research careers (i.e. a career which is not a post doctoral/research scientist position at a university, national laboratory, or physics-y company like IBM). I wholeheartedly agree that a failure exists, and I would like to use this post to explicate on my very subjective answers to the following questions: 
 
-- Why does this failure exists?
+- Why does this failure exist?
 - What is the point of a physics PhD program?
 - What can be done to improve things?
 
 _Full disclaimer: all of my (probably cynical) opinions here are from me generalizing about my own, specific experiences in grad school and from observations of my colleagues. I am sure that there are schools that do things better than Columbia, as well as schools that do things worse._
 
-## Why does this failure exists?
+## Why does this failure exist?
 
 While most students intend to pursue a research career on entering graduate school, [many](http://blogs.nature.com/naturejobs/2015/02/17/the-elephant-in-the-lab/) [do](https://www.nature.com/news/many-junior-scientists-need-to-take-a-hard-look-at-their-job-prospects-1.22879) [not](https://www.pnas.org/content/115/50/12616) [actually](https://www.nature.com/naturejobs/science/articles/10.1038/nj7508-256a) [end](https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0184130) up in such a career upon graduating. I would argue that one should avoid a physics PhD altogether if they do not initially intend to pursue a research career. Nevertheless, clearly many students change course during graduate school. The crux of the failure is that there is a fundamental misalignment of incentives between students pursuing research careers versus those who are not. The entire system is setup to incentive research careers thus performing a great disservice to all those who change course.
 
