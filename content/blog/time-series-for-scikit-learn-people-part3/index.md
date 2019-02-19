@@ -4,7 +4,6 @@ title: "Time Series for scikit-learn People (Part III): Horizon Optimization"
 slug: "time-series-for-scikit-learn-people-part3"
 hasMath: true
 notebook: true
-draft: true
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -633,12 +632,76 @@ dl_pipeline = ForecasterPipeline([
     ('post_feature_imputer', ReversibleImputer()),
     ('regressor', net)
 ])
-dl_pipeline = dl_pipeline.fit(X.astype(np.float32), 
-                              y.astype(np.float32), 
+dl_pipeline = dl_pipeline.fit(X[:train_size].astype(np.float32), 
+                              y[:train_size].astype(np.float32), 
                               end_idx=-5)
 ```
 
 {{% jupyter_input_end %}}
+
+      epoch    train_loss      dur
+    -------  ------------  -------
+          1        [36m0.8545[0m  39.0879
+          2        [36m0.4763[0m  39.1436
+          3        [36m0.4035[0m  39.1512
+          4        [36m0.2815[0m  39.1545
+          5        [36m0.2243[0m  39.1775
+          6        [36m0.1953[0m  39.1607
+          7        [36m0.1712[0m  39.1818
+          8        [36m0.1545[0m  39.1811
+          9        [36m0.1360[0m  39.1032
+         10        [36m0.1317[0m  39.1155
+         11        [36m0.1209[0m  39.1975
+         12        [36m0.1143[0m  39.1202
+         13        0.1148  39.1632
+         14        [36m0.1124[0m  39.1452
+         15        [36m0.1073[0m  39.7967
+         16        [36m0.1010[0m  39.3402
+         17        [36m0.0998[0m  39.2144
+         18        [36m0.0989[0m  39.1424
+         19        0.0990  39.1570
+         20        [36m0.0964[0m  39.1539
+         21        [36m0.0932[0m  39.1289
+         22        0.0954  39.1287
+         23        0.0937  39.1562
+         24        [36m0.0908[0m  39.1454
+         25        [36m0.0892[0m  39.1499
+         26        [36m0.0890[0m  39.1537
+         27        [36m0.0874[0m  39.1481
+         28        0.0875  39.1266
+         29        [36m0.0854[0m  39.1315
+         30        0.0861  39.1091
+         31        [36m0.0829[0m  39.0658
+         32        0.0832  39.6938
+         33        [36m0.0827[0m  39.1215
+         34        [36m0.0818[0m  39.1513
+         35        [36m0.0804[0m  39.3047
+         36        0.0814  39.1336
+         37        [36m0.0796[0m  39.1278
+         38        [36m0.0783[0m  39.1255
+         39        0.0784  39.1391
+         40        [36m0.0778[0m  39.1254
+         41        [36m0.0762[0m  39.1329
+         42        0.0765  39.1178
+         43        0.0763  39.0932
+         44        [36m0.0757[0m  39.1236
+         45        [36m0.0744[0m  39.1201
+         46        [36m0.0742[0m  39.1303
+         47        [36m0.0725[0m  39.1160
+         48        [36m0.0722[0m  39.1193
+         49        [36m0.0712[0m  39.0922
+         50        [36m0.0708[0m  39.0981
+         51        [36m0.0704[0m  39.4409
+         52        [36m0.0703[0m  39.1167
+         53        [36m0.0684[0m  39.1057
+         54        0.0699  39.2356
+         55        [36m0.0679[0m  39.2198
+         56        [36m0.0671[0m  39.1199
+         57        [36m0.0670[0m  39.1240
+         58        0.0680  39.1309
+         59        [36m0.0666[0m  39.1128
+         60        [36m0.0647[0m  39.0815
+
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -678,7 +741,7 @@ plt.title('Autoregressive Deep Learning Model');
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-The predictions look fairly good by eye. Let's check out the MAE.
+The predictions look fairly decent by eye. Let's check out the MAE.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -722,13 +785,16 @@ plt.legend(['Linear Regression',
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-Strangely, the model is worse for times close in the future but with roughly half the error for times further in the future. Maybe we should create an ensemble model :)
+Strangely, the model is worse for times close in the future but roughly on par with XGBoost for 2-hour predictions. This is yet another example of the power and ease of XGBoost.
+
+<blockquote class="twitter-tweet" data-lang="en"><p lang="en" dir="ltr">I continue to be astounded by how 1) fast and 2) robust to overfitting XGBoost is. My favorite machine learning library by a long shot.</p>&mdash; Sean J. Taylor (@seanjtaylor) <a href="https://twitter.com/seanjtaylor/status/837081497857310720?ref_src=twsrc%5Etfw">March 1, 2017</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
 ## Takeaways
 
-In this post, I showed how to use the [skits](https://github.com/ethanrosenthal/skits) library to train a supervised learning model to directly predict a time series _horizon_. We then easily ramped up the complexity of our models by simply slotting more complex models into our scikit-learn pipeline. Using a convolutional neural network, we were able to forecast the number of bikes at the bike share station by my apartment to within ~3 bikes 2 hours in advance.
+In this post, I showed how to use the [skits](https://github.com/ethanrosenthal/skits) library to train a supervised learning model to directly predict a time series _horizon_. We then easily ramped up the complexity of our models by simply slotting more complex models into our scikit-learn pipeline. At best, we were able to forecast the number of bikes at the bike share station by my apartment to within 4.5 bikes 2 hours in advance.
 
-I should note that this post was not a fully scientific study. To do that, I should have created training, validation, and test data sets. As well, I should have run a proper hyperparameter search (especially for the deep learning model). Nevertheless, I'm still confident that we can do a decent job at horizon prediction.
+I should note that this post was not a fully scientific study. To do that, I should have created training, validation, and test data sets. As well, I should have run a proper hyperparameter search (especially for the deep learning model!). Nevertheless, I'm still confident that we can do a decent job at horizon prediction.
 
 How can we do a better job? There are a number of ways, which I would like to explore in further blog posts. Instead of thinking of our bike availibility data as a continuous time series to predict, we could go with an approach similar to [ordinal regression]({{< ref "/blog/spacecutter-ordinal-regression" >}}). Additionally, we can incorporate information from other bike stations to better predict our particular station. Stay tuned!
 
