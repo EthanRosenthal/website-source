@@ -49,3 +49,7 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
     url  = "/#blog"
     weight = 3
 
+[[menu.main]]
+    name = "Links"
+    url = "/links"
+    weight = 4
