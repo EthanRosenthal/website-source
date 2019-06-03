@@ -30,7 +30,7 @@ $$\hat r\_{ui} = \textbf{x}\_{u}^{\intercal} \cdot{} \textbf{y}\_{i} = \sum\limi
 
 where $\hat r\_{ui}$ represents our prediction for the true rating $r\_{ui}$, and $\textbf{y}\_{i}$ ($\textbf{x}\_{u}^{\intercal}$) is assumed to be a column (row) vector. These user and item vectors are often called latent vectors or low-dimensional embeddings in the literature. The *k* attributes are often called the latent factors. We will choose to minimize the square of the difference between all ratings in our dataset ($S$) and our predictions. This produces a loss function of the form
 
-$$L = \sum\limits\_{u,i \in S}(r\_{ui} - \textbf{x}\_{u}^{\intercal} \cdot{} \textbf{y}\_{i})^{2} + \lambda\_{x} \sum\limits\_{u} \left\Vert \textbf{x}\_{u} \right\Vert^{2} + \lambda\_{y} \sum\limits\_{u} \left\Vert \textbf{y}\_{i} \right\Vert^{2}$$
+$$L = \sum\limits\_{u,i \in S}(r\_{ui} - \textbf{x}\_{u}^{\intercal} \cdot{} \textbf{y}\_{i})^{2} + \lambda\_{x} \sum\limits\_{u} \left\Vert \textbf{x}\_{u} \right\Vert^{2} + \lambda\_{y} \sum\limits\_{i} \left\Vert \textbf{y}\_{i} \right\Vert^{2}$$
 
 Note that we've added on two $L\_{2}$ regularization terms at the end to prevent overfitting of the user and item vectors. Our goal now is to minimize this loss function. Derivatives are an obvious tool for minimizing functions, so I'll cover the two most popular derivative-based methods. We'll start with Alternating Least Squares (ALS).
 
@@ -562,7 +562,7 @@ where $\mu$ is the global bias, and $b\_{u}$ ($b\_{i}$) is the user (item) bias.
 
 $$L = \sum\limits\_{u,i}(r\_{ui} - (\mu + b\_{u} + b\_{i} + \textbf{x}\_{u}^{\intercal} \cdot{} \textbf{y}\_{i}))^{2} \newline
 + \lambda\_{xb} \sum\limits\_{u} \left\Vert b\_{u} \right\Vert^{2} + \lambda\_{yb} \sum\limits\_{i} \left\Vert b\_{i} \right\Vert^{2} \newline
-+ \lambda\_{xf} \sum\limits\_{u} \left\Vert \textbf{x}\_{u} \right\Vert^{2} + \lambda\_{yf} \sum\limits\_{u} \left\Vert \textbf{y}\_{i} \right\Vert^{2}$$
++ \lambda\_{xf} \sum\limits\_{u} \left\Vert \textbf{x}\_{u} \right\Vert^{2} + \lambda\_{yf} \sum\limits\_{i} \left\Vert \textbf{y}\_{i} \right\Vert^{2}$$
 
 where we have added on extra bias regularization terms. We want to update each feature (user and item latent factors and bias terms) with each sample. The update for the user bias is given by 
 
