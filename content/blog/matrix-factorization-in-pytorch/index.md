@@ -4,12 +4,13 @@ slug: "matrix-factorization-in-pytorch"
 notebook: true
 title: "Matrix Factorization in PyTorch"
 ---
-
 {{% jupyter_cell_start markdown %}}
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-Hey, remember when I wrote those [ungodly]({{< ref "blog/explicit-matrix-factorization-sgd-als" >}}) [long]({{< ref "blog/implicit-mf-part-1" >}}) [posts]({{< ref "blog/implicit-mf-part-2" >}}) about matrix factorization chock-full of gory math? Good news! You can forget it all. We have now entered the Era of Deep Learning, and automatic differentiation shall be our guiding light. 
+_Update 7/8/2019: Upgraded to PyTorch version 1.0. Removed now-deprecated `Variable` framework_
+
+Hey, remember when I wrote those [ungodly]({filename}/2016-01-09-explicit-matrix-factorization-als-sgd.md) [long]({filename}/2016-10-19-implicit-mf-part-1.md) [posts]({filename}/2016-11-7-implicit-mf-part-2.md) about matrix factorization chock-full of gory math? Good news! You can forget it all. We have now entered the Era of Deep Learning, and automatic differentiation shall be our guiding light. 
 
 <!-- PELICAN_END_SUMMARY -->
 
@@ -56,7 +57,6 @@ We'll also make up some fake ratings data for playing with in this post.
 import numpy as np
 from scipy.sparse import rand as sprand
 import torch
-from torch.autograd import Variable
 
 # Make up some random explicit feedback ratings
 # and convert to a numpy array
@@ -149,11 +149,9 @@ optimizer = torch.optim.SGD(model.parameters(),
 
 ### Train
 
-With the three steps complete, all that's left is to train the model! We have to convert our data into a `Variable` which will talk with the automatic differentiation library, [autograd](http://pytorch.org/docs/autograd.html). To convert the data into a `Variable`, it must first be cast to a torch `Tensor`. Explicitly casting variables is relatively rare in Python, which is probably why I run into the most issues at this stage.
+With the three steps complete, all that's left is to train the model! We have to convert our data PyTorch tensors which will talk with the automatic differentiation library, [autograd](http://pytorch.org/docs/autograd.html). The PyTorch tensors must be Python-native datatypes like `float` and `long` rather than standard `numpy` datatypes, and it can be a little difficult to cast everything correctly.
 
-You must get your data into Python-native datatypes, `float` and `long`, and numpy likes to make this difficult. For example, you can try to cast a numpy array to `long` by calling `arr.long()`. This is a valid method but does not seem to actually cast the matrix.
-
-Nonetheless, below we shuffle our data and iterate through each sample. Each sample is converted to `Variable`, the loss is calculated, backpropagation is carried out to generate the gradients, and then the optimizer updates the parameters. And voilá! We have matrix factorization.
+Nonetheless, below we shuffle our data and iterate through each sample. Each sample is converted to a tensor, the loss is calculated, backpropagation is carried out to generate the gradients, and then the optimizer updates the parameters. And voilá! We have matrix factorization.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -167,10 +165,10 @@ p = np.random.permutation(len(rows))
 rows, cols = rows[p], cols[p]
 
 for row, col in zip(*(rows, cols)):
-    # Turn data into variables
-    rating = Variable(torch.FloatTensor([ratings[row, col]]))
-    row = Variable(torch.LongTensor([np.long(row)]))
-    col = Variable(torch.LongTensor([np.long(col)]))
+    # Turn data into tensors
+    rating = torch.FloatTensor([ratings[row, col]])
+    row = torch.LongTensor([row])
+    col = torch.LongTensor([col])
     
     # Predict and calculate loss
     prediction = model(row, col)
@@ -216,8 +214,8 @@ class BiasedMatrixFactorization(torch.nn.Module):
         
     def forward(self, user, item):
         pred = self.user_biases(user) + self.item_biases(item)
-        pred += (self.user_factors(user) * self.item_factors(item)).sum(1)
-        return pred
+        pred += (self.user_factors(user) * self.item_factors(item)).sum(dim=1, keepdim=True)
+        return pred.squeeze()
 ```
 
 {{% jupyter_input_end %}}
