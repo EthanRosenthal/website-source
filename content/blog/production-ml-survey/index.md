@@ -1,7 +1,7 @@
 ---
 date: "2019-07-25"
 title: "Production Machine Learning Survey Results"
-slug: "product-ml-survey"
+slug: "production-ml-survey"
 notebook: true
 ---
 {{% jupyter_cell_start markdown %}}
