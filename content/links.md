@@ -1,6 +1,6 @@
 ---
 title: "Links"
-date: "2019-04-19"
+date: "2019-10-29"
 draft: false
 ---
 
@@ -13,11 +13,12 @@ Having suffered through years of dry physics talks during my academic days, I'm 
 
 ### Upcoming Talks
 
-- [Model Remodeling with Modern Deep Learning Frameworks](https://www.scipy2019.scipy.org/talks-posters/Model-Remodeling-with-Modern-Deep-Learning-Frameworks), SciPy 2019
+- [Time series for scikit-learn people](https://pydata.org/nyc2019/schedule/presentation/15/time-series-for-scikit-learn-people/), PyData NYC 2019
 
 
 ### Past Talks
 
+- [Model Remodeling with Modern Deep Learning Frameworks](https://www.scipy2019.scipy.org/talks-posters/Model-Remodeling-with-Modern-Deep-Learning-Frameworks), SciPy 2019 ([video](https://youtu.be/OoGaFn3aaMU))
 - [Empowering the Humans in the Loop by Synthesizing Machine Learning and Optimization](http://texasaisummit.com/2019/sessions), Texas AI Summit 2019
 - [Making the Machines Work for Us](https://www.theinnovationenterprise.com/summits/machine-learning-innovation-summit-new-york-2018/agenda), Machine Learning Innovation Summit 2018
 - [Scaling Personalization via Machine-Learned Assortment Optimization](https://www.datacouncil.ai/talks/scaling-personalization-via-machine-learned-assortment-optimization), DataEngConf 2018 ([video](https://youtu.be/1_wjsY6eSFs), [slides](https://www.slideshare.net/rosentep/scaling-personalization-via-machinelearned-assortment-optimization))
