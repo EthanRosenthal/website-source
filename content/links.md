@@ -11,17 +11,14 @@ You can find me on [GitHub](https://github.com/EthanRosenthal), [Twitter](https:
 
 Having suffered through years of dry physics talks during my academic days, I'm on a mission to give data science talks that are engaging and interesting while still delivering technical insights for the audience.
 
-### Upcoming Talks
-
-- [Time series for scikit-learn people](https://pydata.org/nyc2019/schedule/presentation/15/time-series-for-scikit-learn-people/), PyData NYC 2019
-
-
 ### Past Talks
 
-- [Model Remodeling with Modern Deep Learning Frameworks](https://www.scipy2019.scipy.org/talks-posters/Model-Remodeling-with-Modern-Deep-Learning-Frameworks), SciPy 2019 ([video](https://youtu.be/OoGaFn3aaMU), [slides]({{< ref "/talks/model-remodeling" >}}))
+- [Time series for scikit-learn people](https://pydata.org/nyc2019/schedule/presentation/15/time-series-for-scikit-learn-people/), PyData NYC 2019, ([slides]({{< ref "/talks/pydata-2019-time-series" >}}))
+- [Continuous Approximation: From Physics to Data Science](http://csma31.csm.jmu.edu/physics/courses/391/Speakers/2019fall/abstract_rosenthal_ethan.pdf), JMU Physics Dept 2019, ([slides]({{< ref "/talks/jmu-2019-physics-to-ds" >}}))
+- [Model Remodeling with Modern Deep Learning Frameworks](https://www.scipy2019.scipy.org/talks-posters/Model-Remodeling-with-Modern-Deep-Learning-Frameworks), SciPy 2019 ([video](https://youtu.be/OoGaFn3aaMU), [slides]({{< ref "/talks/scipy-2019-model-remodeling" >}}))
 - [Empowering the Humans in the Loop by Synthesizing Machine Learning and Optimization](http://texasaisummit.com/2019/sessions), Texas AI Summit 2019
 - [Making the Machines Work for Us](https://www.theinnovationenterprise.com/summits/machine-learning-innovation-summit-new-york-2018/agenda), Machine Learning Innovation Summit 2018
-- [Scaling Personalization via Machine-Learned Assortment Optimization](https://www.datacouncil.ai/talks/scaling-personalization-via-machine-learned-assortment-optimization), DataEngConf 2018 ([video](https://youtu.be/1_wjsY6eSFs), [slides](https://www.slideshare.net/rosentep/scaling-personalization-via-machinelearned-assortment-optimization))
+- [Scaling Personalization via Machine-Learned Assortment Optimization](https://www.datacouncil.ai/talks/scaling-personalization-via-machine-learned-assortment-optimization), DataEngConf 2018 ([video](https://youtu.be/1_wjsY6eSFs), [slides]({{< ref "/talks/dataengconf-2018-scaling-personalization" >}}))
 - [Diving into the deep end of clothing styles](https://pydata.org/nyc2017/schedule/presentation/18/), PyData 2017 ([video](https://www.youtube.com/watch?v=Pm4ZQMKoz7Q), [slides](https://www.slideshare.net/rosentep/diving-into-the-deep-end-of-clothing-styles-pydata-nyc-2017))
 
 
