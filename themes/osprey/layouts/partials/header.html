@@ -94,6 +94,10 @@
     <link href="{{ $.Site.BaseURL }}/css/dataframe.css" rel="stylesheet" type="text/css">
   {{ end }}
 
+  {{ if .Params.slides }}
+    <link href="{{ $.Site.BaseURL }}/css/slides.css" rel="stylesheet" type="text/css">
+  {{ end }}
+
   {{ if .Site.GoogleAnalytics }}
     {{ template "_internal/google_analytics.html" . }}
   {{ end }}
