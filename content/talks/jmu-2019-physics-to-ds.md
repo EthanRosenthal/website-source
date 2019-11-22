@@ -1,7 +1,7 @@
 
 ---
 title: "Continuous Approximation: From Physics to Data Science"
-slug: "jmu-209-physics-to-ds"
+slug: "jmu-2019-physics-to-ds"
 draft: false
 hideDate: true
 slides: true
