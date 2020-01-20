@@ -7,7 +7,7 @@ draft: false
 
 There is no shortage of stories about tech founders achieving face-melting wealth from startup success. Bless their hearts.
 
-On the other side are [stories](https://gimletmedia.com/shows/startup/awhmbo) of founders sacrificing everything for the sake of their startup with unhappy endings. I hate those stories.
+On the other side are [stories](https://gimletmedia.com/shows/startup/awhmbo) with unhappy endings of founders sacrificing everything for the sake of their startup. I hate those stories.
 
 This story lies smack-dab in the middle. There is zero money made and minimal money lost. This is a story of how I had an idea that I was excited about, pursued it for 6 months, and then decided to pull the plug and get a job.
 
@@ -93,11 +93,13 @@ In addition to the above, as I thought more and more about this idea, I envision
 
 ## The Progress
 
-Like a good student of Silicon Valley, I worked hard to build a Minimum Viable Product (MVP) and get it in front of potential users. I did this. 
+Like a good student of Silicon Valley, I worked hard to build a Minimum Viable Product (MVP) and get it in front of potential users.
 
 I had started working on this problem part-time around May 2019 and switched to full-time in July. By mid-August, I had a proper MVP consisting of a public-facing API, ETL pipelines, and a UI consisting of both a conventional SaaS CRUD app and interactive dashboards. 
 
 The MVP was ugly and feature-incomplete. I gritted my teeth and showed it to people. I spent mid-August to mid-November pitching the product to companies, getting rejected, and working on the product. My goal was to determine whether it was possible to build a general _product_ to monitor 80% of peoples' ML models, or if everybody's ML systems were so bespoke that custom monitoring solutions would have to be built for each one. I still have not answered this question.
+
+{{< figure src="api_docs.png" caption="API Docs" >}}
 
 ## The Problems
 
@@ -117,11 +119,11 @@ What's the ideal company, then? Probably a company with lots of ML models and a 
 
 I found a couple ML-heavy startups which had large-ish data teams, but they often had relatively unimportant models. Or, and this is key, they were perfectly happy to write custom monitoring jobs for each model. After all, if you are savvy enough to deploy an ML model, you are probably more than capable of deploying a job to monitor it.
 
-I also started thinking about what other types of companies would match my ideal, and I realized that enterprises likely have large data teams with potentially important models (think: banks). These enterprises have also probably been sold vendor solutions for handling general training and deployment. Of course, if you already have a vendor solution for training and deployment, it'd be a lot easier if that vendor included monitoring, as well...
+I also started thinking about what other types of companies would match my ideal, and I realized that enterprises likely have large data teams with potentially important models (think: banks). These enterprises have also probably been sold vendor solutions for handling general training and deployment. Of course, if you already have a vendor solution for training and deployment, it'd be a lot easier if that solution also included monitoring...
 
 ### The Product
 
-As mentioned, I did find some ML-heavy startups that seemed like potential candidates. Many had significant concerns about sending me their data. They wanted to deploy my system within their own cloud. I ignored this for a while. After all, companies like Segment are current unicorns, and companies have given them carte blanche to suck up all the proprietary data they want. Hell, Customer Data Platform is a _thing_.
+As mentioned, I did find some ML-heavy startups that seemed like potential candidates. Many had significant concerns about sending me their data. They wanted to deploy my system within their own cloud. I ignored this for a while. After all, companies like Segment are current unicorns, and other companies have given them carte blanche to suck up all the proprietary data they want. Hell, Customer Data Platform is a _thing_.
 
 Besides sending me data, companies had other requests of the product. Many were solvable. Companies wanted a batch upload option rather than API access. Fine, this is easy. Some companies wanted a Kafka consumer or an SDK to interact with the API. This can be done. But, some companies had gnarly logic around filtering out certain ground truth data. They were already doing this for their ETL jobs to populate their data warehouse, and they would potentially have to duplicate all of this for my service. Or, companies wanted to be able to join a lot of other, "contextual" data, and it did not make sense to send this via API. Solvable problems, but... the path forward was less clear.
 
@@ -134,11 +136,11 @@ Another pivot? Focus on enterprises, where there is a clear need. That is a worl
 
 Lots of people wanted an all-in-one solution containing training, deployment, and monitoring. That space is crowded.
 
-Is there space for a horizontal monitoring product? I still think yes, but the market is small right now (though likely bigger on the west coast). I do think that this market _will_ grow. As it becomes easier and easier to deploy models, data teams will inevitably have to deal with the headaches of monitoring a slew of services. But I think we're a little ways out from that world. 
+Is there space for a horizontal monitoring product? I still think yes, but the market is small right now (though likely bigger on the west coast than here in NYC). I do think that this market _will_ grow. As it becomes easier and easier to deploy models, data teams will inevitably have to deal with the headaches of monitoring a slew of services; but, I think we're a little ways out from that world. 
 
 ## The Money
 
-I talked with people who had money to invest or knew people with money to invest. I could probably have raised a couple hundred $K pre-revenue. I have academic and professional credentials which matter to some people. Further, you could imagine a pitch involving an AI monitoring system that would use AI to diagnose the AI that it was monitoring. And the AI doing the diagnosing would itself be monitored in a glorious dogfooding ouroboros that would leave investors salivating.
+I talked with people who had money to invest or knew people with money to invest. I could probably have raised a couple hundred $K pre-revenue. I have academic and professional credentials which matter to some people. Furthermore, you could imagine a pitch involving an AI monitoring system that would use AI to diagnose the AI that it was monitoring. And the AI doing the diagnosing would itself be monitored in a glorious dogfooding ouroboros that would leave investors salivating.
 
 And yet, I was very, very hesitant about taking money. First of all, _I_ didn't really need it. I had basically made an annual data scientist salary in half a year of consulting, so I had some runway. Furthermore, I did not really need to hire anybody. Sure, I had a lot to learn in building my product, but it was all well within my wheelhouse.
 
@@ -170,10 +172,10 @@ I talked with a lot of people and learned a lot about the industry. It's comfort
 
 With all that said, this experience was much harder than I would have expected, and I quit so early! It is really difficult to work by yourself, day-in and day-out. A co-founder would have helped, immensely. Constant rejections from product pitches is an impressive confidence destroyer. Combine this with coding by yourself, where you get stuck on _everything_, and you've got a cocktail of misery.
 
-When I would talk about the difficulty of the experience to other people, they were all extremely supportive and encouraged me to keep going. On one hand, this is nice and supportive and everything else you would want. On the other hand, they are not the ones who have to _live_ the experience. It all conjures an odd paradox of emotion.
+When I would talk about the difficulty of the experience to other people, they were all extremely supportive and encouraged me to keep going. On one hand, this is nice and supportive and everything else you would want. On the other hand, they are not the ones who have to _live_ the experience. Sometimes I would wish people would stop being supportive and instead encourage me to quit.
 
 ## The End?
 
-Since I pulled the plug, [Arthur AI](https://www.arthur.ai/) [raised](https://techcrunch.com/2019/12/11/arthur-announces-3-3m-seed-to-monitor-machine-learning-model-performance/) a healthy Seed round. They have a platform for monitoring machine learning models in production. They appear to focus on enterprise clients. AWS also [released](https://aws.amazon.com/blogs/aws/amazon-sagemaker-model-monitor-fully-managed-automatic-monitoring-for-your-machine-learning-models/) a monitoring component to Sagemaker. There appear to be a couple other startups in this space, too. I'm excited to see what happens.
+Since I pulled the plug, [Arthur AI](https://www.arthur.ai/) [raised](https://techcrunch.com/2019/12/11/arthur-announces-3-3m-seed-to-monitor-machine-learning-model-performance/) a healthy Seed round. They have a platform for monitoring machine learning models in production. They appear to focus on enterprise clients. AWS also [released](https://aws.amazon.com/blogs/aws/amazon-sagemaker-model-monitor-fully-managed-automatic-monitoring-for-your-machine-learning-models/) a monitoring component to Sagemaker. It looks like there are a [couple](https://www.superwise.ai/) [other](https://hydrosphere.io/) [startups](https://www.orbit.dessa.com/) in this space, too. I'm excited to see what happens.
 
 After freelance consulting and grinding on this startup, I was tired. I took a job at a large, stable company. I shutdown most of my running systems on AWS that were costing me fixed money. All of the code sits in a couple repos on GitHub. I might leave it there. It would be cool to open source it, as a single-tenant solution that can be deployed within ones own cloud. This requires refactoring of the code and the removal of AWS managed services. Even so, the system has never really been tested at a company, and there are definitely some missing pieces. For now, I am going to [enjoy](https://youtu.be/R8vqs5fEEVw) my time off before I start my job.
