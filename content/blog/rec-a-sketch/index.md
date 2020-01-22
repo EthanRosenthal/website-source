@@ -8,7 +8,7 @@ title: "Rec-a-Sketch: a Flask App for Interactive Sketchfab Recommendations"
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-After the long [series]({{< ref "blog/likes-out-guerilla-dataset" >}}) [of]({{< ref "blog/implicit-mf-part-1" >}}) [previous]({{< ref "blog/implicit-mf-part-2" >}}) [posts]({{< ref "blog/recasketch-keras" >}}) describing various recommendation algorithms using Sketchfab data, I decided to build a website called [Rec-a-Sketch](http://www.rec-a-sketch.science/) which visualizes the different algorithms' recommendations. In this post, I'll describe the process of getting this website up and running on AWS with nginx and gunicorn.
+After the long [series]({{< ref "/blog/likes-out-guerilla-dataset" >}}) [of]({{< ref "/blog/implicit-mf-part-1" >}}) [previous]({{< ref "/blog/implicit-mf-part-2" >}}) [posts]({{< ref "/blog/recasketch-keras" >}}) describing various recommendation algorithms using Sketchfab data, I decided to build a website called [Rec-a-Sketch](http://www.rec-a-sketch.science/) which visualizes the different algorithms' recommendations. In this post, I'll describe the process of getting this website up and running on AWS with nginx and gunicorn.
 
 <!-- PELICAN_END_SUMMARY -->
 

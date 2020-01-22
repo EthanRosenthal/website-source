@@ -217,7 +217,7 @@ input_data
 
 ## Allocating Movies
 
-I've [written]({{< ref "blog/lets-talk-or" >}}) [previously]({{< ref "blog/towards-optimal-personalization" >}}) about integer programming in Python using the [PuLP](https://pythonhosted.org/PuLP/) package, so I will avoid the introductions to integer programming and `pulp`. For this post, I will just quickly summarize the optimization problem, as it's reasonably simple!
+I've [written]({{< ref "/blog/lets-talk-or" >}}) [previously]({{< ref "/blog/towards-optimal-personalization" >}}) about integer programming in Python using the [PuLP](https://pythonhosted.org/PuLP/) package, so I will avoid the introductions to integer programming and `pulp`. For this post, I will just quickly summarize the optimization problem, as it's reasonably simple!
 
 We only have a single _decision variable_ in our problem. In the code, I call this `movie_counts`. In math, we can call it $S\_{m}$ which corresponds to how many screens we will play movie $m$ on for the weekend. This is an _integer_ decision variable with a lower bound of 0 and an upper bound of 8 (the number of screens we have available in our fantasy movie theater). It is an integer variable because we cannot screen a movie on 2.5 screens.
 

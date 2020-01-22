@@ -4,7 +4,7 @@ slug: festival-chatter-part2
 title: Festival Chatter (Part 2) - Evaluating Band Popularity from Bonnaroo Tweets
 ---
 
-In my previous [post]({{< ref "blog/2014-08-31-festival-chatter-part1.md" >}}), I wrote about how I collected tweets about the Bonnaroo Music and Arts Festival during the entirety of the festival. There are a wide range of questions that could be answered by this dataset, like
+In my previous [post]({{< ref "/blog/2014-08-31-festival-chatter-part1.md" >}}), I wrote about how I collected tweets about the Bonnaroo Music and Arts Festival during the entirety of the festival. There are a wide range of questions that could be answered by this dataset, like
 
 + Do people spell worse as they become more intoxicated throughout the night?
 + Does text [sentiment](http://en.wikipedia.org/wiki/Sentiment_analysis) decline as people go more days without bathing?
@@ -259,4 +259,4 @@ And now, finally, all we have to do is type ```bandPop[:10].plot(kind='bar')``` 
 
 And of course it's Kanye! Is anybody surprised?
 
-Wow, that was a lot of work for one, measly histogram! However, we now have a bunch of data analytical machinery that we can use to delve deeper into this dataset. In my [next post]({{< ref "blog/2014-10-6-festival-chatter-part3.md" >}}), I'll do just that!
+Wow, that was a lot of work for one, measly histogram! However, we now have a bunch of data analytical machinery that we can use to delve deeper into this dataset. In my [next post]({{< ref "/blog/2014-10-6-festival-chatter-part3.md" >}}), I'll do just that!

@@ -9,7 +9,7 @@ notebook: true
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-Last [post]({{< ref "blog/lets-talk-or" >}}) I talked about how data scientists probably ought to spend some time talking about optimization (but not too much time - I need topics for my blog posts!). While I provided a basic optimization example in that post, that may have not been so interesting, and there definitely wasn't any machine learning involved. 
+Last [post]({{< ref "/blog/lets-talk-or" >}}) I talked about how data scientists probably ought to spend some time talking about optimization (but not too much time - I need topics for my blog posts!). While I provided a basic optimization example in that post, that may have not been so interesting, and there definitely wasn't any machine learning involved. 
 
 <!-- PELICAN_END_SUMMARY -->
 

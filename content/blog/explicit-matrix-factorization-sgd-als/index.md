@@ -8,7 +8,7 @@ slug: "explicit-matrix-factorization-sgd-als"
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-In my last [post]({{< ref "blog/intro-to-collaborative-filtering" >}}), I described user- and item-based collaborative filtering which are some of the simplest recommendation algorithms. For someone who is used to conventional machine learning classification and regression algorithms, collaborative filtering may have felt a bit *off*. To me, machine learning almost always deals with some function which we are trying to maximize or minimize. In simple linear regression, we minimize the mean squared distance between our predictions and the true values. Logistic regression involves maximizing a likelihood function. However, in my post on collaborative filtering, we randomly tried a bunch of different parameters (distance function, top-k cutoff) and watched what happened to the mean squared error. This sure doesn't feel like machine *learning*. 
+In my last [post]({{< ref "/blog/intro-to-collaborative-filtering" >}}), I described user- and item-based collaborative filtering which are some of the simplest recommendation algorithms. For someone who is used to conventional machine learning classification and regression algorithms, collaborative filtering may have felt a bit *off*. To me, machine learning almost always deals with some function which we are trying to maximize or minimize. In simple linear regression, we minimize the mean squared distance between our predictions and the true values. Logistic regression involves maximizing a likelihood function. However, in my post on collaborative filtering, we randomly tried a bunch of different parameters (distance function, top-k cutoff) and watched what happened to the mean squared error. This sure doesn't feel like machine *learning*. 
 
 <!-- PELICAN_END_SUMMARY -->
 
@@ -548,7 +548,7 @@ plot_learning_curve(iter_array, best_als_model)
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-So it looks like the best performing parameters were 20 factors and a regularization value of 0.01. I would like to again look at the movie-to-movie similarity like my previous [post]({{< ref "blog/intro-to-collaborative-filtering" >}}), but let's first explore the other minimization algorithm: stochastic gradient descent (SGD).
+So it looks like the best performing parameters were 20 factors and a regularization value of 0.01. I would like to again look at the movie-to-movie similarity like my previous [post]({{< ref "/blog/intro-to-collaborative-filtering" >}}), but let's first explore the other minimization algorithm: stochastic gradient descent (SGD).
 
 ## Stochastic Gradient Descent
 
