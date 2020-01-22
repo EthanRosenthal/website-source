@@ -4,11 +4,11 @@ slug: festival-chatter-part3
 title: Festival Chatter (Part 3) - Bonnaroo Analysis in the Fourth Dimension
 ---
 
-In this series of posts ([part 1]({{< ref "blog/2014-08-31-festival-chatter-part1.md" >}}), [part 2]({{< ref "blog/2014-09-09-festival-chatter-part2.md" >}})), I have been showing how to use Python and other data scientist tools to analyze a collection of tweets related to the 2014 Bonnaroo Music and Arts Festival. So far, the investigation has been limited to summary data of the full dataset. The beauty of Twitter is that it occurs in realtime, so we can now peer into the fourth dimension and learn about these tweets as a function of time.
+In this series of posts ([part 1]({{< ref "/blog/2014-08-31-festival-chatter-part1.md" >}}), [part 2]({{< ref "/blog/2014-09-09-festival-chatter-part2.md" >}})), I have been showing how to use Python and other data scientist tools to analyze a collection of tweets related to the 2014 Bonnaroo Music and Arts Festival. So far, the investigation has been limited to summary data of the full dataset. The beauty of Twitter is that it occurs in realtime, so we can now peer into the fourth dimension and learn about these tweets as a function of time.
 
 ## More Organic
 
-Before we view the Bonnaroo tweets as a time series, I would like to make a quick comment about the organic-ness of the tweets. If you recall from the previous [post]({{< ref "blog/2014-09-09-festival-chatter-part2.md" >}}), I removed duplicates and retweets from my collection in order to make the tweet database more indicative of true audience reactions. On further investigation, it seems that there were many spammy media sources still in the collection. To make the tweets even more organic, I decided to look at the source of the tweets.
+Before we view the Bonnaroo tweets as a time series, I would like to make a quick comment about the organic-ness of the tweets. If you recall from the previous [post]({{< ref "/blog/2014-09-09-festival-chatter-part2.md" >}}), I removed duplicates and retweets from my collection in order to make the tweet database more indicative of true audience reactions. On further investigation, it seems that there were many spammy media sources still in the collection. To make the tweets even more organic, I decided to look at the source of the tweets.
 
 Because Kanye West was the most popular artist from the previous posts' analysis, I decided to look at the top 15 sources that mentioned him:
 

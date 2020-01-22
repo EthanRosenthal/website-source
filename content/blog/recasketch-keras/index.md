@@ -9,7 +9,7 @@ title: "Using Keras' Pretrained Neural Networks for Visual Similarity Recommenda
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-To close out our series on building recommendation models using [Sketchfab data]({{< ref "blog/likes-out-guerilla-dataset" >}}), I will venture far from the [previous]({{< ref "blog/implicit-mf-part-1" >}}) [posts']({{ ref "blog/implicit-mf-part-2" >}}) factorization-based methods and instead explore an unsupervised, deep learning-based model. You'll find that the implementation is fairly simple with remarkably promising results which is almost a smack in the face to all of that effort put in earlier.
+To close out our series on building recommendation models using [Sketchfab data]({{< ref "/blog/likes-out-guerilla-dataset" >}}), I will venture far from the [previous]({{< ref "/blog/implicit-mf-part-1" >}}) [posts']({{ ref "/blog/implicit-mf-part-2" >}}) factorization-based methods and instead explore an unsupervised, deep learning-based model. You'll find that the implementation is fairly simple with remarkably promising results which is almost a smack in the face to all of that effort put in earlier.
 
 <!-- PELICAN_END_SUMMARY -->
 

@@ -10,7 +10,7 @@ title: "Time Series for scikit-learn People (Part II): Autoregressive Forecastin
 <!-- PELICAN_BEGIN_SUMMARY -->
 
 In this post, I will walk through how to use my new library [skits](https://github.com/ethanrosenthal/skits) for building `scikit-learn` pipelines to fit, predict, and forecast time series data. <!-- PELICAN_END_SUMMARY -->
-We will pick up from the last [post]({{< ref "blog/time-series-for-scikit-learn-people-part1" >}}) where we talked about how to turn a one-dimensional time series array into a design matrix that works with the standard `scikit-learn` API. At the end of that post, I mentioned that we had started building an ARIMA model. We'll "circle back and close that loop", in startup parlance, and walk through ARIMA models. I'll then rant for quite some time on stationary data and confusions/conclusions surrounding this concept. We'll then move onto the fun stage of training, predicting, and forecasting autoregressive models using the new `skits` library.
+We will pick up from the last [post]({{< ref "/blog/time-series-for-scikit-learn-people-part1" >}}) where we talked about how to turn a one-dimensional time series array into a design matrix that works with the standard `scikit-learn` API. At the end of that post, I mentioned that we had started building an ARIMA model. We'll "circle back and close that loop", in startup parlance, and walk through ARIMA models. I'll then rant for quite some time on stationary data and confusions/conclusions surrounding this concept. We'll then move onto the fun stage of training, predicting, and forecasting autoregressive models using the new `skits` library.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
