@@ -12,8 +12,8 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
     blog = "/:year/:month/:day/:slug/"
 
 [Params]
-    headline = "Ethan Rosenthal, PhD"
-    subheadline = "Data Science Consulting"
+    headline = "ethan rosenthal"
+    subheadline = "data, science, etc"
     author = "Ethan Rosenthal"
     description = ""
     logoBig = "/images/profile_pic2.jpg"
@@ -35,21 +35,16 @@ disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use 
 
 
 [[menu.main]]
-    name = "Services"
-    url  = "/#services"
-    weight = 1
-
-[[menu.main]]
     name = "About"
     url  = "/#about"
-    weight = 2
+    weight = 1
 
 [[menu.main]]
     name = "Blog"
     url  = "/#blog"
-    weight = 3
+    weight = 2
 
 [[menu.main]]
     name = "Links"
     url = "/links"
-    weight = 4
+    weight = 3
