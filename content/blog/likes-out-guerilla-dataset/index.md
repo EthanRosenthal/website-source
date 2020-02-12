@@ -3,6 +3,9 @@ date: "2016-10-09"
 slug: "likes-out-guerilla-dataset"
 notebook: true
 title: "Likes Out! Guerilla Dataset!"
+tags:
+  - web scraping
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 

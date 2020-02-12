@@ -4,6 +4,10 @@ title: "Quick and Dirty Serverless Integer Programming"
 hasMath: true
 notebook: true
 slug: "serverless-integer-programming"
+tags:
+  - operations research
+  - serverless
+  - web development
 ---
 {{% jupyter_cell_start markdown %}}
 

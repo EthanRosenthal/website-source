@@ -4,6 +4,8 @@ slug: "lets-talk-or"
 title: "I'm all about ML, but let's talk about OR"
 hasMath: true
 notebook: true
+tags:
+  - operations research
 ---
 {{% jupyter_cell_start markdown %}}
 

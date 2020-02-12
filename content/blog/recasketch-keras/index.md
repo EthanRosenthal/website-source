@@ -4,6 +4,9 @@ slug: "recasketch-keras"
 hasMath: true
 notebook: true
 title: "Using Keras' Pretrained Neural Networks for Visual Similarity Recommendations"
+tags:
+  - deep learning
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 

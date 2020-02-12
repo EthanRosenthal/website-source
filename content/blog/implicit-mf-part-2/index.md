@@ -4,6 +4,8 @@ slug: "implicit-mf-part-2"
 hasMath: true
 notebook: true
 title: "Learning to Rank Sketchfab Models with LightFM"
+tags:
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 

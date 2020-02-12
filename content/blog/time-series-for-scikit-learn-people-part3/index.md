@@ -4,6 +4,9 @@ title: "Time Series for scikit-learn People (Part III): Horizon Optimization"
 slug: "time-series-for-scikit-learn-people-part3"
 hasMath: true
 notebook: true
+tags:
+  - time series
+  - machine learning
 ---
 {{% jupyter_cell_start markdown %}}
 

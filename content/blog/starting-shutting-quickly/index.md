@@ -3,6 +3,8 @@ date: "2020-01-22"
 title: "Starting Up and Shutting Down, Quickly"
 slug: "starting-shutting-quickly"
 draft: false
+tags:
+  - data science industry
 ---
 
 There is no shortage of stories about tech founders achieving face-melting wealth from startup success. Bless their hearts.

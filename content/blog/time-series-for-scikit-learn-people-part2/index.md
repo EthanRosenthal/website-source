@@ -4,6 +4,9 @@ slug: "time-series-for-scikit-learn-people-part2"
 hasMath: true
 notebook: true
 title: "Time Series for scikit-learn People (Part II): Autoregressive Forecasting Pipelines"
+tags:
+  - time series
+  - machine learning
 ---
 {{% jupyter_cell_start markdown %}}
 

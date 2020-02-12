@@ -4,6 +4,9 @@ slug: "time-series-for-scikit-learn-people-part1"
 hasMath: true
 notebook: true
 title: "Time Series for scikit-learn People (Part I): Where's the X Matrix?"
+tags:
+  - time series
+  - machine learning
 ---
 {{% jupyter_cell_start markdown %}}
 

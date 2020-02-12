@@ -6,7 +6,10 @@ config = "config.toml"
 theme = "osprey"
 canonifyURLS = true
 googleAnalytics = "UA-54232305-1"
-disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
+# disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
+
+[taxonomy]
+    tag = "tags"
 
 [permalinks]
     blog = "/:year/:month/:day/:slug/"

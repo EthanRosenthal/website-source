@@ -4,6 +4,9 @@ title: "spacecutter: Ordinal Regression Models in PyTorch"
 slug: "spacecutter-ordinal-regression"
 hasMath: true
 notebook: true
+tags:
+  - machine learning
+  - deep learning
 ---
 {{% jupyter_cell_start markdown %}}
 

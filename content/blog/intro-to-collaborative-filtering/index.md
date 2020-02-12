@@ -4,6 +4,8 @@ title: "Intro to Recommender Systems: Collaborative Filtering"
 hasMath: true
 notebook: true
 slug: "intro-to-collaborative-filtering"
+tags:
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 

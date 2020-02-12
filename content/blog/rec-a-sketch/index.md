@@ -3,6 +3,9 @@ date: "2017-02-05"
 slug: "rec-a-sketch"
 notebook: true
 title: "Rec-a-Sketch: a Flask App for Interactive Sketchfab Recommendations"
+tags:
+  - web development
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 
