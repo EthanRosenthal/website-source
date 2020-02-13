@@ -2,6 +2,9 @@
 date: "2019-02-12"
 slug: "liberal-physics-phd"
 title: "Hedging Academia and Liberalizing Physics PhD Programs"
+tags:
+  - data science industry
+  - academia
 ---
 
 A recent Twitter [thread](https://twitter.com/QuantumHazzard/status/1079024274617364480) got me thinking back to the frustrations I felt working towards gaining non-research employment during the last year of my physics PhD program at Columbia University from 2014-2015. While I tried to participate in the thread, I had way too many thoughts for Twitter. A blog post felt more appropriate, so here it is.

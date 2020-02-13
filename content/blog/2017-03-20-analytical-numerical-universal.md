@@ -2,6 +2,8 @@
 date: "2017-03-20"
 slug: "analytical-numerical-universal"
 title: "From Analytical to Numerical to Universal Solutions"
+tags:
+  - deep learning
 ---
 
 I've been making my way through the recently released [Deep Learning](http://www.deeplearningbook.org/) textbook (which is absolutely excellent), and I came upon the section on Universal Approximation Properties. The [Universal Approximation Theorem](https://en.wikipedia.org/wiki/Universal_approximation_theorem) (UAT) essentially proves that neural networks are capable of approximating any continuous function (subject to some constraints and with upper bounds on compute).

@@ -3,6 +3,8 @@ date: "2020-01-08"
 title: "Doing Freelance Data Science Consulting in 2019"
 slug: "freelance-ds-consulting"
 draft: false
+tags:
+  - data-science-industry
 ---
 
 About 15 months ago, I left my full-time job as a machine learning team lead with the goal of doing independent / freelance data science consulting. Since then, I've gotten a lot of questions about what that means and entails. I have not found too much information about this type of work, other than Greg Reda's [fantastic post](http://www.gregreda.com/2017/01/07/freelance-data-science-experience/). I hope this blog post answers some of those questions for anybody interested in becoming or hiring a data science consultant. 
