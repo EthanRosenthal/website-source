@@ -1,8 +1,4 @@
 <footer class="row middle-xs center-xs">
-
-  {{ if .Site.Params.facebook }}
-    <div class="col-xs-3 col-md-2"><a target="_blank" href="https://facebook.com/{{ .Site.Params.facebook }}">Facebook</a></div>
-  {{ end }}
   
   {{ if .Site.Params.github }}
     <div class="col-xs-3 col-md-2"><a target="_blank" href="https://github.com/{{ .Site.Params.github }}">GitHub</a></div>
@@ -15,6 +11,9 @@
   {{ if .Site.Params.twitter }}
     <div class="col-xs-3 col-md-2"><a target="_blank" href="https://twitter.com/{{ .Site.Params.twitter }}">Twitter</a></div>
   {{ end }}
+
+  <div class="col-xs-3 col-md-2"><a href="{{ with .OutputFormats.Get "RSS" }}{{ .RelPermalink }}{{ end }}">RSS</a>
+  </div>
 
   {{ if or (.Site.Params.copyright) (.Site.Params.credit) }}
     <div class="col-xs-12">
