@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.LanguageCode }}">
+  {{ partial "header.html" . }}
+  <body>
+    {{ partial "body-top" . }}
+    <main>
+
+      <section class="container">
+          <section class="content">
+              <h1>{{ if .Params.heading }} {{ .Params.heading }} {{ else }} {{ .Title }} {{ end }}</h1>
+
+              <article class="entry-content">
+                <!-- Make this into a table -->
+              {{ range $key, $value := .Site.Taxonomies.tags }}
+                    <h3><a href="{{ $.Site.BaseURL }}tags/{{ $key }}">{{ $key }}</a></h3>
+                    <table class="table">
+                      <colgroup>
+                        <col span="1" style="width: 20%">
+                        <col span="1" style="width: 80%">
+                      </colgroup>
+                    <!-- <ul> -->
+                        {{ range $value.Pages }}
+                          <tr>
+                            <th>{{ .Date.Format "Jan 2006" }}</th> <th><a href="{{ .Permalink}}">{{ .LinkTitle }} </a></th>
+                          </tr>
+                        {{ end }}
+                    <!-- </ul> -->
+                  </table>
+                </div>
+            {{ end }}
+              </article>
+
+          </section>
+          <br>
+          {{ partial "disqus" . }}
+      </section>
+
+
+    </main>
+    {{ partial "footer.html" . }}
+    {{ partial "body-bottom" . }}
+  </body>
+</html>
+
+

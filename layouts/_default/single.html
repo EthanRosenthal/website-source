@@ -14,6 +14,15 @@
                   {{ .Date.Format (.Site.Params.dateform | default "January 2, 2006") }} · {{ .ReadingTime }} minute read
               </div>
               {{ end }}
+              
+              <div class="sub-header">
+              Tags:
+              {{ range $index, $tag := .Params.tags -}}
+                  {{- if $index -}}, {{ end -}}
+                  <a href='{{ "/tags/" | relLangURL }}{{ . | urlize }}'>{{ $tag }}</a>
+              {{- end -}}
+              </div>
+
 
               <article class="entry-content">
                   {{ .Content }}
