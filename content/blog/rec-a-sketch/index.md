@@ -4,8 +4,8 @@ slug: "rec-a-sketch"
 notebook: true
 title: "Rec-a-Sketch: a Flask App for Interactive Sketchfab Recommendations"
 tags:
-  - web development
   - recommendation systems
+  - web development
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -34,7 +34,7 @@ I decided to use Flask to build the web app because I already have some experien
 The functionality is relatively simple. When one initially goes to the page, there is a default list of models to select from, or one can input a link to a custom model. Once a model is selected, this sends a ```GET``` request to the main ```route```. When the ```route``` receives this request, it must do two things:
 
 1. Grab data about the input model (name, url, and thumbnail).
-2. Find other recommended models and get their associated data. 
+2. Find other recommended models and get their associated data.
 
 I populated a sqllite database with data about the Sketchfab models. I do not store the thumbnails directly; rather, I include a link to the thumbnail on Sketchfab's servers.
 
@@ -81,7 +81,7 @@ This [post](https://www.digitalocean.com/community/tutorials/how-to-serve-flask-
 
 ### EC2
 
-For my purposes, I chose to use Amazon Web Services (AWS) instead of DigitalOcean for hosting the Rec-a-Sketch. This was imply because I had previous experience with AWS. The first step is to setup an EC2 instance which is virtual server. Rec-a-Sketch is lightweight, so I chose a t2.nano instance because it's the cheapest. 
+For my purposes, I chose to use Amazon Web Services (AWS) instead of DigitalOcean for hosting the Rec-a-Sketch. This was imply because I had previous experience with AWS. The first step is to setup an EC2 instance which is virtual server. Rec-a-Sketch is lightweight, so I chose a t2.nano instance because it's the cheapest.
 
 One must create an Elastic IP address for the instance (which costs some money) as well as open ports 80 and 22. The ports can be opened by going to ```Network & Security -> Security Groups``` and creating a security group with the following ports:
 
@@ -110,9 +110,9 @@ I did run into some issues setting up both the upstart service and nginx (when d
 
 ## Image Hosting
 
-I mentioned before that I do not actually host the Sketchfab model images on my server. I would have to pay for outgoing bandwidth, and this would add up quite fast (if people actually visit my website!). A simpler way to host images (though maybe morally dubious?) is to point to the url where Sketchfab hosts the image. 
+I mentioned before that I do not actually host the Sketchfab model images on my server. I would have to pay for outgoing bandwidth, and this would add up quite fast (if people actually visit my website!). A simpler way to host images (though maybe morally dubious?) is to point to the url where Sketchfab hosts the image.
 
-The Sketchfab API easily lets you find the location of an image thumbnail. At first I would just ping the Sketchfab API for each request that came into my Flask app. This proved super slow because I would have to wait for the Sketchfab API response each time. I tried to solve this by running a big script to store all API responses in my own database. 
+The Sketchfab API easily lets you find the location of an image thumbnail. At first I would just ping the Sketchfab API for each request that came into my Flask app. This proved super slow because I would have to wait for the Sketchfab API response each time. I tried to solve this by running a big script to store all API responses in my own database.
 
 This worked for a bit, but then the image links started to break. I was confused for a bit, but maybe you can figure out what happened - here's an example image link:
 
@@ -123,7 +123,7 @@ https://dg5bepmjyhz9h.cloudfront.net/urls/a1194aa7be824b7da6accb1d0c788132
 
 What's going on here? It turns out that Sketchfab smartly hosts their images using a Content Delivery Network, or CDN. CDNs are used to quickly serve files to users by hosting the files much closer to the user. There's no guarantee that the filename should stay the same at the CDN node, and it seems that they do not.
 
-I did not want to go back to pinging the Sketchfab API on every request, so I settled on a compromise. I setup a cron job to run every two days to grab the current image urls. The assumption here is that these urls will not change too quickly, and I am fine with small breakages in the meantime. The cron job script is located [here](https://github.com/EthanRosenthal/rec-a-sketch/blob/master/flask_app/app/update.sh). 
+I did not want to go back to pinging the Sketchfab API on every request, so I settled on a compromise. I setup a cron job to run every two days to grab the current image urls. The assumption here is that these urls will not change too quickly, and I am fine with small breakages in the meantime. The cron job script is located [here](https://github.com/EthanRosenthal/rec-a-sketch/blob/master/flask_app/app/update.sh).
 
 ## Closing Thoughts
 

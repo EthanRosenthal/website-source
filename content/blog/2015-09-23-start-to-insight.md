@@ -3,6 +3,7 @@ date: '2015-09-23'
 slug: start-to-insight
 title: Yet Another PhD to Data Science Post (Part I)
 tags:
+  - academia
   - data science industry
 ---
 

@@ -4,10 +4,10 @@ title: "Doing Freelance Data Science Consulting in 2019"
 slug: "freelance-ds-consulting"
 draft: false
 tags:
-  - data-science-industry
+  - data science industry
 ---
 
-About 15 months ago, I left my full-time job as a machine learning team lead with the goal of doing independent / freelance data science consulting. Since then, I've gotten a lot of questions about what that means and entails. I have not found too much information about this type of work, other than Greg Reda's [fantastic post](http://www.gregreda.com/2017/01/07/freelance-data-science-experience/). I hope this blog post answers some of those questions for anybody interested in becoming or hiring a data science consultant. 
+About 15 months ago, I left my full-time job as a machine learning team lead with the goal of doing independent / freelance data science consulting. Since then, I've gotten a lot of questions about what that means and entails. I have not found too much information about this type of work, other than Greg Reda's [fantastic post](http://www.gregreda.com/2017/01/07/freelance-data-science-experience/). I hope this blog post answers some of those questions for anybody interested in becoming or hiring a data science consultant.
 
 Full disclosure: I only _really_ consulted for the first ~8 months. I spent the next 6 months of my time starting and stopping a startup, which will be the subject of a future post.
 
@@ -29,19 +29,19 @@ In this arrangement, I got a company email address, I attended weekly meetings (
 
 ### Agency Work
 
-Contracting work is probably the least risky, and consequently least lucrative side of freelancing. You typically sign a contract for X weeks of Y hours / week at $Z / hour. Sure, the contract can typically be ended at any time. But besides that, you can somewhat count on a steady stream of money over this time as long as the client is happy. 
+Contracting work is probably the least risky, and consequently least lucrative side of freelancing. You typically sign a contract for X weeks of Y hours / week at $Z / hour. Sure, the contract can typically be ended at any time. But besides that, you can somewhat count on a steady stream of money over this time as long as the client is happy.
 
-I never truly understood "risk versus reward" until I started freelancing. Anytime you are willing to take on a little more risk, the potential for greater reward increases. With contracting, your time is directly coupled to your income. You can ask for higher and higher hourly rates (and you should!), but all potential clients will balk at some rate. 
+I never truly understood "risk versus reward" until I started freelancing. Anytime you are willing to take on a little more risk, the potential for greater reward increases. With contracting, your time is directly coupled to your income. You can ask for higher and higher hourly rates (and you should!), but all potential clients will balk at some rate.
 
-One of the things that bothered me about this setup was that the incentives are poorly aligned. If you are charging hourly and get twice as fast at your job, you will earn half as much, unless you hustle and find more clients. Yes, you can try to charge twice as much, but there is likely an upper limit to how much you can successfully charge. 
+One of the things that bothered me about this setup was that the incentives are poorly aligned. If you are charging hourly and get twice as fast at your job, you will earn half as much, unless you hustle and find more clients. Yes, you can try to charge twice as much, but there is likely an upper limit to how much you can successfully charge.
 
 You can decouple your time from your money by switching to "project-based billing", which I think of as "agency work". In this scenario, a client hires you (or your agency) to do some project for them. This could be a small project, like an analysis, or a big project, like a production machine learning model deployment. You agree to some price for this project, and away you go. If you can agree upon a price proportional to the _value_ this project will bring, rather than the amount of work that it takes, then you stand to potentially make a lot of money. Imagine you start to build out your own code to make it quick and easy to deploy machine learning models. You could reuse this code while quickly churning out models for different projects and charge a high amount for each one. The inevitable extrapolation of this is to turn yourself from a _services_ company into a _product_ company.
 
-Due to some failed negotiations at higher rates and an increasing appetite for risk, I sold a project-based contract. The client was a small startup that wanted to generate a time series forecast for a bunch of different "entities" each night. They came to me with this goal and a description of the data that they had. I wrote up a long proposal describing how I would go from auditing their data to deploying a nightly forecast. This proposal consisted of multiple "milestones" that I would hit (e.g. a working model prototype with achieving X performance metric), and a timeline for these milestones. I quoted a weekly rate but did not mention how many hours I expected to work. On the backend, I calculated my weekly rate by picking an hourly rate and estimating my time. This is a clear risk<>reward tradeoff. If the project took me longer to do than I planned, then I would end up eating the cost. If it took me less time, then I was able to achieve a higher effective hourly rate. 
+Due to some failed negotiations at higher rates and an increasing appetite for risk, I sold a project-based contract. The client was a small startup that wanted to generate a time series forecast for a bunch of different "entities" each night. They came to me with this goal and a description of the data that they had. I wrote up a long proposal describing how I would go from auditing their data to deploying a nightly forecast. This proposal consisted of multiple "milestones" that I would hit (e.g. a working model prototype with achieving X performance metric), and a timeline for these milestones. I quoted a weekly rate but did not mention how many hours I expected to work. On the backend, I calculated my weekly rate by picking an hourly rate and estimating my time. This is a clear risk<>reward tradeoff. If the project took me longer to do than I planned, then I would end up eating the cost. If it took me less time, then I was able to achieve a higher effective hourly rate.
 
 ### Consulting
 
-When I think of consulting, I think of paying somebody a lot of money to come into your company and tell you things. This person likely does less technical work (e.g. writing code) and works fewer hours per week than contractors or agency-based freelancers. On the other hand, the consultant may charge a very high hourly rate to make up for this. 
+When I think of consulting, I think of paying somebody a lot of money to come into your company and tell you things. This person likely does less technical work (e.g. writing code) and works fewer hours per week than contractors or agency-based freelancers. On the other hand, the consultant may charge a very high hourly rate to make up for this.
 
 I ended up as this version of a consultant for a couple clients. Largely due to my expertise in certain areas of data science, I had a couple clients for whom I would provide "a la carte" consulting on an ad hoc basis. These clients were free to ask questions via email or through setting up a meeting. I would provide advice, feedback, and occasional one-off analyses, and I would bill the clients for my time. Typically, I would sign contracts which allowed to the clients to reach out up to X hours per week on an as-needed basis over a period of Y months.
 
@@ -81,7 +81,7 @@ While I did not have a terrible time finding work, things likely would have gott
 
 ## What did I like?
 
-There was a lot to like about consulting. In my short time, I got to considerably broaden my experience. I worked on new company domains, new data science techniques, new infrastructure, new frameworks, etc... 
+There was a lot to like about consulting. In my short time, I got to considerably broaden my experience. I worked on new company domains, new data science techniques, new infrastructure, new frameworks, etc...
 
 I really enjoyed setting my own schedule. I had minimal meetings compared to full-time jobs. This allowed me to work from wherever I wanted, and I'm now a strong proponent of remote work. I got into a great groove working from my [bougie gym](https://www.chelseapiers.com/fitness/locations/chelsea/) where there is a cafe with great WiFi. When I was working full time prior to consulting, I would get to the gym in the morning, race through my workout, and then still have to shower and commute to the office. With consulting, I could workout in the morning, and then I would already be at the office. In the summertime, I could work from the gym's ridiculous outdoor cabanas that look out over the Hudson. Once noon hit, the cabanas were no longer in the shade, so I would ride my bike home, clear my head on the ride, make some lunch, and work the rest of the afternoon, recharged, from home.
 
@@ -89,7 +89,7 @@ I really enjoyed setting my own schedule. I had minimal meetings compared to ful
 {{< figure src="IMG_20190605_100007.jpg" caption="Cabanas">}}
 {{< figure src="IMG_20190903_102622.jpg" caption="\"Working\"" >}}
 
-I met with a _lot_ of people while consulting. At the beginning, my mantra was to never say no to a meeting. Tech likes to fashion itself as introverts, so many people may be repulsed at constant meetings. On the contrary, I think it's a great setup for introverts. Meetings mean that you have focused time during which you have to socialize. All the time in between can be spent focusing on technical work. I rather liked this setup. I could meet with people for coffee, learn about all the fascinating things their company is working on, and then go home and "recharge" my social batteries. 
+I met with a _lot_ of people while consulting. At the beginning, my mantra was to never say no to a meeting. Tech likes to fashion itself as introverts, so many people may be repulsed at constant meetings. On the contrary, I think it's a great setup for introverts. Meetings mean that you have focused time during which you have to socialize. All the time in between can be spent focusing on technical work. I rather liked this setup. I could meet with people for coffee, learn about all the fascinating things their company is working on, and then go home and "recharge" my social batteries.
 
 On that note, it was eye opening to learn about how large the business world really is. It's easy to get horse blinders when working at a company or only consuming news from certain sources. The real world is always much larger than you would expect, and industries are always deeper and more interesting than they appear.
 
@@ -100,15 +100,15 @@ Speaking of business, I learned a lot about business! I created an LLC, I opened
 - Open a business bank account early so that you can put all large, initial expenses on the company credit card. For example, I got like $500 in credit card points by spending enough money in the first 3 months which was easily satisfied by buying a Macbook on the credit card.
 - Use [Quickbooks Self-Employed](https://quickbooks.intuit.com/self-employed/) for accounting. It's cheap, simple, and a really good product. It will automatically match-up images of receipts with transactions on your credit card. You can also use it for invoicing clients.
 
-Lastly, freelancing was exciting. There is a thrill to selling, negotiating, and closing deals. Also, nothing is quite as motivating as selling a project to somebody knowing that it's going to be up to you, and you alone, to figure out how the fuck to get this thing to actually work. Sure, this was stressful at times, but it also made me incredibly productive. 
+Lastly, freelancing was exciting. There is a thrill to selling, negotiating, and closing deals. Also, nothing is quite as motivating as selling a project to somebody knowing that it's going to be up to you, and you alone, to figure out how the fuck to get this thing to actually work. Sure, this was stressful at times, but it also made me incredibly productive.
 
 ## What did I not like?
 
-There was a lot to not like about consulting. So much, in fact, that I no longer want to do it! 
+There was a lot to not like about consulting. So much, in fact, that I no longer want to do it!
 
 ### Time
 
-When I started consulting, I had this dream of charging a lot of money per hour and working minimal hours. I think I still have this dream, but my definition of "minimal hours" has changed. 
+When I started consulting, I had this dream of charging a lot of money per hour and working minimal hours. I think I still have this dream, but my definition of "minimal hours" has changed.
 
 I had hourly contracts for two different clients totaling 30 billable hours / week when I began freelancing. This is too many hours. Most people people would scoff at this and say, "I'm sorry, 30 hours is too _many_?!". In fact, we're just coming off the latest Twitter war about how many hours people in tech work. I'll consider all of the arguments moot without evidence of tracked hours and _what_ work was done during those hours.
 
@@ -122,23 +122,23 @@ Given everything above, I would argue that an ideal number of billable weekly ho
 
 ### Work
 
-If you have not read Monica Rogati's [Data Science Hierarchy of Needs](https://hackernoon.com/the-ai-hierarchy-of-needs-18f111fcc007), then get out of here and go read that. I bring it up because my goal was to focus on work towards the top of her pyramid, like writing production code to repeatedly train and/or perform inference on machine learning models. There is significantly less freelance need for this type of work than work towards the bottom of the pyramid, like ETL pipelines and analytics. 
+If you have not read Monica Rogati's [Data Science Hierarchy of Needs](https://hackernoon.com/the-ai-hierarchy-of-needs-18f111fcc007), then get out of here and go read that. I bring it up because my goal was to focus on work towards the top of her pyramid, like writing production code to repeatedly train and/or perform inference on machine learning models. There is significantly less freelance need for this type of work than work towards the bottom of the pyramid, like ETL pipelines and analytics.
 
-For the ML need that _did_ exist, a lot of it was misplaced. I successfully argued myself out of a job multiple times by dissuading companies from hiring me for ML and instead encouraging them to do some basic analytics or setup a data warehouse. 
+For the ML need that _did_ exist, a lot of it was misplaced. I successfully argued myself out of a job multiple times by dissuading companies from hiring me for ML and instead encouraging them to do some basic analytics or setup a data warehouse.
 
-For the few companies that had a legitimate ML need, I started to feel _morally bad_ about building production ML systems for them. In fact, I would stand behind the following statement for the vast majority of companies: 
+For the few companies that had a legitimate ML need, I started to feel _morally bad_ about building production ML systems for them. In fact, I would stand behind the following statement for the vast majority of companies:
 
->Do not hire a freelancer to build data products in 2020. 
+>Do not hire a freelancer to build data products in 2020.
 
 Due to the selection bias of companies that were looking for a freelancer, they tended to be either very early stage startups or had few to zero data scientists. Building out a production ML system requires _so much fucking code right now_. Sure, companies agree to terms up front and this is all business baby, but I really loathed handing over giant piles of code + infrastructure to clients.
 
-To be clear, I pride myself on the code that I write. I write tests, comments, and documentation. I try to keep things DRY and modular. _Regardless_. Many parts of an ML pipeline end up consisting of custom code. Everything will eventually break. The data coming into the pipeline will change. The data volume will grow. Shit will happen, the company will have to maintain this system, and it's going to be a pain to maintain. After all, [ML is the high interest credit card of technical debt](https://research.google/pubs/pub43146/). It's possible to build out tooling to mitigate these risks, but [the list of required infrastructure is long](https://research.google/pubs/pub46555/). 
+To be clear, I pride myself on the code that I write. I write tests, comments, and documentation. I try to keep things DRY and modular. _Regardless_. Many parts of an ML pipeline end up consisting of custom code. Everything will eventually break. The data coming into the pipeline will change. The data volume will grow. Shit will happen, the company will have to maintain this system, and it's going to be a pain to maintain. After all, [ML is the high interest credit card of technical debt](https://research.google/pubs/pub43146/). It's possible to build out tooling to mitigate these risks, but [the list of required infrastructure is long](https://research.google/pubs/pub46555/).
 
 The crux of this issue is that there is no Rails for ML. If you hire somebody to build you a website and they hand you a pile of Rails code, you can find many other people who will be able to take over this code and understand it. This is not the case with ML right now. It also might never be the case due to the fact that ML code is so tightly coupled with compute / infrastructure.
 
-I also got a lot of pushback from potential clients who wanted this work to be done in house. At the time, this annoyed me (I wanted a deal!). In hindsight, this makes a lot of sense, and I have now come around to the belief that most of this work _should_ be done in house. The systems are just too complicated right now. 
+I also got a lot of pushback from potential clients who wanted this work to be done in house. At the time, this annoyed me (I wanted a deal!). In hindsight, this makes a lot of sense, and I have now come around to the belief that most of this work _should_ be done in house. The systems are just too complicated right now.
 
-A counterexample to this is that there are a number of companies for whom they basically need simple, one-off data products built. For example, imagine a small-scale ecommerce company that needs a recommendation system. Their scale is small enough that a simple recommendation system will suffice, and improvements to the algorithm will not have large absolute impact due the small scale of the company. 
+A counterexample to this is that there are a number of companies for whom they basically need simple, one-off data products built. For example, imagine a small-scale ecommerce company that needs a recommendation system. Their scale is small enough that a simple recommendation system will suffice, and improvements to the algorithm will not have large absolute impact due the small scale of the company.
 
 <blockquote class="twitter-tweet"><p lang="en" dir="ltr">You can have 2 DS and a 2-year plan for them, but, even if they execute flawlessly, you can end up in a place where there&#39;s not much left to do unless (1) there are new DS products to build or (2) the scale of the company warrants marginal improvements on existing DS products</p>&mdash; Ethan Rosenthal (@eprosenthal) <a href="https://twitter.com/eprosenthal/status/1135962682870378496?ref_src=twsrc%5Etfw">June 4, 2019</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
