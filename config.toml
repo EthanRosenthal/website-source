@@ -8,6 +8,10 @@ canonifyURLS = true
 googleAnalytics = "UA-54232305-1"
 # disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
 
+[markup]
+  [markup.highlight]
+    style = "monokailight"
+
 [taxonomy]
     tag = "tags"
 
