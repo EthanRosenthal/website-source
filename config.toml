@@ -6,11 +6,14 @@ config = "config.toml"
 theme = "osprey"
 canonifyURLS = true
 googleAnalytics = "UA-54232305-1"
-# disableKinds = ["taxonomy", "taxonomyTerm"] # This theme does not currently use "tag" and "category" taxonomies
+pygmentsUseClasses = true
 
 [markup]
   [markup.highlight]
-    style = "monokailight"
+    style = "github"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
 
 [taxonomy]
     tag = "tags"
