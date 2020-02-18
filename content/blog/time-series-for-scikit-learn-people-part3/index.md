@@ -4,6 +4,9 @@ title: "Time Series for scikit-learn People (Part III): Horizon Optimization"
 slug: "time-series-for-scikit-learn-people-part3"
 hasMath: true
 notebook: true
+tags:
+  - machine learning
+  - time series
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -22,7 +25,7 @@ def recursive_forecast(model, input_data, num_points_in_future):
         prediction = model.predict(input_data)
         # Append prediction to the input data
         input_data = np.hstack((input_data, prediction))
-        
+
     return prediction
 ```
 
@@ -244,7 +247,7 @@ lin_pipeline = lin_pipeline.fit(X[:train_size], y[:train_size])
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-With the fitted pipeline, we can now generate horizon predictions. Calling `predict` on the pipeline will now generate a 2-hour, 24 data point prediction at each point in the data `X`. Passing in `start_idx` will return predictions starting at the `start_idx` of X (which in our case will be the start of the test data). 
+With the fitted pipeline, we can now generate horizon predictions. Calling `predict` on the pipeline will now generate a 2-hour, 24 data point prediction at each point in the data `X`. Passing in `start_idx` will return predictions starting at the `start_idx` of X (which in our case will be the start of the test data).
 
 `prediction` will have 24 columns where the first column represents the first data point in the future (in our case, 5 minutes in the future) all the way up to the 24th data point in the future.
 
@@ -281,7 +284,7 @@ plt.plot(np.arange(350, 374), lin_prediction[350, :], linewidth=6);
 plt.ylabel('Number of Bikes Available');
 plt.xlabel('Time Index');
 plt.title('Autoregressive Linear Model');
-plt.legend(['Actual Bike Availability', 
+plt.legend(['Actual Bike Availability',
             'Predicted availability \nat Time Index 350']);
 ```
 
@@ -293,7 +296,7 @@ plt.legend(['Actual Bike Availability',
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-We can also layer on different horizon predictions to see how they compare to each other. Below, I plot the true bike availability, the 1-hour prediction, and the 2-hour prediction. The 1-hour prediction corresponds to what our model would predict for the bike availability at a particular time, given all of the data up until an hour prior to that time. 
+We can also layer on different horizon predictions to see how they compare to each other. Below, I plot the true bike availability, the 1-hour prediction, and the 2-hour prediction. The 1-hour prediction corresponds to what our model would predict for the bike availability at a particular time, given all of the data up until an hour prior to that time.
 
 Surpisingly to me, both the 1-hour and 2-hour predictions look pretty good by eye! You can see that the 2-hour prediction is slightly more "off" from the Actual data compared to the 1-hour prediction, which makes sense.
 
@@ -307,8 +310,8 @@ plt.figure();
 plt.plot(y[-test_size:], 'k.-');
 plt.plot(np.arange(11, test_size),  lin_prediction[:-11, 11], 'o', alpha=0.75);
 plt.plot(np.arange(23, test_size), lin_prediction[:-23, 23], 'x', alpha=0.75);
-plt.legend(['Actual Bike Availability', 
-            '1 Hour Prediction', 
+plt.legend(['Actual Bike Availability',
+            '1 Hour Prediction',
             '2 Hour Prediction']);
 plt.ylabel('Number of Bikes Available');
 plt.xlabel('Time Index');
@@ -362,8 +365,8 @@ While our horizon prediction looks pretty good, we can still try out a recursive
 {{% jupyter_input_start %}}
 
 ```python
-forecast = lin_pipeline.forecast(X, 
-                                 start_idx=train_size + 530, 
+forecast = lin_pipeline.forecast(X,
+                                 start_idx=train_size + 530,
                                  trans_window=samples_per_week)
 ```
 
@@ -420,7 +423,7 @@ xgb_pipeline = ForecasterPipeline([
         ('ar_features', AutoregressiveTransformer(num_lags=samples_per_week)),
     ])),
     ('post_feature_imputer', ReversibleImputer()),
-    ('regressor', MultiOutputRegressor(XGBRegressor(n_jobs=12, 
+    ('regressor', MultiOutputRegressor(XGBRegressor(n_jobs=12,
                                                     n_estimators=300)))
 ])
 
@@ -454,8 +457,8 @@ plt.figure();
 plt.plot(y[-test_size:], 'k.-');
 plt.plot(np.arange(11, test_size),  xgb_prediction[:-11, 11], 'o', alpha=0.75);
 plt.plot(np.arange(23, test_size), xgb_prediction[:-23, 23], 'x', alpha=0.75);
-plt.legend(['Actual Bike Availability', 
-            '1 Hour Prediction', 
+plt.legend(['Actual Bike Availability',
+            '1 Hour Prediction',
             '2 Hour Prediction']);
 plt.ylabel('Number of Bikes Available');
 plt.xlabel('Time Index');
@@ -564,7 +567,7 @@ class TemporalBlock(nn.Module):
 
 
 class TemporalConvNet(nn.Module):
-    def __init__(self, num_inputs, num_channels, output_sz, 
+    def __init__(self, num_inputs, num_channels, output_sz,
                  kernel_size=2, dropout=0.2):
         super(TemporalConvNet, self).__init__()
         layers = []
@@ -573,9 +576,9 @@ class TemporalConvNet(nn.Module):
             dilation_size = 2 ** i
             in_channels = num_inputs if i == 0 else num_channels[i-1]
             out_channels = num_channels[i]
-            layers += [TemporalBlock(in_channels, out_channels, kernel_size, stride=1, 
+            layers += [TemporalBlock(in_channels, out_channels, kernel_size, stride=1,
                                      dilation=dilation_size,
-                                     padding=(kernel_size-1) * dilation_size, 
+                                     padding=(kernel_size-1) * dilation_size,
                                      dropout=dropout)]
 
         self.network = nn.Sequential(*layers)
@@ -588,7 +591,7 @@ class TemporalConvNet(nn.Module):
         out = self.network(x.unsqueeze(1))
         out = out.transpose(1, 2)
         out = self.linear(out).mean(dim=1)
-        
+
         return out
 ```
 
@@ -617,7 +620,7 @@ net = NeuralNetRegressor(
     optimizer=torch.optim.Adam,
     device='cuda',
     iterator_train__shuffle=True,
-    callbacks=[GradientNormClipping(gradient_clip_value=1, 
+    callbacks=[GradientNormClipping(gradient_clip_value=1,
                                     gradient_clip_norm_type=2)],
     train_split=None,
 )
@@ -632,8 +635,8 @@ dl_pipeline = ForecasterPipeline([
     ('post_feature_imputer', ReversibleImputer()),
     ('regressor', net)
 ])
-dl_pipeline = dl_pipeline.fit(X[:train_size].astype(np.float32), 
-                              y[:train_size].astype(np.float32), 
+dl_pipeline = dl_pipeline.fit(X[:train_size].astype(np.float32),
+                              y[:train_size].astype(np.float32),
                               end_idx=-5)
 ```
 
@@ -661,8 +664,8 @@ plt.figure();
 plt.plot(y[-test_size:], 'k.-');
 plt.plot(np.arange(11, test_size),  dl_prediction[:-11, 11], 'o', alpha=0.75);
 plt.plot(np.arange(23, test_size), dl_prediction[:-23, 23], 'x', alpha=0.75);
-plt.legend(['Actual Bike Availability', 
-            '1 Hour Prediction', 
+plt.legend(['Actual Bike Availability',
+            '1 Hour Prediction',
             '2 Hour Prediction']);
 plt.ylabel('Number of Bikes Available');
 plt.xlabel('Time Index');
@@ -686,7 +689,7 @@ The predictions look fairly decent by eye. Let's check out the MAE.
 
 ```python
 y_actual = dl_pipeline.transform_y(X)
-dl_mae = mean_absolute_error(y_actual[-test_size:], 
+dl_mae = mean_absolute_error(y_actual[-test_size:],
                              dl_prediction,
                              multioutput='raw_values')
 ```
@@ -708,7 +711,7 @@ plt.plot(np.arange(1, 25) * 5, dl_mae[:24])
 plt.xlabel('Minutes in the Future');
 plt.ylabel('Mean Absolute Error');
 plt.title('Autoregressive Model MAE');
-plt.legend(['Linear Regression', 
+plt.legend(['Linear Regression',
             'XGBoost',
             'Deep Learning']);
 ```

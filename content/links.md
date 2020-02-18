@@ -2,6 +2,7 @@
 title: "Links"
 date: "2019-10-29"
 draft: false
+hideDate: true
 ---
 
 You can find me on [GitHub](https://github.com/EthanRosenthal), [Twitter](https://twitter.com/eprosenthal), [LinkedIn](https://www.linkedin.com/in/ethanrosenthal/), and email (hello at ethanrosenthal dot com)

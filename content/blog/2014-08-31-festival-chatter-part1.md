@@ -2,6 +2,8 @@
 date: '2014-08-31'
 slug: festival-chatter-part1
 title: Festival Chatter (Part 1) - Collecting Bonnaroo Tweets from the Streaming Twitter API
+tags:
+  - festival chatter
 ---
 
 It seems like summer music festivals get more and more popular every year. I guess this could be the subject of its own post, but let's stick with my personal anecdotal evidence for the time being. I remember only a handful of music festivals in the U.S. when I was in high school - Bonnaroo, All Good, 10,000 Lakes, and Coachella. I am sure that there were others, but it was nowhere near as ubiquitous as present day. Even so, [Bonnaroo](http://www.bonnaroo.com/) remains one of the most popular festivals east of the Mississippi.

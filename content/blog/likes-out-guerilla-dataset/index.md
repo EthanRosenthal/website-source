@@ -3,6 +3,9 @@ date: "2016-10-09"
 slug: "likes-out-guerilla-dataset"
 notebook: true
 title: "Likes Out! Guerilla Dataset!"
+tags:
+  - recommendation systems
+  - web scraping
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -36,7 +39,7 @@ Back when I was a graduate student, I thought for some time that maybe I would w
 </p>
 </div>
 
-Users can "like" 3D models which is an excellent implicit signal. It turns out you can actually see which user liked which model. This presumably allows one to reconstruct the classic recommendation system "ratings matrix" of *users* as rows and *3D models* as columns with *likes* as the elements in the sparse matrix. 
+Users can "like" 3D models which is an excellent implicit signal. It turns out you can actually see which user liked which model. This presumably allows one to reconstruct the classic recommendation system "ratings matrix" of *users* as rows and *3D models* as columns with *likes* as the elements in the sparse matrix.
 
 Okay, I can see the likes on the website, but how do I actually get the data?
 

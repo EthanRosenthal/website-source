@@ -28,7 +28,7 @@
   <meta name="MobileOptimized" content="320">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="no-referrer-when-downgrade">
-  <meta name="generator" content="{{ .Hugo.Generator }}">
+  <meta name="generator" content="{{ hugo.Generator }}">
   <base href="{{ .Site.BaseURL }}">
 
   {{ if .Description }}
@@ -72,18 +72,14 @@
 
   <link rel="canonical" href="{{ .Permalink }}">
 
-  {{ if .RSSLink }}
-    <link href="{{ .RSSLink }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}">
-  {{ end }}
+  {{ range .AlternativeOutputFormats -}}
+      {{ printf `<link rel="%s" type="%s" href="%s" title="%s" />` .Rel .MediaType.Type .Permalink $.Site.Title | safeHTML }}
+  {{ end -}}
 
   <link rel="stylesheet" href="{{ .Site.BaseURL }}/styles/{{ if .Site.Params.cacheBustCSS }}{{ index .Site.Data.cachedAssets "main.css" }}{{ else }}main.css{{ end }}" type="text/css">
 
   {{ if .Site.Params.customCSS }}
     {{ partial "css.html" . }}
-  {{ end }}
-
-  {{ if .Site.Params.highlightJS }}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
   {{ end }}
 
   {{ if .Params.hasMath }}
@@ -97,6 +93,7 @@
   {{ if .Params.slides }}
     <link href="{{ $.Site.BaseURL }}/css/slides.css" rel="stylesheet" type="text/css">
   {{ end }}
+  <link href="{{ $.Site.BaseURL }}/css/syntax.css" rel="stylesheet" type="text/css">
 
   {{ if .Site.GoogleAnalytics }}
     {{ template "_internal/google_analytics.html" . }}

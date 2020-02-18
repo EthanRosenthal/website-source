@@ -2,6 +2,8 @@
 date: '2014-08-22'
 slug: hello-world
 title: Setting up a website and separate blog repository hosted on GitHub
+tags:
+  - web development
 ---
 
 As the title of the blog suggests, I would like to use this space to write about anything "data"-related that piques my interest. Likely, this will consist of personal and academic projects.

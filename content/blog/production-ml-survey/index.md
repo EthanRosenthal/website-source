@@ -3,6 +3,9 @@ date: "2019-07-25"
 title: "Production Machine Learning Survey Results"
 slug: "production-ml-survey"
 notebook: true
+tags:
+  - data science industry
+  - machine learning engineering
 ---
 {{% jupyter_cell_start markdown %}}
 

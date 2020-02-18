@@ -3,6 +3,8 @@ date: "2016-01-09"
 title: "Explicit Matrix Factorization: ALS, SGD, and All That Jazz"
 hasMath: true
 slug: "explicit-matrix-factorization-sgd-als"
+tags:
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 

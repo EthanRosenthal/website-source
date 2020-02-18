@@ -4,6 +4,9 @@ slug: "time-series-for-scikit-learn-people-part2"
 hasMath: true
 notebook: true
 title: "Time Series for scikit-learn People (Part II): Autoregressive Forecasting Pipelines"
+tags:
+  - machine learning
+  - time series
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -59,7 +62,7 @@ While much of the above feels contradictory, it's all fairly correct. The follow
 
 One would like to feed stationary data into a linear model because this ensures that the model will not suffer from [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity) such that individual predictions worsen and interpretability is reduced. One way to (try to) stationarize the data is to difference it. One typically differences the data by hand in order to determine how many times one should difference the data to make it stationary. With this knowledge in hand, one then passes the _undifferenced_ data into the ARIMA model. The ARIMA model _containes_ a differencing step. Differencing by hand is performed to determine the differencing order paramater (like an ML hyperparameter!) for the ARIMA model. This is all part of the [Box-Jenkins method](https://en.wikipedia.org/wiki/Box%E2%80%93Jenkins_method) for building ARIMA models.
 
-Another way to stationarize data is to add a trend term to a model, and we decide on differencing vs. trend terms depending on whether there is a [stochastic or deterministic (pdf)](http://hedibert.org/wp-content/uploads/2015/04/DT-or-ST.pdf) trend in the data, respectively. 
+Another way to stationarize data is to add a trend term to a model, and we decide on differencing vs. trend terms depending on whether there is a [stochastic or deterministic (pdf)](http://hedibert.org/wp-content/uploads/2015/04/DT-or-ST.pdf) trend in the data, respectively.
 
 If the residuals are stationary after being fed through a linear model, then the [Gauss-Markov theorem](https://en.wikipedia.org/wiki/Gauss%E2%80%93Markov_theorem) guarantees us that we have found the best unbiased linear estimator (BLUE) of the data. Another way to think about this is that, if we see that the residuals are _not_ stationary, then there is probably some pattern in the data that we should be able to incorporate into our model such that the residuals become stationary. There's also a ton of bonus goodies that we get if we can follow Gauss-Markov, such as accurate estimates of uncertainty. This leads to a big danger in that we may _underestimate_ the uncertainty of our model (and consequently overestimate correlations) if we use Gauss-Markov theorems on non-stationary data.
 
@@ -69,7 +72,7 @@ One could make the argument
 
 >Who cares about the antiquated methods for determining the parameters of my ARIMA model? I'll just figure them out with grid search and cross validation.
 
-and I would half agree. 
+and I would half agree.
 
 The devil on my shoulder cajoles
 
@@ -199,14 +202,14 @@ def plot_multi_acf(data, lags, titles, ylim=None, partial=False):
         fig = acf_func(data, lags=lag, ax=ax[idx], title=title);
         if ylim is not None:
             ax[idx].set_ylim(ylim);
-    
+
     fig.tight_layout();
 
 period_minutes = 5
 samples_per_hour = int(60 / period_minutes)
 samples_per_day = int(24 * samples_per_hour)
 samples_per_week = int(7 * samples_per_day)
-    
+
 lags = [3 * samples_per_hour, samples_per_day, samples_per_week]
 titles= ['Autocorrelation: 3-Hour Lag',
          'Autocorrelation: 1-Day Lag',
@@ -225,15 +228,15 @@ plot_multi_acf(y, lags, titles)
 
 ## Reversible Transformations
 
-So we should probably try differencing our data. That is, we should subtract the adjacent point from each point. This seems like a simple concept. [Lots](https://www.analyticsvidhya.com/blog/2016/02/time-series-forecasting-codes-python/) of [posts](https://tomaugspurger.github.io/modern-7-timeseries) reference the [DataFrame.shift()](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.shift.html) function in pandas as an easy way to subtract shifted data. My neurotic issue was that, once one does this, it is nontrivial to reconstruct the original time series. Consequently, how does one then feed the differenced data through a model and plot the prediction alongside the original data? 
+So we should probably try differencing our data. That is, we should subtract the adjacent point from each point. This seems like a simple concept. [Lots](https://www.analyticsvidhya.com/blog/2016/02/time-series-forecasting-codes-python/) of [posts](https://tomaugspurger.github.io/modern-7-timeseries) reference the [DataFrame.shift()](https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.shift.html) function in pandas as an easy way to subtract shifted data. My neurotic issue was that, once one does this, it is nontrivial to reconstruct the original time series. Consequently, how does one then feed the differenced data through a model and plot the prediction alongside the original data?
 
-Additionally, one performs regression on the difference time series data in an ARIMA model. This is a unique problem that shows where time series diverge from conventional machine learning via scikit-learn. While one may build and manipulate a bunch of features for an ML prediction, the target values (i.e. $y$) are typically left alone. I, for one, am always scared too touch them lest I leak target information into my features. With time series, though, one must actually transform the `y` variable that is fed into the eventual model `fit(X, y)` method. 
+Additionally, one performs regression on the difference time series data in an ARIMA model. This is a unique problem that shows where time series diverge from conventional machine learning via scikit-learn. While one may build and manipulate a bunch of features for an ML prediction, the target values (i.e. $y$) are typically left alone. I, for one, am always scared too touch them lest I leak target information into my features. With time series, though, one must actually transform the `y` variable that is fed into the eventual model `fit(X, y)` method.
 
 Given the needs that I had - reversible transformations and the ability to modify both `X` and `y` - I ended up building a library that is inspired by scikit-learn (all classes inherit from scikit-learn classes), but there are definitely untoward actions deviating from the scikit-learn paradigm. As mentioned at the top, this library is called `skits`, and can be found on my [github](https://github.com/ethanrosenthal/skits). I should warn that it is definitely a work in progress with a non-stationary API (har har har).
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-## Why not use an existing library? 
+## Why not use an existing library?
 
 [statsmodels](http://www.statsmodels.org) has a lot of time series models along with plotting and pandas integrations. However, I had difficulty figuring out what was going on under the hood. Also, I did not understand how one would use a trained model on new data. And even if I did figure this out, who the hell knows how you serialize these models? Finally, I like the composability of scikit-learn. If I want to throw a neural network at the end of a pipeline, why shouldn't I be able to?
 
@@ -241,7 +244,7 @@ After I started this post, I found this library [tsfresh](http://tsfresh.readthe
 
 I would like to call out Facebook's [prophet](https://facebook.github.io/prophet/) which seems excellent for understanding uncertainty in time series predictions. Uncertainty in time series is typically quite large (it's hard to predict the future!), so quantifying this is often of paramount importance (think: risk management). I would like to write about this library in a future post.
 
-Lastly, I will talk later about forecasting, but I will say now that I wanted the ability to build models that directly optimize for "multi-step ahead" forecasting which I have not seen widely implemented. 
+Lastly, I will talk later about forecasting, but I will say now that I wanted the ability to build models that directly optimize for "multi-step ahead" forecasting which I have not seen widely implemented.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
@@ -257,7 +260,7 @@ We would like to chain their transformations together, so we will use the `Forec
 {{% jupyter_input_start %}}
 
 ```python
-from skits.preprocessing import (ReversibleImputer, 
+from skits.preprocessing import (ReversibleImputer,
                                  DifferenceTransformer)
 from skits.pipeline import ForecasterPipeline
 from sklearn.preprocessing import StandardScaler
@@ -319,7 +322,7 @@ The Box-Jenkins method calls for not only looking at the autocorrelation functio
 {{% jupyter_input_start %}}
 
 ```python
-plot_multi_acf(Xt.squeeze(), lags, ['Partial ' + t for t in titles], 
+plot_multi_acf(Xt.squeeze(), lags, ['Partial ' + t for t in titles],
                partial=True)
 ```
 
@@ -361,7 +364,7 @@ from skits.feature_extraction import (AutoregressiveTransformer,
 
 ```python
 from sklearn.linear_model import LinearRegression, LogisticRegression, Ridge
-from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier, 
+from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier,
                               RandomForestRegressor)
 from sklearn.metrics import mean_squared_error
 from sklearn.pipeline import FeatureUnion
@@ -674,7 +677,7 @@ And so we get amazing AUC with only looking at a single value of the data 15 min
 fig, ax = plt.subplots();
 ax.plot(X[-2000:, 0], '.');
 ax2 = ax.twinx();
-ax2.plot(y_pred[-2000:], 
+ax2.plot(y_pred[-2000:],
          '.',
          c=ax._get_lines.get_next_color());
 ax2.set_ylim((0, 1.1));
@@ -702,7 +705,7 @@ We can then zoom in on one of the transitions from available to zero bikes. As y
 fig, ax = plt.subplots();
 ax.plot(X[-1250:-1200], '-');
 ax2 = ax.twinx();
-ax2.plot(y_pred[-1250:-1200], 
+ax2.plot(y_pred[-1250:-1200],
          '-',
          c=ax._get_lines.get_next_color());
 ax2.set_ylim((0, 1.1));

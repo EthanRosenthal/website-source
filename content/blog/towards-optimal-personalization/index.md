@@ -4,6 +4,9 @@ title: "Towards optimal personalization: synthesisizing machine learning and ope
 slug: "towards-optimal-personalization"
 hasMath: true
 notebook: true
+tags:
+  - machine learning
+  - operations research
 ---
 {{% jupyter_cell_start markdown %}}
 

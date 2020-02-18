@@ -4,6 +4,8 @@ slug: "implicit-mf-part-1"
 hasMath: true
 notebook: true
 title: "Intro to Implicit Matrix Factorization: Classic ALS with Sketchfab Models"
+tags:
+  - recommendation systems
 ---
 {{% jupyter_cell_start markdown %}}
 

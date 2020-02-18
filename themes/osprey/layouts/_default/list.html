@@ -16,11 +16,23 @@
                           <article>
                               <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
                               <div class=sub-header>
-                              {{ .Date.Format (.Site.Params.dateform | default "January 2, 2006") }} · {{ .ReadingTime }} minute read
+                              {{ .Date.Format (.Site.Params.dateform | default "January 2, 2006") }} · {{ .ReadingTime }} minute read · {{ range $index, $tag := .Params.tags -}}
+                            {{- if $index -}}, {{ end -}}
+                            <a href='{{ "/tags/" | relLangURL }}{{ . | urlize }}'>{{ $tag }}</a>
+                            {{- end -}}
                               </div>
                           </article>
                       {{ end }}
                   </div>
+              </div>
+              <div class="content">
+                  Blog Tags:
+                  {{ range $key, $value := .Site.Taxonomies.tags }}
+                  {{- if ne $key "academia" -}}, {{ end -}}
+                  <a href="{{ $.Site.BaseURL }}tags/{{ $key }}">{{ $key }}</a>
+                  {{- end -}}
+                  <br><br>
+                  <a href="{{ .Site.BaseURL }}tags/">View All Posts by Tag</a>
               </div>
           </div>
       </section>

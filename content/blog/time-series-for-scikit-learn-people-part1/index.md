@@ -4,6 +4,9 @@ slug: "time-series-for-scikit-learn-people-part1"
 hasMath: true
 notebook: true
 title: "Time Series for scikit-learn People (Part I): Where's the X Matrix?"
+tags:
+  - machine learning
+  - time series
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -17,7 +20,7 @@ Still, I often wondered, "Where does machine learning end and time series begin?
 
 I have had trouble answering these questions, in no small part due to the common difficulty of dealing with domain-specific vocabulary. I find myself having to internally translate time series concepts into "familiar" machine learning concepts. With this in mind, I would thus like to kick off a series of blog posts around analyzing time series data with the hopes of presenting these concepts in a familiar form. Due to the ubiquity of [scikit-learn](http://scikit-learn.org/stable/), I'll assume that the scikit-learn API constitutes a familiar form.
 
-To start the series off, in this post I'll introduce a time series dataset that I've gathered. I'll then walk through how we can turn the time series forecasting problem into a classic linear regression problem. 
+To start the series off, in this post I'll introduce a time series dataset that I've gathered. I'll then walk through how we can turn the time series forecasting problem into a classic linear regression problem.
 
 
 ## Let's find a y(t)
@@ -373,21 +376,21 @@ end = np.where(y.index == '2017-05-02 12:30:00')[0][0]
 window = 5
 
 for i in range(8):
-    
+
     full = y.iloc[start:end]
     train = y.iloc[middle - i - window:middle - i ]
-    predict = y.iloc[middle - i:middle - i + 1]   
-    
+    predict = y.iloc[middle - i:middle - i + 1]
+
     (full + 2*i).plot(ax=ax, c='grey', alpha=0.5);
     (train + 2*i).plot(ax=ax, c='c', markersize=4,
                        marker='o')
-    (predict + 2*i).plot(ax=ax, c='r', markersize=8, 
+    (predict + 2*i).plot(ax=ax, c='r', markersize=8,
                          marker='o', linestyle='')
 
-    
+
 ax.get_yaxis().set_ticks([]);
-ax.legend(['full time series', 
-           '$\mathbf{X}$', 
+ax.legend(['full time series',
+           '$\mathbf{X}$',
            '$y$'],
           bbox_to_anchor=(1, 1));
 ```
@@ -513,7 +516,7 @@ By the way, what we have done is defined and solved an [autoregressive model](ht
 
 Now that we've seen how to turn a time series problem into a typical supervised learning problem, one can easily add features to the model as extra columns in the design matrix, $\mathbf{X}$. The tricky part about time series is that, because you're predicting the future, you must know what the future values of your features will be. For example, we could add in a binary feature indicating whether or not there is rain into our bike availablility forecaster. While this could potentially be useful for increasing accuracy on the training data, we would need to be able to accurately forecast the weather in order to forecast the time series far into the future, and we all know how hard weather forecasting is! In general, building training and test data for features that change with time is difficult, as it can be easy to leak information from the future into the past.
 
-Lastly, I would also like to point out that, while we chose to use Linear Regression as our model, we could have used any other type of model, such as a random forest or neural network. 
+Lastly, I would also like to point out that, while we chose to use Linear Regression as our model, we could have used any other type of model, such as a random forest or neural network.
 
 In the next post, I'll walk through how we can _correctly_ build up a design matrix, and we'll take on the task of forecasting bike availability.
 

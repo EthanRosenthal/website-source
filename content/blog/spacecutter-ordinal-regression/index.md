@@ -4,6 +4,9 @@ title: "spacecutter: Ordinal Regression Models in PyTorch"
 slug: "spacecutter-ordinal-regression"
 hasMath: true
 notebook: true
+tags:
+  - deep learning
+  - machine learning
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -90,7 +93,7 @@ Through some math, it's possible to convince yourself that picking a particular 
 
 $$P(y = 1) = \sigma(f)$$
 
-The probability that the observation belongs to class `0` is 
+The probability that the observation belongs to class `0` is
 
 $$
 \begin{aligned}
@@ -128,7 +131,7 @@ plt.xlabel('$f$');
 Moving from binary classification to ordinal regression with 3+ classes involves simply defining more cutpoints to chop up our prediction space into "class probability" space. For $K$ classes, we will have $K - 1$ cutpoints. The probability that an observation belongs to class $k$ is given by the _cumulative logistic link function_:
 
 $$
-P(y = k) = 
+P(y = k) =
   \begin{cases}
     \sigma(c\_0 - f(\mathbf{X}))\,, \text{if } k = 0 \cr
     \sigma(c\_{k} - f(\mathbf{X})) - \sigma(c\_{k - 1} - f(\mathbf{X})) \,, \text{if } 0 < k < K \cr
@@ -150,24 +153,24 @@ def plot_ordinal_classes(f, cutpoints):
     num_classes = len(cutpoints) + 1
     labels = []
     for idx in range(num_classes):
-        
+
         if idx == 0:
             plt.plot(f, sigma(cutpoints[0] - f));
         elif idx == num_classes - 1:
             plt.plot(f, 1 - sigma(cutpoints[-1] - f));
         else:
             plt.plot(f, sigma(cutpoints[idx] - f) - sigma(cutpoints[idx - 1] - f));
-            
+
         labels.append(f'$P(y = {idx})$')
-        
+
     for c in cutpoints:
         plt.plot((c, c), (0, 1), 'k--')
-        
+
     labels.append('cutpoints')
     plt.legend(labels);
     plt.ylabel('Probability');
     plt.xlabel('$f$');
-    
+
 cutpoints = [-2, 2]
 plot_ordinal_classes(f, cutpoints)
 ```
@@ -201,15 +204,15 @@ plot_ordinal_classes(np.linspace(-5, 5, 101), [-0.5, 0.5])
 
 The following animation shows the class probabilities for a 5-class model as we vary the cutpoints.
 
-<video style="display:block; width:100%; height:auto;" autoplay="" muted="" loop="loop"> 
-    <source src="videos/spacecutter-ordinal-regression/ordinal_class_probabilities.mp4" type="video/mp4"> 
+<video style="display:block; width:100%; height:auto;" autoplay="" muted="" loop="loop">
+    <source src="videos/spacecutter-ordinal-regression/ordinal_class_probabilities.mp4" type="video/mp4">
 </video>
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
 ## Learning Ordinal Regression
 
-Now that we have our model that predicts ordinal class probabilities, it's only a small step to _learning_ a model. We simply need to define a loss function and minimize. Our loss function will be the negative log likelihood which corresponds to the negative log of the class probability that we predict for whichever class is the "true" class for a particular observation. In pseudocode, imagine that we have three classes and a prediction `y_pred = [0.25, 0.5, 0.25]` corresponding to the predicted class probability for each of the three classes. If `y_true = 1`, then our loss is `-log(y_pred[1])`. This is easy enough to define in PyTorch, and then all we have to do is optimize both our model _and_ our cutpoints via Stochastic Gradient Descent (SGD). 
+Now that we have our model that predicts ordinal class probabilities, it's only a small step to _learning_ a model. We simply need to define a loss function and minimize. Our loss function will be the negative log likelihood which corresponds to the negative log of the class probability that we predict for whichever class is the "true" class for a particular observation. In pseudocode, imagine that we have three classes and a prediction `y_pred = [0.25, 0.5, 0.25]` corresponding to the predicted class probability for each of the three classes. If `y_true = 1`, then our loss is `-log(y_pred[1])`. This is easy enough to define in PyTorch, and then all we have to do is optimize both our model _and_ our cutpoints via Stochastic Gradient Descent (SGD).
 
 One wrinkle is that our cutpoints should be in _ascending_ order. That is, `cutpoint[0] < cutpoint[1] < ... cutpoint[K-1]`. This is a _constraint_ on our optimization problem which is not easily handled by SGD. My dirty hack is to clip the cutpoint values after each gradient update to ensure that they are always in ascending order. With more time, I'd like to implement a more [proper](https://arxiv.org/abs/1804.06500) solution.
 
@@ -394,7 +397,7 @@ wine.head()
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-It seems that everybody rates the wine quality somewhere between 3 and 8. We'll map these to classes 0-5. 
+It seems that everybody rates the wine quality somewhere between 3 and 8. We'll map these to classes 0-5.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -466,7 +469,7 @@ column_transformer = ColumnTransformer([
 
 ```python
 X_trans = column_transformer.fit_transform(wine)
-(pd.DataFrame(X_trans, 
+(pd.DataFrame(X_trans,
               columns=gaussian_columns + power_columns)
    .hist(figsize=(10, 10)));
 plt.tight_layout();
@@ -490,8 +493,8 @@ y -= y.min()
 
 X = wine
 
-(X_train, X_test, 
- y_train, y_test) = train_test_split(X, y, test_size=0.33, 
+(X_train, X_test,
+ y_train, y_test) = train_test_split(X, y, test_size=0.33,
                                      stratify=y, random_state=666)
 ```
 
@@ -631,7 +634,7 @@ Let's use mean absolute error as our scoring critera and do a grid search across
 def mae_scorer(y_true, y_pred):
     return mean_absolute_error(y_true, y_pred.argmax(axis=1))
 
-scoring = make_scorer(mae_scorer, 
+scoring = make_scorer(mae_scorer,
                       greater_is_better=False,
                       needs_proba=True)
 ```
