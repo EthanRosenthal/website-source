@@ -29,10 +29,10 @@
                   Blog Tags:
                   {{ range $key, $value := .Site.Taxonomies.tags }}
                   {{- if ne $key "academia" -}}, {{ end -}}
-                  <a href="{{ $.Site.BaseURL }}tags/{{ $key }}">{{ $key }}</a>
+                  <a href="{{ $.Site.BaseURL }}/tags/{{ $key }}">{{ $key }}</a>
                   {{- end -}}
                   <br><br>
-                  <a href="{{ .Site.BaseURL }}tags/">View All Posts by Tag</a>
+                  <a href="{{ .Site.BaseURL }}/tags/">View All Posts by Tag</a>
               </div>
           </div>
       </section>
