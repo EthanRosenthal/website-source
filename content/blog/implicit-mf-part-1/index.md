@@ -17,7 +17,7 @@ Last post I described how I collected implicit feedback data from the website [S
 
 I think the best place to start when looking into implicit feedback recommenders is with the model outlined in the classic paper "[Collaborative Filtering for Implicit Feedback Datasets](http://yifanhu.net/PUB/cf.pdf)" by Koren et.al. (warning: pdf link).  I have seen many names in the literature and machine learning libraries for this model. I'll call it Weighted Regularized Matrix Factorization (WRMF) which tends to be a name used fairly often. WRMF is like the classic rock of implicit matrix factorization. It may not be the trendiest, but it will never go out of style. And, everytime I use it, I know that I'm guaranteed to like what I get out. Specifically, this model makes reasonable intuitive sense, it's scalable, and, most importantly, I've found it easy to tune. There are much fewer hyperparameters than, say, stochastic gradient descent models.
 
-If you recall from my post on [Explicit Feedback Matrix Factorization]({filename}/2016-01-09-explicit-matrix-factorization-als-sgd.md), we had a loss function (without biases) that looked like:
+If you recall from my post on [Explicit Feedback Matrix Factorization]({{< ref "/blog/explicit-matrix-factorization-sgd-als" >}}), we had a loss function (without biases) that looked like:
 
 $$L\_{exp} = \sum\limits\_{u,i \in S}(r\_{ui} - \textbf{x}\_{u}^{\intercal} \cdot{} \textbf{y}\_{i})^{2} + \lambda\_{x} \sum\limits\_{u} \left\Vert \textbf{x}\_{u} \right\Vert^{2} + \lambda\_{y} \sum\limits\_{u} \left\Vert \textbf{y}\_{i} \right\Vert^{2}$$
 
@@ -675,7 +675,7 @@ curves = grid_search_learning_curve(base_model, train, test,
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-The training log is ridculously long, but feel free to click [here]({filename}/assets/logs/wrmf_gridsearch.log) and check it out. Otherwise, here's the printout of the best run:
+The training log is ridculously long, but feel free to click [here](/logs/wrmf_gridsearch.log) and check it out. Otherwise, here's the printout of the best run:
 
 ```
 alpha: 50 | num_factors: 40 | regularization: 0.1
