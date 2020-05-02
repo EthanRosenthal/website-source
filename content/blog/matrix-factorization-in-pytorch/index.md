@@ -13,7 +13,7 @@ tags:
 
 _Update 7/8/2019: Upgraded to PyTorch version 1.0. Removed now-deprecated `Variable` framework_
 
-Hey, remember when I wrote those [ungodly]({filename}/2016-01-09-explicit-matrix-factorization-als-sgd.md) [long]({filename}/2016-10-19-implicit-mf-part-1.md) [posts]({filename}/2016-11-7-implicit-mf-part-2.md) about matrix factorization chock-full of gory math? Good news! You can forget it all. We have now entered the Era of Deep Learning, and automatic differentiation shall be our guiding light. 
+Hey, remember when I wrote those [ungodly]({{< ref "/blog/explicit-matrix-factorization-sgd-als" >}}) [long]({{< ref "/blog/implicit-mf-part-1" >}}) [posts]({{< ref "/blog/implicit-mf-part-2" >}}) about matrix factorization chock-full of gory math? Good news! You can forget it all. We have now entered the Era of Deep Learning, and automatic differentiation shall be our guiding light. 
 
 <!-- PELICAN_END_SUMMARY -->
 

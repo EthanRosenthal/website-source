@@ -11,7 +11,7 @@ tags:
 
 <!-- PELICAN_BEGIN_SUMMARY -->
 
-In this post we're going to do a bunch of cool things following up on the last [post]({filename}/2016-10-19-implicit-mf-part-1.md) introducing implicit matrix factorization. We're going to explore Learning to Rank, a different method for implicit matrix factorization, and then use the library [LightFM](http://lyst.github.io/lightfm/docs/home.html) to incorporate side information into our recommender. Next, we'll use [scikit-optimize](https://scikit-optimize.github.io/) to be smarter than grid search for cross validating hyperparameters. Lastly, we'll see that we can move beyond simple user-to-item and item-to-item recommendations now that we have side information embedded in the same space as our users and items. Let's go!
+In this post we're going to do a bunch of cool things following up on the last [post]({{< ref "/blog/implicit-mf-part-1" >}}) introducing implicit matrix factorization. We're going to explore Learning to Rank, a different method for implicit matrix factorization, and then use the library [LightFM](http://lyst.github.io/lightfm/docs/home.html) to incorporate side information into our recommender. Next, we'll use [scikit-optimize](https://scikit-optimize.github.io/) to be smarter than grid search for cross validating hyperparameters. Lastly, we'll see that we can move beyond simple user-to-item and item-to-item recommendations now that we have side information embedded in the same space as our users and items. Let's go!
 
 <!-- PELICAN_END_SUMMARY -->
 
