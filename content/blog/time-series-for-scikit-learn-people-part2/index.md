@@ -19,13 +19,13 @@ We will pick up from the last [post]({{< ref "/blog/time-series-for-scikit-learn
 
 ### What is an ARIMA model?
 
-Last post, we built an autoregressive model. Recall that we had a function $y$ which dependended on time ($t$), and we wanted to build a model, $\hat{y}$, to predict $y$. In that post, we created "features" (aka a design matrix) which consisted of previous values of $y$. We then learned the weights of these features via linear regression. If we considered the previous two values of $y$ as our features, then we can write this mathematically as
+Last post, we built an autoregressive model. Recall that we had a function $y$ which depended on time ($t$), and we wanted to build a model, $\hat{y}$, to predict $y$. In that post, we created "features" (aka a design matrix) which consisted of previous values of $y$. We then learned the weights of these features via linear regression. If we considered the previous two values of $y$ as our features, then we can write this mathematically as
 
 $$\hat{y}\_{t} = a\_{1}y\_{t - 1} + a\_{2}y\_{t - 2}$$
 
 where $a\_{j}$ is linear regression coefficient for the $j$-th previous value of $y$. These are the **AutoRegressive** terms (the AR in ARIMA).
 
-Next are the **Integrated** terms. These are for if you want to predict the *difference* between pairs of $y$ values as opposed to predicting $y$ directly. We can think of this like a preprocessing step to our data. As an example, the first order integrated model would transform our $y$ into $y^{\*}$ as follows:
+Next are the **Integrated** terms. These are for if you want to predict the *difference* between pairs of $y$ values as opposed to predicting $y$ directly. We can think of this as a preprocessing step to our data. As an example, the first order integrated model would transform our $y$ into $y^{\*}$ as follows:
 
 $$y^{\*}\_{t} = y\_{t} - y\_{t - 1}$$
 
@@ -60,7 +60,7 @@ Now here's the thing about stationarity: I've found it incredibly confusing to r
 
 While much of the above feels contradictory, it's all fairly correct. The following walks through how I understand this, but I would be happy for feedback on where I'm wrong:
 
-One would like to feed stationary data into a linear model because this ensures that the model will not suffer from [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity) such that individual predictions worsen and interpretability is reduced. One way to (try to) stationarize the data is to difference it. One typically differences the data by hand in order to determine how many times one should difference the data to make it stationary. With this knowledge in hand, one then passes the _undifferenced_ data into the ARIMA model. The ARIMA model _containes_ a differencing step. Differencing by hand is performed to determine the differencing order paramater (like an ML hyperparameter!) for the ARIMA model. This is all part of the [Box-Jenkins method](https://en.wikipedia.org/wiki/Box%E2%80%93Jenkins_method) for building ARIMA models.
+One would like to feed stationary data into a linear model because this ensures that the model will not suffer from [multicollinearity](https://en.wikipedia.org/wiki/Multicollinearity) such that individual predictions worsen and interpretability is reduced. One way to (try to) stationarize the data is to difference it. One typically differences the data by hand in order to determine how many times one should difference the data to make it stationary. With this knowledge in hand, one then passes the _undifferenced_ data into the ARIMA model. The ARIMA model _contains_ a differencing step. Differencing by hand is performed to determine the differencing order paramater (like an ML hyperparameter!) for the ARIMA model. This is all part of the [Box-Jenkins method](https://en.wikipedia.org/wiki/Box%E2%80%93Jenkins_method) for building ARIMA models.
 
 Another way to stationarize data is to add a trend term to a model, and we decide on differencing vs. trend terms depending on whether there is a [stochastic or deterministic (pdf)](http://hedibert.org/wp-content/uploads/2015/04/DT-or-ST.pdf) trend in the data, respectively.
 
@@ -84,7 +84,7 @@ but the angel cautions
 
 See, a lot of the time series theory was developed and used in econometrics. In that field, it is [particularly](http://www.nytimes.com/2008/09/15/business/15lehman.html) [important](http://www.nytimes.com/2010/10/02/business/02flash.html) to understand the "data generating process", and one would like to be able to make decisions in the face of new data, new patterns, and new forecasts. There are ARIMA models that represent data generating processes that would be unrealistic in economic scenarios, and one would want to know this when developing a model!
 
-What I would like to do is trade some of the stability and interpretability of classical time series modeling for the potentially higher accuracy and easier implementation (AKA I don't have to know the stats or solve nonlinear PDEs) of supervised machine learning. After all, from my original most, I just want to know how many Citi Bikes will be occupying a station in the next 15 minutes. This is not mission critical!
+What I would like to do is trade some of the stability and interpretability of classical time series modeling for the potentially higher accuracy and easier implementation (AKA I don't have to know the stats or solve nonlinear PDEs) of supervised machine learning. After all, from my original post, I just want to know how many Citi Bikes will be occupying a station in the next 15 minutes. This is not mission critical!
 
 ## Building ARIMA Models with skits
 
