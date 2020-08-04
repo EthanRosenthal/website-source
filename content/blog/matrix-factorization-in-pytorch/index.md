@@ -13,7 +13,9 @@ tags:
 
 _Update 7/8/2019: Upgraded to PyTorch version 1.0. Removed now-deprecated `Variable` framework_
 
-Hey, remember when I wrote those [ungodly]({{< ref "/blog/explicit-matrix-factorization-sgd-als" >}}) [long]({{< ref "/blog/implicit-mf-part-1" >}}) [posts]({{< ref "/blog/implicit-mf-part-2" >}}) about matrix factorization chock-full of gory math? Good news! You can forget it all. We have now entered the Era of Deep Learning, and automatic differentiation shall be our guiding light. 
+_Update 8/4/2020: Added missing `optimizer.zero_grad()` call. Reformatted code with [black](https://github.com/psf/black)_
+
+Hey, remember when I wrote those [ungodly]({filename}/2016-01-09-explicit-matrix-factorization-als-sgd.md) [long]({filename}/2016-10-19-implicit-mf-part-1.md) [posts]({filename}/2016-11-7-implicit-mf-part-2.md) about matrix factorization chock-full of gory math? Good news! You can forget it all. We have now entered the Era of Deep Learning, and automatic differentiation shall be our guiding light. 
 
 <!-- PELICAN_END_SUMMARY -->
 
@@ -63,13 +65,10 @@ import torch
 
 # Make up some random explicit feedback ratings
 # and convert to a numpy array
-n_users = 1000
-n_items = 1000
-ratings = sprand(n_users, n_items, 
-                 density=0.01, format='csr')
-ratings.data = (np.random.randint(1, 5, 
-                                  size=ratings.nnz)
-                          .astype(np.float64))
+n_users = 1_000
+n_items = 1_000
+ratings = sprand(n_users, n_items, density=0.01, format="csr")
+ratings.data = np.random.randint(1, 5, size=ratings.nnz).astype(np.float64)
 ratings = ratings.toarray()
 ```
 
@@ -82,16 +81,11 @@ ratings = ratings.toarray()
 
 ```python
 class MatrixFactorization(torch.nn.Module):
-    
     def __init__(self, n_users, n_items, n_factors=20):
         super().__init__()
-        self.user_factors = torch.nn.Embedding(n_users, 
-                                               n_factors,
-                                               sparse=True)
-        self.item_factors = torch.nn.Embedding(n_items, 
-                                               n_factors,
-                                               sparse=True)
-        
+        self.user_factors = torch.nn.Embedding(n_users, n_factors, sparse=True)
+        self.item_factors = torch.nn.Embedding(n_items, n_factors, sparse=True)
+
     def forward(self, user, item):
         return (self.user_factors(user) * self.item_factors(item)).sum(1)
 ```
@@ -142,8 +136,7 @@ We'll keep things simple, though, and use the same technique for all parameters 
 {{% jupyter_input_start %}}
 
 ```python
-optimizer = torch.optim.SGD(model.parameters(), 
-                            lr=1e-6) # learning rate
+optimizer = torch.optim.SGD(model.parameters(), lr=1e-6)  # learning rate
 ```
 
 {{% jupyter_input_end %}}
@@ -168,18 +161,21 @@ p = np.random.permutation(len(rows))
 rows, cols = rows[p], cols[p]
 
 for row, col in zip(*(rows, cols)):
+    # Set gradients to zero
+    optimizer.zero_grad()
+    
     # Turn data into tensors
     rating = torch.FloatTensor([ratings[row, col]])
     row = torch.LongTensor([row])
     col = torch.LongTensor([col])
-    
+
     # Predict and calculate loss
     prediction = model(row, col)
     loss = loss_func(prediction, rating)
-    
+
     # Backpropagate
     loss.backward()
-    
+
     # Update the parameters
     optimizer.step()
 ```
@@ -199,25 +195,19 @@ The beauty of the above code is that we can rapidly experiment with different pa
 
 ```python
 class BiasedMatrixFactorization(torch.nn.Module):
-    
     def __init__(self, n_users, n_items, n_factors=20):
         super().__init__()
-        self.user_factors = torch.nn.Embedding(n_users, 
-                                               n_factors,
-                                               sparse=True)
-        self.item_factors = torch.nn.Embedding(n_items, 
-                                               n_factors,
-                                               sparse=True)
-        self.user_biases = torch.nn.Embedding(n_users, 
-                                              1,
-                                              sparse=True)
-        self.item_biases = torch.nn.Embedding(n_items,
-                                              1,
-                                              sparse=True)
-        
+        self.user_factors = torch.nn.Embedding(n_users, n_factors, sparse=True)
+        self.item_factors = torch.nn.Embedding(n_items, n_factors, sparse=True)
+        self.user_biases = torch.nn.Embedding(n_users, 1, sparse=True)
+        self.item_biases = torch.nn.Embedding(n_items, 1, sparse=True)
+
     def forward(self, user, item):
         pred = self.user_biases(user) + self.item_biases(item)
-        pred += (self.user_factors(user) * self.item_factors(item)).sum(dim=1, keepdim=True)
+        pred += (
+            (self.user_factors(user) * self.item_factors(item))
+            .sum(dim=1, keepdim=True)
+        )
         return pred.squeeze()
 ```
 
@@ -233,8 +223,7 @@ $L_{2}$ regularization can easily be added to the entire model via the optimizer
 {{% jupyter_input_start %}}
 
 ```python
-reg_loss_func = torch.optim.SGD(model.parameters(), lr=1e-6,
-                                weight_decay=1e-5)
+reg_loss_func = torch.optim.SGD(model.parameters(), lr=1e-6, weight_decay=1e-5)
 ```
 
 {{% jupyter_input_end %}}
