@@ -19,13 +19,13 @@ I was personally useless for most of the Spring of 2020. There was a period of t
 
 A side effect of having spent 10 years with limited income in college and grad school, 6 of those here in expensive ass NYC, is that I eat of lot of cheap sandwiches, even though I now have a nice Tech™ job. While my sandwich consumption was quite formidable pre-covid, sheltering in place cemented this staple in my diet. I am particularly fond of peanut butter and banana sandwiches, having been introduced to them as a child by my maternal grandfather who ate them regularly. 
 
-I start a peanut butter and banana sandwich by spreading peanut butter on two slices of bread. I then slice circular slices of the banana, starting at the end of the banana, and place each slice on one of the pieces of bread until I have a single layer of banana slices. Every time I do this, the former condensed matter physicist in me starts to twitch his eye. You see, I have this urge, this desire, this _need_ to maximize the [packing fraction](https://en.wikipedia.org/wiki/Atomic_packing_factor) of the banana slices. That is, I want to maximize the amount of bread that is covered by banana slices. Just as bowl-form food is perfect because you get every ingredient in every bite, each bite of my sandwich should yield the same golden ratio of bread, peanut butter, and banana.
+I start a peanut butter and banana sandwich by spreading peanut butter on two slices of bread. I then slice circular slices of the banana, starting at the end of the banana, and place each slice on one of the pieces of bread until I have a single layer of banana slices. Every time I do this, the former condensed matter physicist in me starts to twitch his eye. You see, I have this urge, this desire, this _need_ to maximize the [packing fraction](https://en.wikipedia.org/wiki/Atomic_packing_factor) of the banana slices. That is, I want to maximize the coverage of the banana slices on the bread. Just as bowl-form food is perfect because you get every ingredient in every bite, each bite of my sandwich should yield the same golden ratio of bread, peanut butter, and banana.
 
-If you were a machine learning model (or my wife), then you would tell me to just cut long rectangular strips along the long axis of the banana, but I'm not a sociopath. If life were simple, then the banana slices would be perfect circles of equal diameter, and we could coast through life looking up optimal configurations on [packomania](http://packomania.com/). But alas, life is not simple. We're in the middle of a global pandemic, and banana slices are elliptical with varying size.
+If you were a machine learning model (or my wife), then you would tell me to just cut long rectangular strips along the long axis of the banana, but I'm not a sociopath. If life were simple, then the banana slices would be perfect circles of equal diameter, and we could coast along looking up optimal configurations on [packomania](http://packomania.com/). But alas, life is not simple. We're in the middle of a global pandemic, and banana slices are elliptical with varying size.
 
 So, how do we make optimal peanut butter and banana sandwiches? It's really quite simple. You take a picture of your banana and bread, pass the image through a deep learning model to locate said items, do some nonlinear curve fitting to the banana, transform to polar coordinates and "slice" the banana along the fitted curve, turn those slices into elliptical polygons, and feed the polygons and bread "box" into a 2D nesting algorithm. 
 
-You may have noticed that I supposedly started this project in the Spring, and it's now August. Like most idiot engineers, I had no idea how complicated this stupid project was going to be, but time's meaningless in quarantine, so here we are. And here you are! Because I made a python package [nannernest](https://github.com/EthanRosenthal/nannernest) if you want to optimize your own sandwiches, and I'm going to spend the rest of this post describing how this whole godforsaken thing works.
+You may have noticed that I supposedly started this project in the Spring, and it's now August. Like most idiot engineers, I had no idea how complicated this stupid project was going to be, but time's meaningless in quarantine, so here we are. And here you are! Because I made a pip installable python package [nannernest](https://github.com/EthanRosenthal/nannernest) if you want to optimize your own sandwiches, and I'm going to spend the rest of this post describing how this whole godforsaken thing works.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
@@ -155,11 +155,11 @@ nannernest.viz.plot(
 
 ## Rad Coordinate Transformations
 
-With the circle fit to the banana, the goal is to now draw radial lines out from the center of the circle to the banana and have each radial line correspond to the slice of a knife. Again, while it's easy to visualize this, it's much harder in practice. For example, we need to start slicing at one end of the banana, but how do we find an end of the banana? Also, there are two ends, and we have to differentiate them. Contrary to the behavior of [monkeys](https://www.thekitchn.com/why-you-should-peel-your-banana-like-a-monkey-206322), I start slicing my bananas at the end that was originally attached to the banana bunch, and that's what we're going to do here.
+With the circle fit to the banana, the goal is to now draw radial lines out from the center of the circle to the banana and have each radial line correspond to the slice of a knife. Again, while it's easy to visualize this, it's much harder in practice. For example, we need to start slicing at one end of the banana, but how do we find an end of the banana? Also, there are two ends, and we have to differentiate between them. Contrary to the behavior of [monkeys](https://www.thekitchn.com/why-you-should-peel-your-banana-like-a-monkey-206322), I start slicing my bananas at the end that was originally attached to the banana bunch, and that's what we're going to do here.
 
 Crucially, because we now have this circle and want to cut radial slices, we must transform from cartesian to polar coordinates and orient ourselves both radially and angularly with respect to the banana. As a start for orienting ourselves angularly, we calculate the _centroid_ of the banana mask, which corresponds to the center of mass of the banana mask if the banana mask were a 2D object. The centroid is shown below as a red dot.
 
-We can now draw a radial line originating from the banana circle and passing through the centroid, shown as the dashed white line below. We will consider that line to mark our _reference_ angle which orients us to the center of the banana.
+We now draw a radial line originating from the banana circle and passing through the centroid, shown as the dashed white line below. We will consider that line to mark our _reference_ angle which orients us to the center of the banana.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -241,7 +241,7 @@ None
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-This profile line is what allows us to orient ourselves radially. You can clearly see where the banana starts and ends, in the radial direction. As always, just seeing it is not good enough. We need code to define the start and end of the banana in this direction. The `masks` tend to be monotonically increasing and then monotonically decreasing along the start and end, respectively. Using this information, there are a couple ways that we could define the start and the end. If the steepest parts of the profile line occur at the start and end, then the start and end would correspond to the maximum and minimum derivatives, respectively. I'm a little nervous about noise in the `mask` signal when the model confidence is low, so I chose to first digitize (or threshold) the profile line by setting it to 0 (1) if it's less than (greater than) 0.5. 
+This profile line is what allows us to orient ourselves radially. You can clearly see where the banana starts and ends, in the radial direction. As always, just seeing it is not good enough. We need code to define the start and end of the banana in this direction. The `mask` tends to be monotonically increasing and then monotonically decreasing along the start and end, respectively. Using this information, there are a couple ways that we could define the start and the end. If the steepest parts of the profile line occur at the start and end, then the start and end would correspond to the maximum and minimum derivatives, respectively. I'm a little nervous about noise in the `mask` signal when the model confidence is low, so I first digitize (or threshold) the profile line by setting it to 0 (1) if it's less than (greater than) 0.5. 
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -268,7 +268,7 @@ None
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-We now search for the points where the signal flips in terms of the maxmimum and minimum derivatives of the digitized signal. This can be done with some quick `numpy`. It's still a dangerous ("dangerous", it's a banana) operation which could definitely amplify noise. One option in the future would be to smooth the profile line prior to taking the derivative.
+We now search for the points where the signal flips in terms of the maxmimum and minimum derivatives of the digitized signal. This can be done with some quick `numpy`. It's still a dangerous ("dangerous", it's a banana) operation which could amplify noise. One option in the future would be to smooth the profile line prior to taking the derivative.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -311,7 +311,7 @@ None
 
 We are now able to orient ourselves angularly with respect to the center of the banana and radially in terms of the start and end of the banana along the radial line. The last step is the find the _angular_ start and end of the banana, where the angular start will correspond to the angle pointing to the stem of the banana. To that end, we start by creating an array of angles which span from the reference centroid angle _minus_ 135$^{\circ}$ to the reference angle _plus_ 135$^{\circ}$. Analogous to numpy's `linspace`, we'll call this array $\phi$-space.
 
-For each of angle in $\phi$-space, we'll calculate a profile line like we did above. Below, we calculate a $\phi$-space of 201 points and draw each of these profile lines on the original image. You can see that they clearly cover the banana with some healthy room on either angular side.
+For each angle in $\phi$-space, we'll calculate a profile line like we did above. Below, we create a $\phi$-space of 201 points and draw each of these profile lines on the original image. You can see that they clearly cover the banana with some healthy room on either angular side.
 
 
 
@@ -398,9 +398,9 @@ None
 
 ## Slicing from Stem to Seed
 
-Finally, with this odd matrix above that represents this polar world warped onto a cartesian plot, we can identify the banana stem and the opposite end of the banana which houses its seed. I find the two ends of the banana using a similar method to earlier for finding the radial start and end of the banana. I then find the average mask intensity in a region around either end of the banana and assume that the stem has a smaller average intensity. Finally, I virtually "chop off" the stem using the knowledge that the seed side of the banana should have similar average intensity to the stem side sans stem.
+Finally, with this odd matrix above that represents this polar world warped onto a cartesian plot, we can identify both the banana stem and the opposite end of the banana which houses its seed. I find the two ends of the banana using a similar method to earlier for finding the radial start and end of the banana. I then find the average mask intensity in a region around either end of the banana and assume that the stem has a smaller average intensity. Finally, I virtually "chop off" the stem using the knowledge that the seed side of the banana should have similar average intensity to the stem side sans stem.
 
-With this work done, I've now identified the angular position of the stem and seed of the banana, along with the radial start and end of the banana at any angle. I slice the banana by chopping it up into evenly spaced angles and drawing a rectangular slice at each angle spacing. I leave as a free parameter the fraction of the banana to slice up and how many slices to slice. These two parameters then implicitly determine the thickness of the slices. By default, I slice 75% of the banana into 17 slices, always throwing away the weird, first, tiny slice (I don't like it on my sandwich).
+With this work done, I've now identified the angular position of the stem and seed of the banana, along with the radial start and end of the banana at any angle. I slice the banana by chopping it up into evenly spaced angles and drawing a rectangular slice at each angle spacing. I leave as a free parameter the total number of slices which implicitly determines the banana slice thickness. By default, I slice 23 slices and throw out the first and last slice.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -425,7 +425,7 @@ nannernest.viz.plot(
 
 ## Ellipsoidal Assumptions
 
-We now have to make two assumptions about the banana slices. Firstly, we know that the banana slices will be smaller than the ones shown above because the peel has finite thickness. Secondly, bananas are not perfectly circular, and the slices will come out as ellipses. Based on very few poor measurements with a tape measure (I don't have calipers), I assume that the actual banana slices are 20% smaller than the image above with the banana peel. I also take the slices in the image above to represent the major axis of the banana slice ellipse, and assume that the minor axis is 85% the size of the major axis.
+We now have to make two assumptions about the banana slices. Firstly, we know that the banana slices will be smaller than the ones shown above because the peel has finite thickness. Secondly, bananas are not perfectly circular, and the slices will come out as ellipses. Based on a couple poor measurements with a tape measure (I don't have calipers), I assume that the actual banana slices are 20% smaller than the image above with the banana peel. I also take the slices in the image above to represent the major axis of the banana slice ellipse, and assume that the minor axis is 85% the size of the major axis.
 
 With these assumptions in place, slice 1 shown above looks like
 
@@ -454,9 +454,9 @@ None
 
 Prior to the final step of this ridiculously long pipeline, we have to convert the ellipsoidal slices into _polygons_. Technically, the plot above is a discrete set of points and could be considered a polygon. To make the problem tractable, though, we reduce the ellipse to a small set of points. When I first started working on this problem, I did not know if I was going to be severely limited in how many points I could allot for each slice polygon. I'm also somewhat neurotic and worried about the fact that the polygon will necessarily not be the exact same size as the ellipse. 
 
-I wanted to figure out the polygon that _circumscribes_ the ellipse. I was surprised to not find any code for this, so I ended up trying to solve it analytically. The algebra ended up being pretty gnarly, so there's now a function in `nannernest` that runs [sympy](https://www.sympy.org/en/index.html) and calculates the scaling factors for the major and minor axes based on the number of points in the ellipse polygon. 
+I wanted to figure out the polygon that _circumscribes_ the ellipse. I was surprised to not find any code for this, so I ended up trying to solve it analytically. The resulting algebra was pretty gnarly, so there's now a function in `nannernest` that runs [sympy](https://www.sympy.org/en/index.html) and calculates the scaling factors for the major and minor axes based on the number of points in the ellipse polygon. 
 
-Below, I draw the ellipse and the circumscribed polygon for a polygon of 12 points. While (by definition) the circumscribed polygon is bigger than the ellipse, the difference is quite small. I probably could have just chopped the original ellipse into 12 points without much loss in accuracy. In practice, I've been using 30 points which only makes the difference even smaller. Also, FWIW, I think that my algebra only works if there is are polygon points directly along the x and y axes, so there you go. If anybody has a closed form solution to this, I'd love to see it!
+Below, I draw the ellipse and the circumscribed polygon for a polygon of 12 points. While (by definition) the circumscribed polygon is bigger than the ellipse, the difference is quite small. I probably could have just chopped the original ellipse into 12 points without much loss in accuracy. In practice, I've been using 30 points which only makes the difference even smaller. Also, FWIW, I think that my algebra only works if there are polygon points directly along the x and y axes, so there you go. If anybody has a closed form solution to this, I'd love to see it!
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -542,17 +542,21 @@ nannernest.viz.plot(image, slices=slices, bread_box=bread_box, show=True)
 
 ## nannernest
 
-As mentioned at the beginning, I built a package called [nannernest](https://github.com/EthanRosenthal/nannernest) for you to make your own optimal peanut butter and banana sandwiches. Due to some [outstanding](https://github.com/markfink/nest2D/pull/2) C issues with the nesting package, you can't pip install the library yet, but you can clone the repo and install it locally.
+As mentioned at the beginning, I built a package called [nannernest](https://github.com/EthanRosenthal/nannernest) for you to make your own optimal peanut butter and banana sandwiches. Once you get the package installed, you can generate your own optimal sandwiches on the command line with:
+
+```commandline
+nannernest pic_of_my_bread_and_banana.jpg
+```
 
 A couple random reflections on building this package:
 
-- It's difficult to transition between different "reference frames" when doing computer vision. Images are matrices, and they're x-direction when plotted corresponds to columns, which are the second index of the matrix. Conversely, we often deal with points or sets of points where the first index coresponds to the x direction. This gets confusing. I often had to convert between cartesian and polar coordinates and place an object in the larger image. Keeping track of your coordinate systems and scaling factors can be difficult, and it's probably worth doing this in a smart way. I didn't really do that.
+- It's difficult to transition between different "reference frames" when doing computer vision. Images are matrices, and their x-direction when plotted corresponds to columns, which are the second index of the matrix. Conversely, we often deal with points or sets of points where the first index coresponds to the x direction. This gets confusing. I often had to convert between cartesian and polar coordinates and place an object in the larger image. Keeping track of your coordinate systems and scaling factors can be difficult, and it's probably worth doing this in a smart way. I didn't really do that.
 - [Typer](https://typer.tiangolo.com/) is pretty great for building command line applications. 
-- I've been enjoying [poetry](https://python-poetry.org/) for package development.
-- [dataclasses](https://docs.python.org/3/library/dataclasses.html) are rad.
+- [poetry](https://python-poetry.org/) makes package development less painful.
+- [dataclasses](https://docs.python.org/3/library/dataclasses.html) are a good reason to upgrade to Python 3.7.
+- There are many, many improvements that could be made. The package is not robust and fails in weird ways. Slices often end up off the corner of the bread due to me using a bounding box to define the bread rather than the actual outline of the bread. I shudder to think of the adversarial attacks that this poor package will receive (think hot dog/not hot dog...).
 
-
-## Optimal Peanut Butter and Banana Sandwich
+## An Optimal Peanut Butter and Banana Sandwich
 
 Lately, my preference is
 
