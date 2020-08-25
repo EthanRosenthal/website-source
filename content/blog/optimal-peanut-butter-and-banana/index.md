@@ -63,6 +63,8 @@ _RC_PARAMS = {
 }
 for k, v in _RC_PARAMS.items():
     plt.rcParams[k] = v
+
+DPI = 160
 ```
 
 {{% jupyter_input_end %}}
@@ -84,7 +86,7 @@ image, banana, bread = nannernest.segmentation.run(Path("pre_sandwich.jpg"))
 {{% jupyter_input_start %}}
 
 ```python
-nannernest.viz.plot(image, banana=banana, bread=bread, show=True)
+nannernest.viz.plot(image, banana=banana, bread=bread, show=True, dpi=DPI)
 ```
 
 {{% jupyter_input_end %}}
@@ -121,7 +123,7 @@ slices, banana_circle, banana_centroid, banana_skeleton = nannernest.slicing.run
 {{% jupyter_input_start %}}
 
 ```python
-nannernest.viz.plot(image, banana_skeleton=banana_skeleton, show=True)
+nannernest.viz.plot(image, banana_skeleton=banana_skeleton, show=True, dpi=DPI)
 ```
 
 {{% jupyter_input_end %}}
@@ -141,7 +143,11 @@ I then fit a circle to the banana skeleton using a nice scipy-based least square
 
 ```python
 nannernest.viz.plot(
-    image, banana_skeleton=banana_skeleton, banana_circle=banana_circle, show=True
+    image,
+    banana_skeleton=banana_skeleton,
+    banana_circle=banana_circle,
+    show=True,
+    dpi=DPI,
 )
 ```
 
@@ -173,6 +179,7 @@ ax = nannernest.viz.plot(
     banana_circle=banana_circle,
     banana_centroid=banana_centroid,
     show=False,
+    dpi=DPI,
 )
 
 dy = banana_centroid[0] - banana_circle.yc
@@ -343,6 +350,7 @@ ax = nannernest.viz.plot(
     banana_circle=banana_circle,
     banana_centroid=banana_centroid,
     show=False,
+    dpi=DPI,
 )
 for phi in phi_space:
     radial_end_point = (
@@ -408,11 +416,7 @@ With this work done, I've now identified the angular position of the stem and se
 {{% jupyter_input_start %}}
 
 ```python
-nannernest.viz.plot(
-    image,
-    slices=slices,
-    show=True,
-)
+nannernest.viz.plot(image, slices=slices, show=True, dpi=DPI)
 ```
 
 {{% jupyter_input_end %}}
@@ -436,8 +440,11 @@ With these assumptions in place, slice 1 shown above looks like
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 8))
-theta = np.linspace(0, 2*np.pi, 101)
-ax.plot((slices[0].major_axis / 2) * np.cos(theta), (slices[0].minor_axis / 2) * np.sin(theta))
+theta = np.linspace(0, 2 * np.pi, 101)
+ax.plot(
+    (slices[0].major_axis / 2) * np.cos(theta),
+    (slices[0].minor_axis / 2) * np.sin(theta),
+)
 lim = slices[0].major_axis / 2 + 1
 ax.set_xlim((-lim, lim))
 ax.set_ylim((-lim, lim))
@@ -465,15 +472,19 @@ Below, I draw the ellipse and the circumscribed polygon for a polygon of 12 poin
 
 ```python
 fig, ax = plt.subplots(figsize=(8, 8))
-theta = np.linspace(0, 2*np.pi, 101)
+theta = np.linspace(0, 2 * np.pi, 101)
 slice_x = (slices[0].major_axis / 2) * np.cos(theta)
 slice_y = (slices[0].minor_axis / 2) * np.sin(theta)
 ax.plot(slice_x, slice_y)
 lim = max(slice_x.max(), slice_y.max()) + 5
 
 num_points = 12
-major_scaler, minor_scaler = nannernest.nesting.calc_elliptical_polygon_scalers(num_points)
-poly = nannernest.nesting.ellipse_to_polygon(slices[0], num_points, major_scaler, minor_scaler)
+major_scaler, minor_scaler = nannernest.nesting.calc_elliptical_polygon_scalers(
+    num_points
+)
+poly = nannernest.nesting.ellipse_to_polygon(
+    slices[0], num_points, major_scaler, minor_scaler
+)
 ax.plot(*zip(*poly), "o--")
 
 ax.set_xlim((-lim, lim))
@@ -529,7 +540,7 @@ slices, bread_box = nannernest.nesting.run(slices, bread)
 {{% jupyter_input_start %}}
 
 ```python
-nannernest.viz.plot(image, slices=slices, bread_box=bread_box, show=True)
+nannernest.viz.plot(image, slices=slices, bread_box=bread_box, show=True, dpi=DPI)
 ```
 
 {{% jupyter_input_end %}}
@@ -545,7 +556,7 @@ nannernest.viz.plot(image, slices=slices, bread_box=bread_box, show=True)
 As mentioned at the beginning, I built a package called [nannernest](https://github.com/EthanRosenthal/nannernest) for you to make your own optimal peanut butter and banana sandwiches. Once you get the package installed, you can generate your own optimal sandwiches on the command line with:
 
 ```commandline
-nannernest pic_of_my_bread_and_banana.jpg
+$ nannernest pic_of_my_bread_and_banana.jpg
 ```
 
 A couple random reflections on building this package:
@@ -567,9 +578,9 @@ Lately, my preference is
 Best of luck with your sandwich making. I wish you optimal coverage.
 
 
-<img style='width: 640px; padding: 10px'  src='images/optimal-peanut-butter-and-banana/pre_made.jpg' />
-<img style='width: 640px; padding: 10px'  src='images/optimal-peanut-butter-and-banana/pre_made_viz.jpg' />
-<img style='width: 640px; padding: 10px'  src='images/optimal-peanut-butter-and-banana/made.jpg' />
+<img style='width: 640px; padding: 10px'  src='images/optimal-peanut-butter-and-banana/pre_made_small.jpg' />
+<img style='width: 640px; padding: 10px'  src='images/optimal-peanut-butter-and-banana/pre_made_viz_small.jpg' />
+<img style='width: 640px; padding: 10px'  src='images/optimal-peanut-butter-and-banana/made_small.jpg' />
 
 
 {{% jupyter_cell_end %}}
