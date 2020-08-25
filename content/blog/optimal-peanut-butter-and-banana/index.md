@@ -100,7 +100,11 @@ nannernest.viz.plot(image, banana=banana, bread=bread, show=True, dpi=DPI)
 ## [What shape does a banana make?](https://www.youtube.com/watch?v=3O1ad4lZYGk)
 
 
-Now that we have identified the banana in the image, we need to virtually "slice" it. This is where we are first introduced to the universal pain of computer vision: by eye, I can see exactly what I want to do, but it's so difficult to turn this into code. I could ask you to draw lines on the banana identifying where you would slice it, and you could easily draw well-spaced, somewhat parallel slices. It's not so easy to do this with code. However, I would also argue that this is the fun part of the problem. There are many ways to solve this, and it feels creative, as opposed to using a pre-trained deep learning model. On the other hand, "creatively" solving these problems likely leads to significantly less robust and generalizable solutions compared to deep learning models trained on millions of examples. There's a tradeoff here.
+Now that we have identified the banana in the image, we need to virtually "slice" it. This is where we are first introduced to the universal pain of computer vision: 
+
+_By eye, I can see exactly what I want to do; by code, it's so damn difficult._
+
+I could ask you to draw lines on the banana identifying where you would slice it, and you could easily draw well-spaced, somewhat parallel slices. It's not so easy to do this with code. However, I would also argue that this is the fun part of the problem. There are many ways to solve this, and it feels creative, as opposed to using a pre-trained deep learning model. On the other hand, "creatively" solving these problems likely leads to more brittle solutions compared to deep learning models trained on millions of examples. There's a tradeoff here.
 
 I tried a bunch of analytical solutions based on ellipses, but nothing seemed to work quite right. I ended up landing on a somewhat simpler solution that may not be robust to straight bananas, but who cares -- this is a silly project anyway. Using the wonderful [scikit-image](https://scikit-image.org/) library, I first calculate the [skeleton](https://scikit-image.org/docs/dev/auto_examples/edges/plot_skeleton.html) of the banana segmentation mask. This reduces the mask to a one pixel wide representation which effectively creates a curve that runs along the long axis of the banana.
 
@@ -161,7 +165,7 @@ nannernest.viz.plot(
 
 ## Rad Coordinate Transformations
 
-With the circle fit to the banana, the goal is to now draw radial lines out from the center of the circle to the banana and have each radial line correspond to the slice of a knife. Again, while it's easy to visualize this, it's much harder in practice. For example, we need to start slicing at one end of the banana, but how do we find an end of the banana? Also, there are two ends, and we have to differentiate between them. Contrary to the behavior of [monkeys](https://www.thekitchn.com/why-you-should-peel-your-banana-like-a-monkey-206322), I start slicing my bananas at the end that was originally attached to the banana bunch, and that's what we're going to do here.
+With the circle fit to the banana, the goal is to now draw radial lines out from the center of the circle to the banana and have each radial line correspond to the slice of a knife. Again, while it's easy to visualize this, it's much harder in practice. For example, we need to start slicing at one end of the banana, but how do we find an end of the banana? Also, there are two ends, and we have to differentiate between them. Contrary to the behavior of [monkeys](https://www.thekitchn.com/why-you-should-peel-your-banana-like-a-monkey-206322), I start slicing my bananas at the stem end, and that's what we're going to do here.
 
 Crucially, because we now have this circle and want to cut radial slices, we must transform from cartesian to polar coordinates and orient ourselves both radially and angularly with respect to the banana. As a start for orienting ourselves angularly, we calculate the _centroid_ of the banana mask, which corresponds to the center of mass of the banana mask if the banana mask were a 2D object. The centroid is shown below as a red dot.
 
@@ -197,7 +201,7 @@ ax.plot(
     (banana_circle.yc, radial_end_point[1]),
     color="white",
     linestyle="--",
-    linewidth=4,
+    linewidth=1,
 )
 None
 ```
@@ -275,7 +279,7 @@ None
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-We now search for the points where the signal flips in terms of the maxmimum and minimum derivatives of the digitized signal. This can be done with some quick `numpy`. It's still a dangerous ("dangerous", it's a banana) operation which could amplify noise. One option in the future would be to smooth the profile line prior to taking the derivative.
+We now search for the points where the signal flips in terms of the maxmimum and minimum derivatives of the digitized signal. This can be done with some quick `numpy`. It's still a dangerous (quote: "dangerous", it's a banana) operation which could amplify noise. One option in the future would be to smooth the profile line prior to taking the derivative.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -362,7 +366,7 @@ for phi in phi_space:
         (banana_circle.yc, radial_end_point[1]),
         color="white",
         linestyle="--",
-        linewidth=1,
+        linewidth=0.5,
     )
 ```
 
@@ -408,7 +412,7 @@ None
 
 Finally, with this odd matrix above that represents this polar world warped onto a cartesian plot, we can identify both the banana stem and the opposite end of the banana which houses its seed. I find the two ends of the banana using a similar method to earlier for finding the radial start and end of the banana. I then find the average mask intensity in a region around either end of the banana and assume that the stem has a smaller average intensity. Finally, I virtually "chop off" the stem using the knowledge that the seed side of the banana should have similar average intensity to the stem side sans stem.
 
-With this work done, I've now identified the angular position of the stem and seed of the banana, along with the radial start and end of the banana at any angle. I slice the banana by chopping it up into evenly spaced angles and drawing a rectangular slice at each angle spacing. I leave as a free parameter the total number of slices which implicitly determines the banana slice thickness. By default, I slice 23 slices and throw out the first and last slice.
+With this work done, I've now identified the angular position of the stem and seed of the banana, along with the radial start and end of the banana at any angle. I slice the banana by chopping it up into evenly spaced angles and drawing a rectangular slice at each angle spacing. I leave as a free parameter the total number of slices which implicitly determines the banana slice thickness. By default, I slice 23 slices and throw out the first and last slice (nobody wants those).
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -459,9 +463,9 @@ None
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-Prior to the final step of this ridiculously long pipeline, we have to convert the ellipsoidal slices into _polygons_. Technically, the plot above is a discrete set of points and could be considered a polygon. To make the problem tractable, though, we reduce the ellipse to a small set of points. When I first started working on this problem, I did not know if I was going to be severely limited in how many points I could allot for each slice polygon. I'm also somewhat neurotic and worried about the fact that the polygon will necessarily not be the exact same size as the ellipse. 
+Prior to the final step of this ridiculously long pipeline, we have to convert the ellipsoidal slices into _polygons_. Technically, the plot above is a discrete set of points and could be considered a polygon. To make the problem tractable, though, we reduce the ellipse to a small set of points. When I first started working on this problem, I did not know if I was going to be severely limited in how many points I could allot for each slice polygon. I'm also somewhat neurotic (a mild understatement) and worried about the fact that the polygon will necessarily not be the exact same size as the ellipse. 
 
-I wanted to figure out the polygon that _circumscribes_ the ellipse. I was surprised to not find any code for this, so I ended up trying to solve it analytically. The resulting algebra was pretty gnarly, so there's now a function in `nannernest` that runs [sympy](https://www.sympy.org/en/index.html) and calculates the scaling factors for the major and minor axes based on the number of points in the ellipse polygon. 
+To solve this, I wanted to figure out the polygon that _circumscribes_ the ellipse. I was surprised to not find any code for this, so I ended up trying to solve it analytically. The resulting algebra was pretty gnarly, so there's now a function in `nannernest` that runs [sympy](https://www.sympy.org/en/index.html) and calculates the scaling factors for the major and minor axes based on the number of points in the ellipse polygon. 
 
 Below, I draw the ellipse and the circumscribed polygon for a polygon of 12 points. While (by definition) the circumscribed polygon is bigger than the ellipse, the difference is quite small. I probably could have just chopped the original ellipse into 12 points without much loss in accuracy. In practice, I've been using 30 points which only makes the difference even smaller. Also, FWIW, I think that my algebra only works if there are polygon points directly along the x and y axes, so there you go. If anybody has a closed form solution to this, I'd love to see it!
 
@@ -517,7 +521,7 @@ I originally set out to find an analytical solution to packing ellipses in a box
 1. Define an overall objective and then employ a black box optimizer to search the space more efficiently. The space involves things like order of polygon placement and the angle of the polygon when it's placed.
 
 
-For months, I waffled back and forth between searching GitHub for implementations and trying to code up my own. One night I would spend 3 hours failing to compile C dependencies, while the next night I would read academic papers and hack away. In the end, I got about halfway to a solution before stumbling upon [nest2D](https://github.com/markfink/nest2D) which provides python bindings for a C++ [library](https://github.com/tamasmeszaros/libnest2d/tree/master). Figuring out this library's C dependencies wasn't [too bad](https://github.com/markfink/nest2D/pull/2). The only output of the library is an SVG file with a fixed rectangular shape containing images of the nested polygons, so I have to parse the SVG afterwards, scale the polygons back to their original image, then translate and rotate them to overlay the original bread box. Nevertheless, this all ended up being easier than finishing my own library.
+For months, I waffled back and forth between searching GitHub for implementations and trying to code up my own. One night I would spend 3 hours failing to compile C dependencies, while the next night I would read academic papers and hack away. In the end, I got about halfway to a solution before stumbling upon [nest2D](https://github.com/markfink/nest2D) which provides python bindings for a C++ [library](https://github.com/tamasmeszaros/libnest2d/tree/master). Figuring out this library's C dependencies wasn't [too bad](https://github.com/markfink/nest2D/pull/2). The only output of the library is an SVG file with a fixed rectangular shape containing images of the nested polygons, so I have to parse the SVG afterwards, scale the polygons back to their original image, then translate and rotate them to overlay with the original bread box. Nevertheless, this all ended up being easier than finishing my own library.
 
 Thankfully, the nesting library is quite fast, so I start with 2 banana slices and keep running the nesting algorithm with more and more slices until no more can be added. 
 
