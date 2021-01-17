@@ -30,7 +30,7 @@ I found the following numbers online for the above variables:
 - $V = 0.5 L = 5 \times 10^{-4} m^3 $
 - $c = .7171 \frac{kJ}{kg \cdot K}$
 
-_Note: we use the specific heat of air assuming constant volume which seemed like a reasonable approximation given that your lungs expand? Honestly, I know very little about the body._
+_Note: we use the specific heat of air assuming constant volume which seemed reasonable enough? Honestly, I know very little about the body._
 
 Plugging everything in and checking our units to make sure everything's correct, we get:
 
