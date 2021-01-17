@@ -45,13 +45,13 @@ $$\Delta E = 4.4 \times 10^{-4} \frac{kJ}{K} \Delta T$$
 Lastly, let's convert $kJ$, our energy units, to $kcal$, aka American _calories_:
 
 $$\Delta E = \big( 4.4 \times 10^{-4} \frac{kJ}{K} \big) \big(\frac{1  \ kcal}{4.184 \ kJ} \big)  \Delta T$$
-$$ \Delta E = 1.05 \times 10^{-3} \frac{kcal}{K} \Delta T $$
+$$ \Delta E = 1.05 \times 10^{-4} \frac{kcal}{K} \Delta T $$
 
 Huzzah! We now have an equation that tells us how many calories are burned when we breathe in air that is colder than our body. Let's finally get to a single number and calculate how many calories are burned when we breathe in freezing air at 32$^\circ$F (0$^\circ$C). Our equation is in terms of Kelvin, so we can either plug in Kelvin or Celsius temperatures due to the fact that Celsius is just Kelvin offset by a constant factor. Your body's basal temperature is around 37$^\circ$C which gives us:
 
-$$ \Delta E = 1.05 \times 10^{-3} \frac{kcal}{K} (37 \ C - 0 \ C) $$
-$$ \Delta E = .039 \ kcal $$
+$$ \Delta E = 1.05 \times 10^{-4} \frac{kcal}{K} (37 \ C - 0 \ C) $$
+$$ \Delta E = .0039 \ kcal $$
 
-And there you have it -- your body burns around $1/25$ of a calorie warming up the frozen air in each breath that you take.
+And there you have it -- your body burns around $1/250$ of a calorie warming up the frozen air in each breath that you take.
 
-The internet tells me that we take around 960 breaths per hour which corresponds to 37 calories of freezing air. Doesn't look like you can quit exercising anytime soon.
+The internet tells me that we take around 960 breaths per hour which corresponds to 3.7 calories of freezing air. Doesn't look like you can quit exercising anytime soon.
