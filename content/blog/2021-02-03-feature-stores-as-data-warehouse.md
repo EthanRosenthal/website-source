@@ -135,7 +135,11 @@ The problem is that the above query calculates the ad's click rate across _all t
 SELECT
   impression_id
   , SUM(was_clicked)::FLOAT / COUNT(*)
-    OVER (PARTITION BY ad_id ORDER BY created_at ASC) 
+    OVER (
+      PARTITION BY ad_id ORDER BY created_at ASC
+      ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
+      EXCLUDE CURRENT ROW
+    ) 
     AS click_rate
 FROM impression_id
 ```
