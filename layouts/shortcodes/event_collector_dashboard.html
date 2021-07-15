@@ -1,0 +1,116 @@
+<div id="event_collector_dashboard" style="border:1px dashed black;padding:10px">  
+    "Dashboard"
+    <br><br>
+    <button type="button" id="blog-button" onclick="submitButtonClick(this.id)" style="align:right">Click Me</button>
+    <br><br>
+    Page Views: <span id="page_views_count">...</span>
+    <br>
+    Button Clicks: <span id="button_clicks_count">...</span> 
+
+    <script type="text/javascript">
+
+        const MAX_ATTEMPTS = 5;
+        const POLL_INTERVAL = 1_000_000;
+        const URL = 'https://3o9x126nr7.execute-api.us-east-1.amazonaws.com/prod/';
+        const USERNAME = 'ethan';
+        const PASSWORD = 'xyz';
+        const BUTTON_ID = 'blog-button';
+
+        // Taken from https://stackoverflow.com/a/2117523
+        function uuidv4() {
+            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+        const SESSION_ID = uuidv4();
+
+        // Polling functions
+        var sleep = time => new Promise(resolve => setTimeout(resolve, time));
+        var poll = (promiseFn, time) => promiseFn().then(sleep(time).then(() => poll(promiseFn, time)));
+
+        function updateCount(result, element_id) {
+            // Update the dashboard element_id to the result count.
+            document.getElementById(element_id).innerText = result['count'];
+        }
+
+        function setupPolling() {
+            // Poll button click counts to continually update the dashboard.
+            poll(
+                () => new Promise(
+                    () => fetch(
+                            URL + 'button/click/count?' + new URLSearchParams({'button_id': BUTTON_ID}),
+                            {headers: headers}
+                        )
+                        .then(response => response.json())
+                        .then(result => updateCount(result, 'button_clicks_count'))
+                ), 
+                POLL_INTERVAL
+            );
+
+            // Poll page view counts to continually update the dashboard.
+            poll(
+                () => new Promise(
+                    () => fetch(
+                            URL + 'web/page_view/count?' + new URLSearchParams({'url': window.location.href}),
+                            {headers: headers}
+                        )
+                        .then(response => response.json())
+                        .then(result => updateCount(result, 'page_views_count'))
+                ), 
+                POLL_INTERVAL
+            );
+        }
+
+        let headers = new Headers();
+        headers.append('Authorization', 'Basic ' + btoa(USERNAME + ':' + PASSWORD));
+
+        const page_view_body = {
+            url: window.location.href,
+            referral_url: document.referral,
+            useragent: navigator.userAgent,
+            session_id: SESSION_ID,
+        }
+
+        // POST a page view and then start polling
+        fetch(
+            URL + 'web/page_view', 
+            {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(page_view_body)
+            }
+        )
+        .then(result => result.json())
+        .then(function() {setupPolling()});
+
+
+        async function submitButtonClick(button_id) {
+            // When the dashboard button is clicked, POST a button click event and update
+            // the dashboard.
+
+            let data = {session_id: SESSION_ID, 'button_id': button_id};
+
+            // await this call before calling the next one
+            await fetch(
+                URL + 'button/click', 
+                {
+                    method: 'POST', 
+                    headers: headers, 
+                    body: JSON.stringify(data)
+                }
+            ).then(response => response.json());
+
+            // Update the button_clicks_count.
+            let params = {'button_id': button_id};
+            fetch(
+                URL + 'button/click/count?' + new URLSearchParams(params),
+                {headers: headers}
+            )
+            .then(response => response.json())
+            .then(result => updateCount(result, 'button_clicks_count'));
+
+        }
+
+    </script>
+
+</div>
