@@ -14,18 +14,14 @@
         // Globals
         let URL;
         let ENV;
-        let POLL_INTERVAL;
         if (window.location.href.startsWith("https://www.ethanrosenthal.com")) {
             // We're in prod
             URL = 'https://3o9x126nr7.execute-api.us-east-1.amazonaws.com/prod/';
             ENV = 'prod';
-            POLL_INTERVAL = 60;
         } else {
             // Send everything else to dev
             URL = 'https://p1zy5iniej.execute-api.us-east-1.amazonaws.com/dev/';
             ENV = 'dev';
-            // No reason to waste lambdas during development.
-            POLL_INTERVAL = 1_000_000;
         }
         const USERNAME = 'ethan';
         const PASSWORD = 'xyz';
@@ -39,46 +35,12 @@
         }
         const SESSION_ID = uuidv4();
 
-        // Polling functions
-        var sleep = time => new Promise(resolve => setTimeout(resolve, time));
-        var poll = (promiseFn, time) => promiseFn().then(sleep(time).then(() => poll(promiseFn, time)));
-
         function updateCount(result, element_id) {
             // Update the dashboard element_id to the result count.
             document.getElementById(element_id).innerText = result['count'];
         }
 
-        function setupPolling() {
-            // Poll button click counts to continually update the dashboard.
-            let env_button_id = ENV.concat('-').concat(BUTTON_ID);
-            poll(
-                () => new Promise(
-                    () => fetch(
-                            URL + 'button/click/count?' + new URLSearchParams({'button_id': env_button_id}),
-                            {headers: headers}
-                        )
-                        .then(response => response.json())
-                        .then(result => updateCount(result, 'button_clicks_count'))
-                ), 
-                POLL_INTERVAL
-            );
-
-            // Poll page view counts to continually update the dashboard.
-            poll(
-                () => new Promise(
-                    () => fetch(
-                            URL + 'web/page_view/count?' + new URLSearchParams({'url': window.location.href}),
-                            {headers: headers}
-                        )
-                        .then(response => response.json())
-                        .then(result => updateCount(result, 'page_views_count'))
-                ), 
-                POLL_INTERVAL
-            );
-        }
-
-
-        // When the page loads, POST a page view and then start polling
+        // When the page loads, POST a page view and then update the dashboard.
         let headers = new Headers();
         headers.append('Authorization', 'Basic ' + btoa(USERNAME + ':' + PASSWORD));
 
@@ -89,6 +51,9 @@
             session_id: SESSION_ID,
         }
 
+        let env_button_id = ENV.concat('-').concat(BUTTON_ID);
+
+        // Post the page view
         fetch(
             URL + 'web/page_view', 
             {
@@ -98,7 +63,25 @@
             }
         )
         .then(result => result.json())
-        .then(function() {setupPolling()});
+        // Grab the button clicks
+        .then(
+            result_data => fetch(
+                            URL + 'button/click/count?' + new URLSearchParams({'button_id': env_button_id}),
+                            {headers: headers}
+                        )
+        )
+        .then(response => response.json())
+        // Update the dashboard
+        .then(result => updateCount(result, 'button_clicks_count'))
+        // Grab the page view count
+        .then(result => fetch(
+                            URL + 'web/page_view/count?' + new URLSearchParams({'url': window.location.href}),
+                            {headers: headers}
+                        )
+        )
+        .then(response => response.json())
+        // Update the dashboard
+        .then(result => updateCount(result, 'page_views_count'));
 
 
         async function submitButtonClick(button_id) {
@@ -126,6 +109,15 @@
             )
             .then(response => response.json())
             .then(result => updateCount(result, 'button_clicks_count'));
+
+            // Update the page view count
+            fetch(
+                URL + 'web/page_view/count?' + new URLSearchParams({'url': window.location.href}),
+                {headers: headers}            
+            )
+            .then(response => response.json())
+            // Update the dashboard
+            .then(result => updateCount(result, 'page_views_count'));
 
         }
 
