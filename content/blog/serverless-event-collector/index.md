@@ -2,7 +2,6 @@
 date: '2021-07-20'
 slug: serverless-event-collector
 title: A Serverless Event Collector
-draft: true
 tags:
   - machine learning engineering
   - serverless
