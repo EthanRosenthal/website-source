@@ -2,7 +2,6 @@
 date: '2021-07-20'
 slug: serverless-event-collector
 title: A Serverless Event Collector
-draft: true
 tags:
   - machine learning engineering
   - serverless
@@ -95,7 +94,7 @@ The other trick you can employ is that you can return a `context` field in the r
 
 ## Moving to Collections
 
-Authorized events make it to the `collector` API which validates the event data, drops the event into a Kinesis queue, and updates relevant DynamoDB tables for real-time statistics. By using the [FastAPI](https://fastapi.tiangolo.com/) framework for the `collector` API, we get data validation and [API docs](https://3o9x126nr7.execute-api.us-east-1.amazonaws.com/prod/docs) for free. Let's take a look at how this all works with some simplified code showing the endpoint for tracking button clicks.
+Authorized events make it to the `collector` API which validates the event data, drops the event into a Kinesis queue, and updates relevant DynamoDB tables for real-time statistics. By using the [FastAPI](https://fastapi.tiangolo.com/) framework for the `collector` API, we get data validation and [API docs](https://6vp50ittt5.execute-api.us-east-1.amazonaws.com/prod/docs) for free. Let's take a look at how this all works with some simplified code showing the endpoint for tracking button clicks.
 
 
 ```python
