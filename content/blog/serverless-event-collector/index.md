@@ -1,5 +1,5 @@
 ---
-date: '2021-06-17'
+date: '2021-07-20'
 slug: serverless-event-collector
 title: A Serverless Event Collector
 tags:
@@ -9,13 +9,13 @@ tags:
 
 Two years ago, I tried to build a SaaS product for monitoring machine learning models. Luckily for you, that product [went nowhere]({{< ref "/blog/starting-shutting-quickly/index.md" >}}), so I figured I ought to share some code rather than let it continue to fester in a private GitHub repo.
 
-The monitoring service was designed to ingest data related to model _predictions_ and model _outcomes_ (aka "gold labels" aka "ground truth" aka "what actually happened"). The service would then join and clean this data and eventually spit back out a bunch of metrics associated with the model's performance. Under the hood, the service was just an unmagical ETL system. Glorified data laundering, if you will.
+The monitoring service was designed to ingest data related to model _predictions_ and model _outcomes_ (aka "gold labels" aka "ground truth" aka "what actually happened"). The service would then join and clean this data and eventually spit back out a bunch of metrics associated with the model's predictive performance. Under the hood, the service was just an unmagical ETL system. Glorified data laundering, if you will.
 
 Central to my operation was an _event collector_. Naively, I thought that many machine learning teams were operating in the world of real-time predictions, so I built an API for them to POST their predictions to on the fly when the model ran. [In reality](https://huyenchip.com/2020/12/27/real-time-machine-learning.html), most teams were operating in the world of batch predictions and still are (_pro tip: talk to people before you build things_).
 
-While maybe not useful for ML monitoring yet, I'm going to spend this post describing how the event collector works. I feel like it's easy to read blog posts on companies' tech blogs with fancy diagrams of their giant system, but, when you go to build a system yourself, there's a giant chasm between vague diagrams and actual code. So, I've built and deployed an event collector just for this blog post. 
+While maybe not yet useful for ML monitoring, I'm going to spend this post describing how the event collector works. I feel like it's easy to read blog posts on companies' tech blogs with fancy diagrams of their giant system, but, when you go to build a system yourself, there's a giant chasm between vague diagrams and actual code. So, I've built, deployed, and open sourced an event collector just for this blog post. 
 
-The event collector is powering the "dashboard" below showing how many people have visited this page and clicked on the `Click Me` button. The full code is provided in my [serverless-event-collector](https://github.com/EthanRosenthal/serverless-event-collector) repo should you want to replicate this yourself.
+The event collector is powering the "dashboard" below showing how many people have visited this page and how many have clicked on the `Click Me` button. The full code is provided in my [serverless-event-collector](https://github.com/EthanRosenthal/serverless-event-collector) repo should you want to replicate this yourself.
 
 {{< event_collector_dashboard >}}
 
@@ -23,9 +23,9 @@ The event collector is powering the "dashboard" below showing how many people ha
 
 Because I'm cheap and don't value my time.
 
-In hindsight, going serverless was a terrible idea. At the time, I did not want any fixed costs (I had no funding and no income), and horizontal scalability was attractive. I figured I could always port my serverless code over to dedicated servers if the economies of scale made sense. The piece that I did not factor into my calculation was the fact that it would take me so much longer to write serverless code. The biggest slowdown is the iteration loop. Lots of magical things happen under the hood, so it can be hard to debug your code locally. But, it can take a while for your code to deploy, hence the slow iteration loop. 
+In hindsight, going serverless was a terrible idea. During development, I did not want any fixed costs (I had no funding or income), and horizontal scalability was attractive. I figured I could always port my serverless code over to dedicated servers if the economies of scale made sense. The piece that I did not factor into my calculation was the fact that it would take me so much longer to write serverless code. The biggest slowdown is the iteration loop. Lots of magical things happen under the serverless hood, so it can be hard to debug your code locally. But, it can take a while for your code to deploy, hence the slow iteration loop. 
 
-Seeing as I eventually shut down my idea and got a real job, I could have saved significantly more money if I had built faster, quit sooner, and started cashing paychecks a couple months earlier.
+Seeing as I eventually shut down my project and got a real job, I could have saved significantly more money if I had built faster, quit sooner, and started cashing paychecks a couple months earlier.
 
 Despite my negativity, it's still really fucking cool that you can do things with code where scale is an afterthought and cost can automatically spin down to zero. The latter is what allows me to not think twice about deploying my toy event collector for the sake of this silly blog post.
 
@@ -35,7 +35,7 @@ Before I reveal the dirty secrets of my data operation, let's first talk through
 
 1. I need a way for the event collector to receive events (aka data) from the user.
 1. I need to _authenticate_ the user. Randos shouldn't be able to send data to another user's account.
-1. I may may need fast access to information about the events, such as the total number of events.
+1. I may need fast access to information about the events, such as the total number of events.
 1. I need to store the events somewhere such that they can be queried later.
 
 Given the above requirements, let's talk implementation.
@@ -139,7 +139,7 @@ The `button_click()` function houses the code that runs when the `/button/click`
 
 Why do events get dropped into a Kinesis queue? I don't know. I originally did it because it seemed like the future looking, scalable thing to do. In actuality, it ended up just being a convenient way to transition from operating on individual events to batches of events. Kinesis will batch up records based on time or storage size (whichever limit gets hit first) and then drop a batch of events into S3. 
 
-The creation of this file containg the batch of events triggers the `fan_out` Lambda function. This function is not particularly interesting. It "fans the records out" from the main Kinesis S3 bucket into individual buckets for each _user_. The records then get partitioned by `event_type` and time, and land at a path like 
+The creation of this file containing the batch of events triggers the `fan_out` Lambda function. This function is not particularly interesting. It "fans the records out" from the main Kinesis S3 bucket into individual buckets for each _user_. The records then get partitioned by `event_type` and time and land at a path like 
 
 ```button_click/year=2021/month=6/day=1/hour=13/some_record_XYZ```
 
@@ -155,9 +155,9 @@ As far as I can tell, `serverless` is a command line node library that converts 
 
 I was planning to explain a bunch of stuff about my serverless YAML file, but I'm kind of sick of staring at it, so I'll just say "Go check out the [serverless.yml](https://github.com/EthanRosenthal/serverless-event-collector/blob/main/serverless.yml) file in the repo if you're interested". 
 
-I should mention that `serverless` is not just for Lambda functions. My _entire_ event collector gets deployed with `serverless`. That includes hooking all of the `collector` endpoints up to API Gateway and placing the `authorizer` in front, creating the Kinesis queue, creating the bucket for Kinesis events, and attaching the `fan_out` function to the Kinesis bucket. It took a while to get this all working, but it's pretty great that you can create the entire system with a simple `serverless deploy` command.
+I should mention that `serverless` is not just for Lambda functions. My _entire_ event collector gets deployed with `serverless`. That includes hooking all of the `collector` endpoints up to API Gateway and placing the `authorizer` in front, creating the Kinesis queue, creating the bucket for Kinesis events, and attaching the `fan_out` function to the Kinesis bucket. It took a while to get this all working, but it's nice that I can now create the entire system with a simple `serverless deploy` command.
 
-One tricky bit was deploying a `FastAPI` server as a Lambda function on API Gateway. `serverless` actually has pretty good [support](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/#lambda-proxy-integration) for hooking up Lambda functions to API Gateway. If you want to deploy a [Flask](https://flask.palletsprojects.com/en/2.0.x/) app to API Gateway, then there's a [serverless-wsgi](https://www.npmjs.com/package/serverless-wsgi) plugin for that. The tricky part for `FastAPI` is that it's an `ASGI` server.
+One tricky bit was deploying a `FastAPI` server as a Lambda function on API Gateway. `serverless` actually has pretty good [support](https://www.serverless.com/framework/docs/providers/aws/events/apigateway/#lambda-proxy-integration) for hooking up Lambda functions to API Gateway. If you want to deploy a [Flask](https://flask.palletsprojects.com/en/2.0.x/) app to API Gateway, then there's a [serverless-wsgi](https://www.npmjs.com/package/serverless-wsgi) plugin for that. The wrinkle for `FastAPI` is that it's an `ASGI` server.
 Thankfully, the [Mangum](https://github.com/jordaneremieff/mangum) library makes this relatively painless. All you have to do is wrap your `FastAPI` app with a `Mangum` class like so:
 
 ```python

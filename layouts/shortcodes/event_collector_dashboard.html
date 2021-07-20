@@ -8,10 +8,25 @@
     Button Clicks: <span id="button_clicks_count">...</span> 
 
     <script type="text/javascript">
-
-        const MAX_ATTEMPTS = 5;
-        const POLL_INTERVAL = 1_000_000;
-        const URL = 'https://3o9x126nr7.execute-api.us-east-1.amazonaws.com/prod/';
+        // Apologies to frontend people. This is basically my first time writing client side javascript.
+        // There is no error handling because I don't actually understand Promises.
+        
+        // Globals
+        let URL;
+        let ENV;
+        let POLL_INTERVAL;
+        if (window.location.href.startsWith("https://www.ethanrosenthal.com")) {
+            // We're in prod
+            URL = 'https://3o9x126nr7.execute-api.us-east-1.amazonaws.com/prod/';
+            ENV = 'prod';
+            POLL_INTERVAL = 60;
+        } else {
+            // Send everything else to dev
+            URL = 'https://p1zy5iniej.execute-api.us-east-1.amazonaws.com/dev/';
+            ENV = 'dev';
+            // No reason to waste lambdas during development.
+            POLL_INTERVAL = 1_000_000;
+        }
         const USERNAME = 'ethan';
         const PASSWORD = 'xyz';
         const BUTTON_ID = 'blog-button';
@@ -35,10 +50,11 @@
 
         function setupPolling() {
             // Poll button click counts to continually update the dashboard.
+            let env_button_id = ENV.concat('-').concat(BUTTON_ID);
             poll(
                 () => new Promise(
                     () => fetch(
-                            URL + 'button/click/count?' + new URLSearchParams({'button_id': BUTTON_ID}),
+                            URL + 'button/click/count?' + new URLSearchParams({'button_id': env_button_id}),
                             {headers: headers}
                         )
                         .then(response => response.json())
@@ -61,6 +77,8 @@
             );
         }
 
+
+        // When the page loads, POST a page view and then start polling
         let headers = new Headers();
         headers.append('Authorization', 'Basic ' + btoa(USERNAME + ':' + PASSWORD));
 
@@ -71,7 +89,6 @@
             session_id: SESSION_ID,
         }
 
-        // POST a page view and then start polling
         fetch(
             URL + 'web/page_view', 
             {
@@ -87,8 +104,9 @@
         async function submitButtonClick(button_id) {
             // When the dashboard button is clicked, POST a button click event and update
             // the dashboard.
+            let env_button_id = ENV.concat('-').concat(button_id);
 
-            let data = {session_id: SESSION_ID, 'button_id': button_id};
+            let data = {session_id: SESSION_ID, 'button_id': env_button_id};
 
             // await this call before calling the next one
             await fetch(
@@ -101,7 +119,7 @@
             ).then(response => response.json());
 
             // Update the button_clicks_count.
-            let params = {'button_id': button_id};
+            let params = {'button_id': env_button_id};
             fetch(
                 URL + 'button/click/count?' + new URLSearchParams(params),
                 {headers: headers}
