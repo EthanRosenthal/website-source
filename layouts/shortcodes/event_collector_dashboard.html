@@ -1,0 +1,134 @@
+<div id="event_collector_dashboard" style="border:1px dashed black;padding:10px">  
+    "Dashboard"
+    <br><br>
+    <button type="button" id="blog-button" onclick="submitButtonClick(this.id)" style="align:right">Click Me</button>
+    <br><br>
+    Page Views: <span id="page_views_count">...</span>
+    <br>
+    Button Clicks: <span id="button_clicks_count">...</span> 
+
+    <script type="text/javascript">
+        // Apologies to frontend people. This is basically my first time writing client side javascript.
+        // There is no error handling because I don't actually understand Promises.
+        
+        // Globals
+        let URL;
+        let ENV;
+        let POLL_INTERVAL;
+        if (window.location.href.startsWith("https://www.ethanrosenthal.com")) {
+            // We're in prod
+            URL = 'https://3o9x126nr7.execute-api.us-east-1.amazonaws.com/prod/';
+            ENV = 'prod';
+            POLL_INTERVAL = 60;
+        } else {
+            // Send everything else to dev
+            URL = 'https://p1zy5iniej.execute-api.us-east-1.amazonaws.com/dev/';
+            ENV = 'dev';
+            // No reason to waste lambdas during development.
+            POLL_INTERVAL = 1_000_000;
+        }
+        const USERNAME = 'ethan';
+        const PASSWORD = 'xyz';
+        const BUTTON_ID = 'blog-button';
+
+        // Taken from https://stackoverflow.com/a/2117523
+        function uuidv4() {
+            return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+                (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            );
+        }
+        const SESSION_ID = uuidv4();
+
+        // Polling functions
+        var sleep = time => new Promise(resolve => setTimeout(resolve, time));
+        var poll = (promiseFn, time) => promiseFn().then(sleep(time).then(() => poll(promiseFn, time)));
+
+        function updateCount(result, element_id) {
+            // Update the dashboard element_id to the result count.
+            document.getElementById(element_id).innerText = result['count'];
+        }
+
+        function setupPolling() {
+            // Poll button click counts to continually update the dashboard.
+            let env_button_id = ENV.concat('-').concat(BUTTON_ID);
+            poll(
+                () => new Promise(
+                    () => fetch(
+                            URL + 'button/click/count?' + new URLSearchParams({'button_id': env_button_id}),
+                            {headers: headers}
+                        )
+                        .then(response => response.json())
+                        .then(result => updateCount(result, 'button_clicks_count'))
+                ), 
+                POLL_INTERVAL
+            );
+
+            // Poll page view counts to continually update the dashboard.
+            poll(
+                () => new Promise(
+                    () => fetch(
+                            URL + 'web/page_view/count?' + new URLSearchParams({'url': window.location.href}),
+                            {headers: headers}
+                        )
+                        .then(response => response.json())
+                        .then(result => updateCount(result, 'page_views_count'))
+                ), 
+                POLL_INTERVAL
+            );
+        }
+
+
+        // When the page loads, POST a page view and then start polling
+        let headers = new Headers();
+        headers.append('Authorization', 'Basic ' + btoa(USERNAME + ':' + PASSWORD));
+
+        const page_view_body = {
+            url: window.location.href,
+            referral_url: document.referral,
+            useragent: navigator.userAgent,
+            session_id: SESSION_ID,
+        }
+
+        fetch(
+            URL + 'web/page_view', 
+            {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(page_view_body)
+            }
+        )
+        .then(result => result.json())
+        .then(function() {setupPolling()});
+
+
+        async function submitButtonClick(button_id) {
+            // When the dashboard button is clicked, POST a button click event and update
+            // the dashboard.
+            let env_button_id = ENV.concat('-').concat(button_id);
+
+            let data = {session_id: SESSION_ID, 'button_id': env_button_id};
+
+            // await this call before calling the next one
+            await fetch(
+                URL + 'button/click', 
+                {
+                    method: 'POST', 
+                    headers: headers, 
+                    body: JSON.stringify(data)
+                }
+            ).then(response => response.json());
+
+            // Update the button_clicks_count.
+            let params = {'button_id': env_button_id};
+            fetch(
+                URL + 'button/click/count?' + new URLSearchParams(params),
+                {headers: headers}
+            )
+            .then(response => response.json())
+            .then(result => updateCount(result, 'button_clicks_count'));
+
+        }
+
+    </script>
+
+</div>
