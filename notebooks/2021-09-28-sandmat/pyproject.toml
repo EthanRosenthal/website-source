@@ -3,6 +3,9 @@ name = "sandmat"
 version = "0.1.0"
 description = ""
 authors = ["EthanRosenthal <ethan@ethanrosenthal.com>"]
+packages = [
+    { include = "sandmat", from = "src" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.8"
@@ -14,6 +17,7 @@ altair = "^4.1.0"
 
 [tool.poetry.dev-dependencies]
 ipykernel = "^6.1.0"
+black = "^21.9b0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

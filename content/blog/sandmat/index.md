@@ -1,11 +1,11 @@
 ---
-date: 2021-08-20
+date: 2021-09-28
 slug: "sandmat"
-tags: []
+tags: ['sandwiches']
 title: "Sandwich Data Science 2: Electric Boogaloo"
 draft: true
 notebook: false
-hasMath: false
+hasMath: false   
 ---
 {{% jupyter_cell_start markdown %}}
 
@@ -29,14 +29,9 @@ And so, this blog post is my attempt at data visualization. My goal is to visual
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-## Menu Scraping
+## Packaging and Presentation
 
-To start, we need to get the menu and turn it into "data". For whatever reason, I didn't feel like using pandas for this blog post, so everything we'll deal with are collections of [dataclasses](https://docs.python.org/3/library/dataclasses.html). 
-
-_By the way, I'm purposefully being super pedantic below and creating lots of functions for every thing. Sure, I could do the scraping as one big long script, but breaking everything up into individual functions for each piece of data that we want to collect is a lesson in building maintainable code which is particularly important when dealing with web scraping. Am I going to be rerunning this code after I publish this? God no. But hey, the pedagogy remains._
-
-
-I'll start with some library imports and defining two `dataclasses`: `Ingredient` and `Sandwich`. Each `Ingredient` has both a `name` and a `category`, where the possible categories are `meat`, `cheese`, `topping`, and `dressing`. Each `Sandwich` contains a `name`, a list of `Ingredients`, and a `price`.
+Like many of my blog posts, I wrote this one in a Jupyter notebook. While I would prefer to show the full code for the blog post, I didn't want this post to be as impenetrable as Alidoro's menu. I made a small `sandmat` package to house much of the code. The package, along with the Jupyter notebook version of this blog post can be found on GitHub [here](https://github.com/EthanRosenthal/website-source/tree/master/notebooks/2021-09-28-sandmat).
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -46,23 +41,20 @@ I'll start with some library imports and defining two `dataclasses`: `Ingredient
 ```python
 %config InlineBackend.figure_format = 'retina'
 
-from collections import Counter, defaultdict
-from dataclasses import dataclass
-from typing import Dict, Iterable, List, Tuple
-from urllib.request import urlopen
-
-from bs4 import BeautifulSoup, Tag
-import altair as alt
 import matplotlib.pyplot as plt
-import numpy as np
+
+from sandmat import scrape, sorting, viz
 ```
 
 {{% jupyter_input_end %}}
 
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
+{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
+## Menu Scraping
 
-{{% jupyter_input_start %}}
+To start, we need to get the menu and turn it into "data". For whatever reason, I didn't feel like using pandas for this blog post, so everything we'll deal with will be collections of [dataclasses](https://docs.python.org/3/library/dataclasses.html). 
+
+I'll make two `dataclasses`: `Ingredient` and `Sandwich`. Most of the fields are self-explanatory with the exception for the ingredient categories. For these, I manually classify ingredients into `meat`, `cheese`, `topping`, or `dressing`. In hindsight, I probably should've made this an `Enum` field.
 
 ```python
 @dataclass(frozen=True)
@@ -75,231 +67,12 @@ class Ingredient:
 class Sandwich:
     name: str
     ingredients: Tuple[Ingredient]
-    price: float
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-In keeping with the pedantry, I'll show you the final function that we want to assemble, and then work our way towards it:
-
-```python
-def get_sandwiches(url: str) -> List[Sandwich]:
-    soup = BeautifulSoup(urlopen(url))
-    menu = get_sandwich_menu(soup)
-    sandwich_tags = get_sandwich_tags(menu)
-    sandwiches = [convert_sandwich_tag_to_sandwich(sandwich_tag) for sandwich_tag in sandwich_tags]
-    return sandwiches
+    price: float 
 ```
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-We're going to use [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to scrape the [menu page](https://www.alidoronyc.com/menu/menu/) of the Alidoro website and grab the section of the HTML that pertains to the menu. Assuming we've turned that page into a `Beautiful Soup` object, the following function will pick out the menu section and return the `Beautiful Soup` `Tag` object associated with the menu HTML tag.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def get_sandwich_menu(soup: BeautifulSoup) -> Tag:
-    sections = soup.find_all(name="section", **{"class": "menu-section"})
-    menu = None
-    for section in sections:
-        if section.find("h2").text == "Menu":
-            menu = section
-
-    if menu is None:
-        raise ValueError("Cannot find Sandwich section of menu.")
-    return menu
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-Once we have the menu, the next step is to grab each sandwich `Tag`.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def get_sandwich_tags(menu: Tag) -> Iterable[Tag]:
-    return menu.find_all(name="li", **{"class": "menu-item"})
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-With the sandwich `Tags` in hand, we'll write functions to parse each field of the `Sandwich` `dataclass`. We start with the `name` and the `price`.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def get_sandwich_name(sandwich_tag: Tag) -> str:
-    return sandwich_tag.find(name="p", **{"class": "menu-item__heading"}).text
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def get_sandwich_price(sandwich_tag: Tag) -> float:
-    price = sandwich_tag.find(name="p", **{"class": "menu-item__details--price"}).text
-    price = float(price.strip(" $\n"))
-    return price
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-Parsing the `ingredients` is a little more complicated because we need to write two helper functions. First, some of the ingredient names need to be cleaned up and deduplicated.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def cleanup_ingredient(name: str) -> str:
-    name = name.lower()
-    mapper = {
-        "m. bel paese cheese": "m. bel paese",
-        "arugul": "arugula",
-        "artichoke": "artichokes",
-        "sweet roasted pepper": "sweet roasted peppers",
-        "olive past": "olive paste",
-    }
-    return mapper.get(name, name)
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-Second, we need to assign categories to each ingredient
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def categorize_ingredient(name: str) -> str:
-    mapper = {
-        "artichokes": "topping",
-        "arugula": "topping",
-        "capicollo": "meat",
-        "caponata of eggplant": "topping",
-        "dressing": "dressing",
-        "fresh mozzarella": "cheese",
-        "hot peppers": "topping",
-        "m. bel paese": "cheese",
-        "mortadella": "meat",
-        "olive paste": "dressing",
-        "prosciutto": "meat",
-        "provolone cheese": "cheese",
-        "salami": "meat",
-        "sardines or mackerel": "meat",
-        "smoked chicken breast": "meat",
-        "smoked mozzarella": "cheese",
-        "sopressata": "meat",
-        "sun dried tomatoes": "topping",
-        "sweet roasted peppers": "topping",
-        "tuna": "meat",
-    }
-    try:
-        return mapper[name]
-    except KeyError:
-        raise ValueError(f"Category not found for ingredient {name!r}")
-        
-        
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-We can now write the function to assemble the `ingredients`.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def get_sandwich_ingredients(sandwich_tag: Tag) -> Tuple[Ingredient]:
-    other_paragraphs = sandwich_tag.find_all(name="p")
-    ingredients = None
-    for p in other_paragraphs:
-        if not p.get("class"):
-            ingredients = p.text.split(", ")
-            ingredients = [cleanup_ingredient(ingredient) for ingredient in ingredients]
-            ingredients = tuple(
-                [
-                    Ingredient(
-                        name=ingredient, category=categorize_ingredient(ingredient)
-                    )
-                    for ingredient in ingredients
-                ]
-            )
-    if ingredients is None:
-        raise ValueError(f"Cannot parse ingredients for sandwich {name}")
-    return ingredients
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-With all of the individual components to the `Sandwich` defined, we write a "pipeline" function to assemble the full `Sandwich`.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def convert_sandwich_tag_to_sandwich(sandwich_tag: Tag) -> Sandwich:
-    name = get_sandwich_name(sandwich_tag)
-    ingredients = get_sandwich_ingredients(sandwich_tag)
-    price = get_sandwich_price(sandwich_tag)
-    return Sandwich(name, ingredients, price)
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-And then finally, we can define that initial function to scrape and assemble all of the sandwiches.
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def get_sandwiches(url: str) -> List[Sandwich]:
-    soup = BeautifulSoup(urlopen(url))
-    menu = get_sandwich_menu(soup)
-    sandwich_tags = get_sandwich_tags(menu)
-    sandwiches = [convert_sandwich_tag_to_sandwich(sandwich_tag) for sandwich_tag in sandwich_tags]
-    return sandwiches
-```
-
-{{% jupyter_input_end %}}
+I use [Beautiful Soup](https://www.crummy.com/software/BeautifulSoup/bs4/doc/) to scrape the [menu page](https://www.alidoronyc.com/menu/menu/) of the Alidoro website and grab the section of the HTML that pertains to the menu. I then do some parsing, cleaning, and categorization in order to turn the menu into a list of `Sandwich` objects.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -318,7 +91,7 @@ URL = "https://www.alidoronyc.com/menu/menu/"
 {{% jupyter_input_start %}}
 
 ```python
-sandwiches = get_sandwiches(URL)
+sandwiches = scrape.get_sandwiches(URL)
 ```
 
 {{% jupyter_input_end %}}
@@ -329,12 +102,22 @@ sandwiches = get_sandwiches(URL)
 {{% jupyter_input_start %}}
 
 ```python
-print(sandwiches[0])
+print(f"{len(sandwiches)} sandwiches found.")
+print("Displaying the first two:\n")
+for sandwich in sandwiches[:2]:
+    print(sandwich)
+    print()
 ```
 
 {{% jupyter_input_end %}}
 
+    40 sandwiches found.
+    Displaying the first two:
+    
     Sandwich(name='Matthew', ingredients=(Ingredient(name='prosciutto', category='meat'), Ingredient(name='fresh mozzarella', category='cheese'), Ingredient(name='dressing', category='dressing'), Ingredient(name='arugula', category='topping')), price=14.0)
+    
+    Sandwich(name='Alyssa', ingredients=(Ingredient(name='smoked chicken breast', category='meat'), Ingredient(name='fresh mozzarella', category='cheese'), Ingredient(name='arugula', category='topping'), Ingredient(name='dressing', category='dressing')), price=14.0)
+    
 
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
@@ -343,9 +126,9 @@ print(sandwiches[0])
 
 I would like to display the sandwiches in "matrix" form. Each sandwich will be a row, each ingredient will be a column, and I will indicate if a sandwich has a particular ingredient. What's left is to decide on an order to the sandwich rows and an order to the ingredient columns.
 
-In my initial approach, I coded up a "Traveling Sandwich Problem" in which sandwiches were cities, and the overlap in ingredients between any two sandwiches was the "distance" between sandwiches. It would've made for a cute title, but, contrary to the numerical solution, the result was visually suboptimal.
+In my initial approach, I coded up a traveling salesman problem in which sandwiches were cities, and the overlap in ingredients between any two sandwiches was the "distance" between sandwiches. It would've made for a cute title ("Traveling Sandwich Problem", obviously), but, contrary to the numerical solution, the result was visually suboptimal.
 
-Thankfully, this is a problem where we can rely on domain expertise. As a sandwich eater myself, I thought about how I typically pick a sandwich. I often look at the meats first, then the cheeses, and then everything else. Ok, let's sort the ingredient columns by category "rank": `meat`, `cheese`, `topping`, `dressing`. Within each category, how about the recsys go-to of sorting in descending order of popularity? Combining category rank and popularity gives us our full ingredient column order. In SQL, we'd want to do something like
+Thankfully, this is a problem where we can rely on domain expertise. As a sandwich eater myself, I thought about how I typically pick a sandwich. I often look at the meats first, then the cheeses, and then everything else. Ok, let's sort the ingredient columns by category "rank": `meat`, `cheese`, `topping`, `dressing`. Within each category, how about using the recsys go-to of sorting in descending order of popularity? Combining category rank and popularity gives us our full ingredient column order. In SQL, we'd want to do something like
 
 ```mysql
 SELECT
@@ -363,82 +146,21 @@ GROUP BY category, category_rank, ingredient
 ORDER BY category_rank ASC, num_sandwiches DESC
 ```
 
-{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
-
-In Python, we can do the following to compose an ordered dictionary where the key is the ingredient name, and the value is the `Ingredient` dataclass.
-
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
 
 {{% jupyter_input_start %}}
 
 ```python
-def get_ranked_categories(
-    sandwiches: List[Sandwich],
-) -> Dict[str, Dict[Ingredient, int]]:
-    """
-    Group ingredients by category and order them by how many sandwiches
-    the ingredient is in.
-
-    For ranked_categories, the key is the category name (e.g. 'meat'),
-    and the value is an ordered dict where key is Ingredient and value
-    is the number of the sandwiches this ingredient is in (i.e. the "ingredient rank").
-    The dict is in descending order of ingredient rank.
-    """
-    category_order = ["meat", "cheese", "topping", "dressing"]
-
-    category_counts = defaultdict(Counter)
-    for sandwich in sandwiches:
-        for ingredient in sandwich.ingredients:
-            category_counts[ingredient.category].update([ingredient])
-
-    # Dicts in Python 3.7+ are ordered based on insertion order.
-    # Thus, iterating through ranked_categories will iterate in
-    # the order of category_order
-    ranked_categories = {}
-    for category in category_order:
-        ranked_categories[category] = {
-            ingredient: rank
-            for rank, (ingredient, count) in enumerate(
-                category_counts[category].most_common(), start=1
-            )
-        }
-    return ranked_categories
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-ranked_categories = get_ranked_categories(sandwiches)
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-# We rely on the fact that dicts are ordered by insertion order,
-# so iterating through ordered_ingredients will iterate through
-# the ingredients by category order and then ingredient rank.
-ordered_ingredients: Dict[str, Ingredient] = {}
-for category, ingredients in ranked_categories.items():
-    for ingredient in ingredients:
-        ordered_ingredients[ingredient.name] = ingredient
+ranked_categories = sorting.get_ranked_categories(sandwiches)
+ordered_ingredients = sorting.get_ordered_ingredients(ranked_categories)
 ```
 
 {{% jupyter_input_end %}}
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-For ordering our sandwich rows, let's sort them by `key` which is a tuple that contains their most popular ingredient in each category where the tuple is in order of `meat`, `cheese`, `topping`, `dressing`.
+For ordering our sandwich rows, let's sort them by a special `key` which is a tuple that contains their most popular ingredient in each category where the tuple is in order of `meat`, `cheese`, `topping`, `dressing`.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -446,36 +168,7 @@ For ordering our sandwich rows, let's sort them by `key` which is a tuple that c
 {{% jupyter_input_start %}}
 
 ```python
-def sort_key(
-    sandwich: Sandwich, ranked_categories: Dict[str, Ingredient]
-) -> Tuple[int, ...]:
-    """
-    Given a sandwich, return a key to sort this sandwich with respect to.
-    The key is a tuple of ingredient ranks where there is a different
-    element of the tuple for each category. This allows for sorting on
-    multiple fields i.e. sort by meat, then cheese, then topping,
-    then dressing.
-    """
-    sortings = []
-    for category, ranked_ingredients in ranked_categories.items():
-        ranks = [
-            ranked_ingredients[i]
-            for i in sandwich.ingredients
-            if i in ranked_ingredients
-        ]
-        if ranks:
-            category_rank = min(ranks)
-        else:
-            # No sandwich ingredients from this category.
-            # Set rank to max rank + 1 for the category
-            category_rank = len(ranked_ingredients) + 1
-        sortings.append(category_rank)
-    return tuple(sortings)
-
-
-ordered_sandwiches = sorted(
-    sandwiches, key=lambda sandwich: sort_key(sandwich, ranked_categories)
-)
+ordered_sandwiches = sorting.get_ordered_sandwiches(sandwiches, ranked_categories)
 ```
 
 {{% jupyter_input_end %}}
@@ -484,7 +177,7 @@ ordered_sandwiches = sorted(
 
 ## Visualizing the Matrix
 
-Finally, with our ordered ingredients and sandwiches, we can visualize the Alidoro sandwich menu as a matrix. Let's first construct our sandwich matrix and then write some visualization functions.
+Finally, with our ordered ingredients and sandwiches, we can visualize the Alidoro sandwich menu as a matrix.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -492,88 +185,7 @@ Finally, with our ordered ingredients and sandwiches, we can visualize the Alido
 {{% jupyter_input_start %}}
 
 ```python
-# Make matrix where rows are sandwiches and columns are ingredients.
-# Values are 1 if sandwich has the ingredient and 0 otherwise.
-sandwich_mat = np.zeros((len(ordered_sandwiches), len(ordered_ingredients)))
-sandwich_to_idx = {sandwich: idx for idx, sandwich in enumerate(ordered_sandwiches)}
-ingredient_to_idx = {
-    ingredient: idx for idx, ingredient in enumerate(ordered_ingredients.values())
-}
-for sandwich in ordered_sandwiches:
-    for ingredient in sandwich.ingredients:
-        sandwich_mat[sandwich_to_idx[sandwich], ingredient_to_idx[ingredient]] = 1
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def column_colors(ordered_ingredients: dict):
-    color_mapper = {
-        "meat": "red",
-        "cheese": "orange",
-        "topping": "green",
-        "dressing": "purple",
-    }
-    return np.array([color_mapper[i.category] for i in ordered_ingredients.values()])
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-def plot_sandwiches(sandwich_mat, ordered_sandwiches, ordered_ingredients):
-
-    fig, ax = plt.subplots(figsize=(10, 20))
-    xs, ys = np.where(sandwich_mat)
-    colors = column_colors(ordered_ingredients)
-
-    ax.scatter(x=ys, y=xs, marker="x", c=colors[ys])
-    ax.set_yticks(np.arange(len(sandwich_mat)))
-    ax.set_yticklabels([s.name for s in ordered_sandwiches], fontsize=12)
-    ax.tick_params(length=0)
-    ax.set_xticks(np.arange(sandwich_mat.shape[1]))
-    ax.set_xticklabels(
-        list(ordered_ingredients.keys()), rotation=45, ha="left", fontsize=12
-    )
-    ax.xaxis.tick_top()
-
-    for i in range(-1, len(sandwich_mat)):
-        ax.plot(
-            (-0.5, sandwich_mat.shape[1] + 0.5),
-            (0.5 + i, 0.5 + i),
-            c="gray",
-            alpha=0.5,
-            linestyle="dashed",
-            linewidth=0.5,
-        )
-
-    ax.set_xlim((-0.5, sandwich_mat.shape[1]))
-
-    for i in range(-1, len(sandwich_mat)):
-        ax.plot(
-            (0.5 + i, 0.5 + i),
-            (-0.5, sandwich_mat.shape[0] + 0.5),
-            c="gray",
-            alpha=0.5,
-            linestyle="dashed",
-            linewidth=0.5,
-        )
-    ax.set_ylim(-0.5, len(sandwich_mat) - 0.5)
-    # ax.grid(b=True, which="both");
-    ax.invert_yaxis()
-
-    for color, tick in zip(colors, ax.get_xticklabels()):
-        tick.set_color(color)
-    return fig, ax
+sandwich_mat = viz.make_sandwich_matrix(ordered_sandwiches, ordered_ingredients)
 ```
 
 {{% jupyter_input_end %}}
@@ -588,21 +200,21 @@ def plot_sandwiches(sandwich_mat, ordered_sandwiches, ordered_ingredients):
 {{% jupyter_input_start %}}
 
 ```python
-fig, ax = plot_sandwiches(sandwich_mat, ordered_sandwiches, ordered_ingredients)
+fig, ax = viz.plot_sandwiches(sandwich_mat, ordered_sandwiches, ordered_ingredients)
 plt.show();
 ```
 
 {{% jupyter_input_end %}}
 
 
-{{< figure src="./index_37_0.png" >}}
+{{< figure src="./index_15_0.png" >}}
 
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
 # Pricing Analysis
 
-Just for prosciutto's and giggles, let's fit a linear regression where each row is a sandwich, the "features" are binary indicators of whether or not an ingredient is present in the sandwich, and the target variable is the sandwich price. The coefficients will thus be the price of each ingredient, and a bias term will take care of the base price of the sandwich (which includes the bread). As you can see, the model is pretty well-calibrated! I guess Alidoro's sandwich pricing is pretty consistent.
+Just for prosciuttos and giggles, I decided to treat my sandwich matrix as a [design matrix](https://en.wikipedia.org/wiki/Design_matrix). I'll fit a linear regression on the sandwich matrix with the sandwich price as the target variable. The model coefficients will thus be the price of each ingredient, and a bias term will take care of the base price of the sandwich (which includes the bread). As you can see, the model is pretty well-calibrated! I guess Alidoro's sandwich pricing is pretty consistent.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -611,6 +223,7 @@ Just for prosciutto's and giggles, let's fit a linear regression where each row 
 
 ```python
 import statsmodels.api as sm
+import numpy as np
 ```
 
 {{% jupyter_input_end %}}
@@ -660,10 +273,10 @@ res.summary(
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   31.39</td>
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sat, 25 Sep 2021</td> <th>  Prob (F-statistic):</th> <td>1.48e-10</td>
+  <th>Date:</th>             <td>Sun, 26 Sep 2021</td> <th>  Prob (F-statistic):</th> <td>1.48e-10</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>22:13:39</td>     <th>  Log-Likelihood:    </th> <td>  9.6979</td>
+  <th>Time:</th>                 <td>10:22:02</td>     <th>  Log-Likelihood:    </th> <td>  9.6979</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>    40</td>      <th>  AIC:               </th> <td>   22.60</td>
@@ -773,72 +386,7 @@ We can inspect this model visually by plotting the prices of all of the ingredie
 {{% jupyter_input_start %}}
 
 ```python
-data = {
-    "values": [
-        {
-            "x": x,
-            "Ingredient": ingredient.name,
-            "Price": price,
-            "Category": ingredient.category,
-            "SE": se,
-        }
-        for x, (ingredient, price, se) in enumerate(
-            zip(list(ordered_ingredients.values()), res.params[1:], res.bse[1:])
-        )
-    ]
-}
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-color_mapper = {
-    "meat": "red",
-    "cheese": "orange",
-    "topping": "green",
-    "dressing": "purple",
-}
-scale = alt.Scale(domain=list(color_mapper.keys()), range=list(color_mapper.values()))
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-chart = (
-    alt.Chart(data)
-    .mark_bar(opacity=0.5)
-    .encode(
-        x=alt.X("Price:Q", axis=alt.Axis(format="$.2f")),
-        y=alt.Y("Ingredient:N", sort="-x"),
-        color=alt.Color("Category:N", scale=scale),
-        tooltip=[
-            "Ingredient:N",
-            alt.Tooltip("Price:Q", format="$.2f"),
-            alt.Tooltip("SE:Q", format="$.2f", title="Standard Error"),
-        ],
-    )
-)
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-chart
+viz.plot_ingredients(ordered_ingredients, res)
 ```
 
 {{% jupyter_input_end %}}
@@ -847,12 +395,12 @@ chart
 
 
 <pre><code class="nohighlight">
-<div id="altair-viz-2981fe794d854808a87051781850b72a"></div>
+<div id="altair-viz-f94987caf2cc4251a973f52f42e9f6e0"></div>
 <script type="text/javascript">
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-2981fe794d854808a87051781850b72a") {
-      outputDiv = document.getElementById("altair-viz-2981fe794d854808a87051781850b72a");
+    if (outputDiv.id !== "altair-viz-f94987caf2cc4251a973f52f42e9f6e0") {
+      outputDiv = document.getElementById("altair-viz-f94987caf2cc4251a973f52f42e9f6e0");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
@@ -901,7 +449,7 @@ chart
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-And last, but not least, we can compare the sandwich price to the model's predicted price in order to get an idea if any sandwich's price is wildly inconsistent. That doesn't appear to be the case, although the Gabriella is apparently cheaper than expected at $11.00 for (only) fresh mozzarella, dressing, and arugula. I don't know if I'd call that cheap, but, then again, neither is SoHo.
+And last but not least, we can compare the sandwich price to the model's predicted price in order to get an idea if any sandwich's price is wildly inconsistent. Most sandiwch prices are consistent, although the Gabriella is apparently cheaper than expected at $11.00 for (only) fresh mozzarella, dressing, and arugula. I don't know if I'd call that cheap, but, then again, neither is SoHo.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -920,67 +468,8 @@ y_pred = model.predict(res.params)
 {{% jupyter_input_start %}}
 
 ```python
-data = {
-    "values": [
-        {
-            "Price": price,
-            "Prediction": prediction,
-            "Sandwich": sandwich.name,
-            "Ingredients": ", ".join(
-                ingredient.name for ingredient in sandwich.ingredients
-            ),
-            "Vegetarian": all(
-                ingredient.category != "meat" for ingredient in sandwich.ingredients
-            ),
-        }
-        for (price, prediction, sandwich) in zip(y, y_pred, ordered_sandwiches)
-    ]
-}
-```
-
-{{% jupyter_input_end %}}
-
-{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
-
-
-{{% jupyter_input_start %}}
-
-```python
-domain = y.min() - 0.5, y.max() + 0.5
-sandwich_chart = (
-    alt.Chart(data)
-    .mark_point()
-    .encode(
-        x=alt.X(
-            "Price:Q",
-            scale=alt.Scale(domain=domain),
-            axis=alt.Axis(format="$.2f"),
-        ),
-        y=alt.Y(
-            "Prediction:Q",
-            scale=alt.Scale(domain=domain),
-            axis=alt.Axis(format="$.2f"),
-        ),
-        color="Vegetarian:N",
-        tooltip=["Sandwich:N", "Ingredients:N"],
-    )
-)
-
-one_to_one = {
-    "values": [
-        {"x": x_, "y": y_}
-        for x_, y_ in zip(np.linspace(*domain, 101), np.linspace(*domain, 101))
-    ]
-}
-line_chart = (
-    alt.Chart(one_to_one)
-    .mark_line(color="black", strokeDash=[5, 5])
-    .encode(
-        x=alt.X("x:Q", axis=alt.Axis(title="Price")),
-        y=alt.Y("y:Q", axis=alt.Axis(title="Prediction")),
-    )
-)
-(sandwich_chart + line_chart).properties(width=400, height=400)
+chart = viz.plot_actual_vs_pred(y, y_pred, ordered_sandwiches)
+chart.properties(width=400, height=400)
 ```
 
 {{% jupyter_input_end %}}
@@ -989,12 +478,12 @@ line_chart = (
 
 
 <pre><code class="nohighlight">
-<div id="altair-viz-c3186f86d0e6493eb512a85062172223"></div>
+<div id="altair-viz-1c9a9820f1a144838b12b8aa2e9ada38"></div>
 <script type="text/javascript">
   (function(spec, embedOpt){
     let outputDiv = document.currentScript.previousElementSibling;
-    if (outputDiv.id !== "altair-viz-c3186f86d0e6493eb512a85062172223") {
-      outputDiv = document.getElementById("altair-viz-c3186f86d0e6493eb512a85062172223");
+    if (outputDiv.id !== "altair-viz-1c9a9820f1a144838b12b8aa2e9ada38") {
+      outputDiv = document.getElementById("altair-viz-1c9a9820f1a144838b12b8aa2e9ada38");
     }
     const paths = {
       "vega": "https://cdn.jsdelivr.net/npm//vega@5?noext",
