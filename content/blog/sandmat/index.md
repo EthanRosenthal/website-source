@@ -21,7 +21,7 @@ From these few ingredients emerge 40 different types of sandwiches, and these 40
 
 <img style='width: 640px; padding: 10px'  src='images/sandmat/alidoro_menu.jpg' />
 
-Naively, you may think you can pick a sandwich that looks close to what you want and then customize it. Perhaps you would like the Romeo but with some fresh mozzarella? Well then perhaps you would be wrong because _customization is not allowed_. Did I mention that Alidoro definitely has similar vibes to the [Soup Nazi](https://youtu.be/euLQOQNVzgY)? You can only order what's on the menu, and it took the global pandemic to finally break their will to remain cash only.
+Naively, you may think you can pick a sandwich that looks close to what you want and then customize it. Perhaps you would like the Romeo but with some fresh mozzarella? Well then perhaps you would be wrong because _customization is not allowed_. Did I mention that there are some [Soup Nazi](https://youtu.be/euLQOQNVzgY) vibes to this place? You can only order what's on the menu, and it took the global pandemic to finally break their will to remain cash only.
 
 Some people like to explore new items on a menu, while I always exploit the one that I've been happy with. Case in point: I get the Fellini on Foccacia every time. Still, I remember what it was like to be a newcomer and encounter that impenetrable menu. 
 
@@ -54,7 +54,7 @@ from sandmat import scrape, sorting, viz
 
 To start, we need to get the menu and turn it into "data". For whatever reason, I didn't feel like using pandas for this blog post, so everything we'll deal with will be collections of [dataclasses](https://docs.python.org/3/library/dataclasses.html). 
 
-I'll make two `dataclasses`: `Ingredient` and `Sandwich`. Most of the fields are self-explanatory with the exception for the ingredient categories. For these, I manually classify ingredients into `meat`, `cheese`, `topping`, or `dressing`. In hindsight, I probably should've made this an `Enum` field.
+Within the `sandmat` package, I make two `dataclasses`: `Ingredient` and `Sandwich`. Most of the fields are self-explanatory with the exception for the ingredient categories. For these, I manually classify ingredients into `meat`, `cheese`, `topping`, or `dressing`. In hindsight, I probably should've made this an `Enum` field.
 
 ```python
 @dataclass(frozen=True)
@@ -124,9 +124,9 @@ for sandwich in sandwiches[:2]:
 
 ## Ingredient Rank and File
 
-I would like to display the sandwiches in "matrix" form. Each sandwich will be a row, each ingredient will be a column, and I will indicate if a sandwich has a particular ingredient. What's left is to decide on an order to the sandwich rows and an order to the ingredient columns.
+I would like to display the sandwiches in "matrix" form. Each sandwich will be a row, each ingredient will be a column, and the values of the matrix will indicate if a sandwich has a particular ingredient. What's left is to decide on an order to the sandwich rows and an order to the ingredient columns.
 
-In my initial approach, I coded up a traveling salesman problem in which sandwiches were cities, and the overlap in ingredients between any two sandwiches was the "distance" between sandwiches. It would've made for a cute title ("Traveling Sandwich Problem", obviously), but, contrary to the numerical solution, the result was visually suboptimal.
+In my initial approach, I coded up a traveling salesman problem in which sandwiches were cities and the overlap in ingredients between any two sandwiches was the "distance" between sandwiches. It would've made for the perfect title ("Traveling Sandwich Problem", obviously), but, contrary to the numerical solution, the result was visually suboptimal.
 
 Thankfully, this is a problem where we can rely on domain expertise. As a sandwich eater myself, I thought about how I typically pick a sandwich. I often look at the meats first, then the cheeses, and then everything else. Ok, let's sort the ingredient columns by category "rank": `meat`, `cheese`, `topping`, `dressing`. Within each category, how about using the recsys go-to of sorting in descending order of popularity? Combining category rank and popularity gives us our full ingredient column order. In SQL, we'd want to do something like
 
@@ -449,7 +449,7 @@ viz.plot_ingredients(ordered_ingredients, res)
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-And last but not least, we can compare the sandwich price to the model's predicted price in order to get an idea if any sandwich's price is wildly inconsistent. Most sandiwch prices are consistent, although the Gabriella is apparently cheaper than expected at $11.00 for (only) fresh mozzarella, dressing, and arugula. I don't know if I'd call that cheap, but, then again, neither is SoHo.
+And last but not least, we can compare the sandwich price to the model's predicted price in order to get an idea if any sandwich's price is wildly inconsistent. Most sandiwch prices are consistent, although the Gabriella is apparently cheaper than expected at $11.00 for (only!) fresh mozzarella, dressing, and arugula. I don't know if I'd call that cheap, but, then again, neither is SoHo.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
