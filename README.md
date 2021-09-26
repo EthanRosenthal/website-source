@@ -6,7 +6,7 @@ This repository is the source code for my personal website located at [ethanrose
 Pip install my fork of [nb_hugo_exporter](https://github.com/jbandlow/nb_hugo_exporter):
 
 ```commandline
-pip install git+git@github.com:EthanRosenthal/nb_hugo_exporter.git@fix-images
+pip install git+ssh://git@github.com/EthanRosenthal/nb_hugo_exporter.git@fix-images
 ```
 
 Edit the notebook metadata (the wrench symbol on the left in jupyter lab, under Advanced Tools) to include the following tags:
