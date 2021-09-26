@@ -1,10 +1,10 @@
 ---
 date: 2021-09-28
+draft: false
+notebook: true
 slug: "sandmat"
 tags: ['sandwiches']
 title: "Sandwich Data Science 2: Electric Boogaloo"
-draft: true
-notebook: false
 hasMath: false   
 ---
 {{% jupyter_cell_start markdown %}}
