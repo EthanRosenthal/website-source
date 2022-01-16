@@ -5,6 +5,7 @@ slug: "time-series-for-scikit-learn-people-part3"
 hasMath: true
 notebook: true
 tags:
+  - deep learning
   - machine learning
   - time series
 ---

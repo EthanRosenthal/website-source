@@ -5,6 +5,7 @@ hasMath: true
 notebook: true
 title: "Using Keras' Pretrained Neural Networks for Visual Similarity Recommendations"
 tags:
+  - computer vision
   - deep learning
   - recommendation systems
 ---
