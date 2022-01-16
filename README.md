@@ -1,28 +1,43 @@
 This repository is the source code for my personal website located at [ethanrosenthal.com](http://ethanrosenthal.com). The static website is generated with [Hugo](https://gohugo.io/) and deployed with [netlifly](https://www.netlify.com/).
 
 
-## Rendering Notebooks
+## Converting Notebooks to Hugo Markdown
 
-Pip install my fork of [nb_hugo_exporter](https://github.com/jbandlow/nb_hugo_exporter):
+Install this repo's Python package with poetry:
 
 ```commandline
-pip install git+ssh://git@github.com/EthanRosenthal/nb_hugo_exporter.git@fix-images
+poetry install
 ```
 
-Edit the notebook metadata (the wrench symbol on the left in jupyter lab, under Advanced Tools) to include the following tags:
+This will install my fork of [nb_hugo_exporter](https://github.com/jbandlow/nb_hugo_exporter).
 
-```json
+Add a `hugo` section to the notebook metadata with the following tags. You can access the metadata from jupyter lab by clicking the gears icon on the upper right, opening Advanced Tools, and then looking in the Notebook Metadata cell. Make sure to click the check mark to save your changes to the metadata.
+
+```python
 {
-  "date": "2018-12-06",
-  "title": "spacecutter: Ordinal Regression Models in PyTorch",
-  "slug": "spacecutter-ordinal-regression",
-  "hasMath": true,
-  "notebook": true
+    "hugo": {
+        "date": "2021-11-03",
+        "draft": false,
+        # Whether or not there are emojis in the notebook
+        "enableEmoji": true,
+        # Whether or not this post was written in a jupyter notebook
+        "notebook": true,
+        # Set to true in order to enable latex support. (I use katex under the hood)
+        "hasMath": false,
+        # The URL path for the blog post: /2021/11/03/alignimation
+        "slug": "alignimation",
+        # Optional tags to add to the blog post
+        "tags": [
+            "computer-vision",
+            "deep-learning",
+            "machine-learning"
+        ],
+        # The blog post title
+        "title": "Alignimation: Differentiable, Semantic Image Registration with Kornia"
+    }
+  ...
 }
 ```
-
-`hasMath: true` is required for `katex` to work. `notebook: true` is required for the notebook to be rendered correctly.
-
 Convert the jupyter notebook to hugo-compatible markdown, e.g.
 
 ```bash
