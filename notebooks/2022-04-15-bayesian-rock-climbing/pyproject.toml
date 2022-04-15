@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "route-response"
+version = "0.1.0"
+description = ""
+authors = ["Ethan Rosenthal <ethan@ethanrosenthal.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+pandas = "^1.4.0"
+matplotlib = "^3.5.1"
+# I had to build httpstan from source, presumably because I have
+# an old version of Ubuntu.
+# https://pystan.readthedocs.io/en/latest/installation.html#supported-linux-distributions
+# Below shows how to build from source.
+# https://github.com/stan-dev/httpstan/blob/main/doc/installation.rst
+# Also, I had to upgrade pip to 21.3.1
+httpstan = [
+    # I had to touch the below file to make sure it existed in order to run this on a Mac.
+    { path = "httpstan/dist/httpstan-4.6.1-cp39-cp39-manylinux_2_23_x86_64.whl", markers = "sys_platform == 'linux'" },
+    # { path = "httpstan/dist/httpstan-4.6.1-cp39-cp39-macosx_10_15_x86_64.whl", markers = "sys_platform == 'darwin'" }
+]
+# After install httpstan, I then was able to successfully install pystan.
+pystan = "^3.3.0"
+# This is needed to run this in a jupyter notebook
+# https://discourse.mc-stan.org/t/pystan-3-beta-4-released/18938/3
+nest-asyncio = "^1.5.4"
+arviz = "^0.11.4"
+altair = "^4.2.0"
+
+[tool.poetry.dev-dependencies]
+ipykernel = "^6.7.0"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
