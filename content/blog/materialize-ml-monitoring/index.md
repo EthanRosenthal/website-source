@@ -4,7 +4,7 @@ draft: false
 hasMath: false
 notebook: false
 slug: "materialize-ml-monitoring"
-tags: ['machine-learning-engineering', 'mlops']
+tags: ['ml-monitoring', 'machine-learning-engineering', 'mlops']
 title: "ML Monitoring with Materialize"   
 ---
 

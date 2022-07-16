@@ -4,7 +4,7 @@ draft: false
 hasMath: false
 notebook: false
 slug: "database-bundling"
-tags: ['machine-learning-engineering', 'mlops']
+tags: ['ml-monitoring', 'machine-learning-engineering', 'mlops']
 title: "Let's Continue Bundling into the Database"   
 ---
 

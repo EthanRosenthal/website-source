@@ -5,6 +5,9 @@ slug: "starting-shutting-quickly"
 draft: false
 tags:
   - data science industry
+  - ml-monitoring
+  - machine-learning-engineering
+  - mlops
 ---
 
 There is no shortage of stories about tech founders achieving face-melting wealth from startup success. Bless their hearts.
