@@ -38,7 +38,7 @@ Let's start with money; money's usually a good thing to maximize. In this case, 
   - Net revenue is zero.
 - False Positive:
   - The model predicts the lead will convert.
-  - A coupon is offered.
+  - Thus, no coupon is offered.
   - The lead does not convert.
   - Net revenue is zero.
 - False Negative:
