@@ -9,8 +9,6 @@ title: "Bayesian Rock Climbing Rankings"
 ---
 {{% jupyter_cell_start markdown %}}
 
-_(Note: this is not a 343 minute read.)_
-
 Just like every other scientist, engineer, or [Matt](https://www.mcsweeneys.net/articles/men-in-tech-to-work-with-and-or-go-on-tinder-dates-with-before-you-a-woman-in-tech-get-fed-up-with-this-industry-and-leave-san-francisco-forever), I'm pretty into rock climbing. Being carless in NYC, I primarily climb indoors. One of the first things that you learn when going to a climbing gym is that you don't get to grab on to every "hold" (the bright plastic things on the wall). Different colored holds correspond to different "routes", and you challenge yourself by only using the holds for a particular route.
 
 {{< figure src="/images/bayesian-rock-climbing/the_wall.jpg" caption="Embarrassingly, the only picture I have of myself climbing is on autobelay." >}}
