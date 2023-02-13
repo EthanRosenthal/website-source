@@ -12,6 +12,10 @@
     <div class="col-xs-3 col-md-2"><a target="_blank" href="https://twitter.com/{{ .Site.Params.twitter }}">Twitter</a></div>
   {{ end }}
 
+  {{ if .Site.Params.mastodon }}
+  <div class="col-xs-3 col-md-2"><a target="_blank" href="{{ .Site.Params.mastodon }}">Mastodon</a></div>
+  {{ end }}
+
   <div class="col-xs-3 col-md-2"><a href="{{ with .OutputFormats.Get "RSS" }}{{ .RelPermalink }}{{ end }}">RSS</a>
   </div>
 

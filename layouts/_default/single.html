@@ -15,6 +15,7 @@
               </div>
               {{ end }}
               
+              {{ if not .Params.hideTags }}
               <div class="sub-header">
               Tags:
               {{ range $index, $tag := .Params.tags -}}
@@ -22,6 +23,7 @@
                   <a href='{{ "/tags/" | relLangURL }}{{ . | urlize }}'>{{ $tag }}</a>
               {{- end -}}
               </div>
+              {{ end }}
 
 
               <article class="entry-content">
