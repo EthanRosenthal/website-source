@@ -3,6 +3,7 @@ date: "2017-06-20"
 slug: "matrix-factorization-in-pytorch"
 notebook: true
 title: "Matrix Factorization in PyTorch"
+hasMath: true
 tags:
   - deep learning
   - recommendation systems
