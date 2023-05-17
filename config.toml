@@ -59,3 +59,8 @@ pygmentsUseClasses = true
     name = "Idle"
     url = "/idle"
     weight = 3
+
+[[menu.main]]
+    name = "Boat"
+    url = "https://boat.ethanrosenthal.com"
+    weight = 4
