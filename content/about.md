@@ -8,7 +8,7 @@ hideTags: true
 
 ## Bio
 
-Ethan Rosenthal lives in New York City and is a data scientist at [Square](https://squareup.com/). Prior to Square, he [freelance consulted]({{< ref "/blog/freelance-ds-consulting" >}}) and worked at [some](https://www.dia.com/) [startups](https://www.birchbox.com/). Before doing data science, Ethan was an actual scientist. He got a [PhD](https://physics.ethanrosenthal.com/) in Physics from Columbia University building atomic-resolution microscopes to study superconductors.
+Ethan Rosenthal lives in New York City and works at [Runway](https://runwayml.com/). Prior to Runway, he worked in [big tech]({{< ref "/blog/2024-01-14-big-company-bachelors.md" >}}), [freelance consulted]({{< ref "/blog/freelance-ds-consulting" >}}), and worked at [some](https://www.dia.com/) [startups](https://www.birchbox.com/). Before working in tech, Ethan got a [PhD](https://physics.ethanrosenthal.com/) in Physics from Columbia University building atomic-resolution microscopes to study superconductors.
 
 
 ## Contact
@@ -16,7 +16,7 @@ Ethan Rosenthal lives in New York City and is a data scientist at [Square](https
 I prefer email: hello at ethanrosenthal dot com
 
 
-You can also find me on [GitHub](https://github.com/EthanRosenthal), ~~[Twitter](https://twitter.com/eprosenthal)~~, [Mastodon](https://recsys.social/@ethanrosenthal), and [LinkedIn](https://www.linkedin.com/in/ethanrosenthal/). For the love of god, don't contact me on LinkedIn.
+You can also find me on [GitHub](https://github.com/EthanRosenthal), ~~[Twitter](https://twitter.com/eprosenthal)~~, [Mastodon](https://recsys.social/@ethanrosenthal), [Bluesky](https://bsky.app/profile/ethanrosenthal.com), and [LinkedIn](https://www.linkedin.com/in/ethanrosenthal/). For the love of god, don't contact me on LinkedIn.
 
 
 ## Speaking
