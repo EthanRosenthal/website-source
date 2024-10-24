@@ -3,3 +3,5 @@ public/
 __pycache__/
 .hugo_build.lock
 .vscode/
+
+/.quarto/
