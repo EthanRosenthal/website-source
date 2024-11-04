@@ -1,0 +1,18 @@
+[project]
+name = "yaml-ml"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "pandas>=2.2.3",
+    "pydantic>=2.9.2",
+    "scikit-learn>=1.5.2",
+    "torch>=2.5.1",
+    "transformers>=4.46.1",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=6.29.5",
+]
