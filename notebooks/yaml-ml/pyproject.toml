@@ -10,6 +10,7 @@ dependencies = [
     "scikit-learn>=1.5.2",
     "torch>=2.5.1",
     "transformers>=4.46.1",
+    "typer>=0.13.0",
 ]
 
 [dependency-groups]

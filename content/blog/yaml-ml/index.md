@@ -1,5 +1,5 @@
 ---
-date: 2024-11-05
+date: 2024-11-19
 draft: false
 hasMath: false
 notebook: true
@@ -8,6 +8,12 @@ tags: ['data-science', 'machine-learning-engineering']
 title: "Why can't we separate YAML from ML?"
 ---
 {{% jupyter_cell_start markdown %}}
+
+<blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:y5qiqqtzjmlwggzuttldivxq/app.bsky.feed.post/3l7jjvgnodp2f" data-bluesky-cid="bafyreifrve66wcxbsr5smir3exhrkomkaacunadng2ky6vschoewcekl5m"><p lang="en">As for the ever popular Python vs R vs Julia vs Scala...
+
+It&#x27;s already been decided and the right answer is YAML. It ever has ML *in the name*!
+
+😉<br><br><a href="https://bsky.app/profile/did:plc:y5qiqqtzjmlwggzuttldivxq/post/3l7jjvgnodp2f?ref_src=embed">[image or embed]</a></p>&mdash; Alex Gude  (<a href="https://bsky.app/profile/did:plc:y5qiqqtzjmlwggzuttldivxq?ref_src=embed">@alexgude.com</a>) <a href="https://bsky.app/profile/did:plc:y5qiqqtzjmlwggzuttldivxq/post/3l7jjvgnodp2f?ref_src=embed">October 27, 2024 at 5:23 PM</a></blockquote><script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
 
 ## Why can't I just write code?
 
@@ -42,7 +48,43 @@ model = model.fit(X_train, y_train)
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-But then, you find yourself hand-designing switch points.
+You find yourself manually modifying parameters in the code, so you move the parameters to a command line interface (CLI).
+
+{{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
+
+
+{{% jupyter_input_start %}}
+
+```python
+import typer
+
+app = typer.Typer()
+
+@app.command()
+def main(filename: str, start_date: str, end_date: str):
+    df = pd.read_csv(filename, parse_dates=["timestamp"])
+    y = df["label"]
+    ts = df["timestamp"]
+    X = df.drop(columns=["label", "timestamp"])
+    train_mask = ts < start_date
+    test_mask = ts >= end_date
+    
+    X_train, y_train = X[train_mask], y[train_mask]
+    X_test, y_test = X[test_mask], y[test_mask]
+    
+    model = LogisticRegression(C=10, random_state=666)
+    model = model.fit(X_train, y_train)
+
+
+# if __name__ == "__main__":
+#     app()
+```
+
+{{% jupyter_input_end %}}
+
+{{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
+
+But, you find yourself continually adding parameters and hand-designing switch points.
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start code %}}
 
@@ -58,10 +100,10 @@ def get_model(model_type: str):
     elif model_type == "rf":
         return RandomForestClassifier(random_state=666)
 
-def get_train_data(end_date: str):
+def get_train_data(train_start_date: str, train_end_date: str):
     ...
 
-def get_test_data(start_date: str):
+def get_test_data(test_start_date: str, test_end_date: str):
     ...
 ```
 
@@ -69,9 +111,9 @@ def get_test_data(start_date: str):
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
-You keep forgetting parameters to pass to each of these switch points, which are actually now nodes in a [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph). So, you get the big brained idea to put all of your parameters into a single configuration file. You pick YAML because it's easier to use than JSON, and you still don't really know what TOML is.
+You now have too many CLI parameters to hold in your head, and [you can't remember](https://bsky.app/profile/ethanrosenthal.com/post/3lb3qm4vmak22) which ones you used on that run yesterday. So, you get the big brained idea to put all of your parameters into a single configuration file. You pick YAML because it's easier to use than JSON, and you still don't really know what TOML is.
 
-You want maximum flexibility, so you push the configuration language to the brink with custom constructors that [dynamically instantiate Python classes](https://matthewpburruss.com/post/yaml/) and [import other yaml files](https://pypi.org/project/pyyaml-include/).
+Your hand-designed switch points are now actually nodes in a large [DAG](https://en.wikipedia.org/wiki/Directed_acyclic_graph). You want maximum flexibility, so you push the configuration language to the brink with custom constructors that [dynamically instantiate Python classes](https://matthewpburruss.com/post/yaml/) and [import other yaml files](https://pypi.org/project/pyyaml-include/).
 
 You sit back and marvel at the beauty of declarative configuration.
 
@@ -143,10 +185,6 @@ warnings.filterwarnings("ignore", category=UserWarning, module="tqdm.*")
 ```
 
 {{% jupyter_input_end %}}
-
-    /Users/erosenthal/personal/website-source/notebooks/yaml-ml/.venv/lib/python3.10/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
-      from .autonotebook import tqdm as notebook_tqdm
-
 
 {{% jupyter_cell_end %}}{{% jupyter_cell_start markdown %}}
 
@@ -399,6 +437,6 @@ A better solution does 3 things:
 
 Step 3 could be skipped if you refactor to ensure that all model's constructors are "lightweight" and don't involve anything like downloading giant weights, allocating lots of GPU memory, etc... but that places major constraints on your codebase.
 
-Does a solution for all 3 steps exist? I haven't seen it yet, but I think I have some ideas.
+Does a solution for all 3 steps exist? I haven't seen it yet, but I have some ideas. I just need a little more time to lazy-load them.
 
 {{% jupyter_cell_end %}}
