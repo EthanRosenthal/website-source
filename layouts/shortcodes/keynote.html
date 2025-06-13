@@ -1,0 +1,274 @@
+<div class="keynote-container" id="keynote-container-{{ .Get "src" | urlize }}">
+  <iframe 
+    id="keynote-iframe-{{ .Get "src" | urlize }}"
+    src="{{ .Site.BaseURL }}{{ .Get "src" }}" 
+    width="{{ .Get "width" | default "100%" }}" 
+    height="{{ .Get "height" | default "750px" }}"
+    frameborder="0"
+    allowfullscreen
+    style="border: 1px solid #ddd; border-radius: 8px;">
+    <p>Your browser does not support iframes. <a href="{{ .Site.BaseURL }}{{ .Get "src" }}">View the presentation directly</a>.</p>
+  </iframe>
+  
+  <div class="keynote-controls">
+    <button class="nav-btn prev-btn" onclick="navigateSlide('keynote-iframe-{{ .Get "src" | urlize }}', 'prev')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 18l-6-6 6-6"/>
+      </svg>
+      <span class="btn-text">Previous</span>
+    </button>
+    
+    <button class="expand-btn" onclick="toggleExpanded('keynote-container-{{ .Get "src" | urlize }}')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+      </svg>
+      <span class="btn-text">Expand</span>
+    </button>
+    
+    <button class="nav-btn next-btn" onclick="navigateSlide('keynote-iframe-{{ .Get "src" | urlize }}', 'next')">
+      <span class="btn-text">Next</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+.keynote-container {
+  margin: 2rem 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.keynote-controls {
+  margin-top: 15px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.expand-btn, .nav-btn {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.expand-btn {
+  background: #007acc;
+  color: white;
+}
+
+.expand-btn:hover {
+  background: #005a9e;
+}
+
+.nav-btn {
+  background: #6c757d;
+  color: white;
+}
+
+.nav-btn:hover {
+  background: #5a6268;
+}
+
+.nav-btn:active {
+  transform: translateY(1px);
+}
+
+.keynote-container iframe {
+  display: block;
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+/* Expanded styles */
+.keynote-container.expanded {
+  position: fixed;
+  left: 0;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.95);
+  z-index: 999;
+  margin: 0;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.keynote-container.expanded .keynote-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  margin: 0;
+}
+
+.keynote-container.expanded iframe {
+  width: 100%;
+  border: none;
+  border-radius: 0;
+}
+
+/* Expanded button styling */
+.keynote-container.expanded .expand-btn {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.keynote-container.expanded .expand-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.keynote-container.expanded .nav-btn {
+  background: rgba(108, 117, 125, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.keynote-container.expanded .nav-btn:hover {
+  background: rgba(90, 98, 104, 0.9);
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+  .keynote-controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .expand-btn, .nav-btn {
+    width: 100%;
+    max-width: 200px;
+    justify-content: center;
+  }
+}
+</style>
+
+<script>
+function navigateSlide(iframeId, direction) {
+  const iframe = document.getElementById(iframeId);
+  const keyCode = direction === 'next' ? 39 : 37; // Right arrow: 39, Left arrow: 37
+  
+  // Focus the iframe first
+  iframe.focus();
+  
+  // Create and dispatch keyboard event
+  const event = new KeyboardEvent('keydown', {
+    key: direction === 'next' ? 'ArrowRight' : 'ArrowLeft',
+    code: direction === 'next' ? 'ArrowRight' : 'ArrowLeft',
+    keyCode: keyCode,
+    which: keyCode,
+    bubbles: true,
+    cancelable: true
+  });
+  
+  // Try to send the event to the iframe's content
+  try {
+    iframe.contentWindow.dispatchEvent(event);
+  } catch (e) {
+    // If cross-origin, try sending to the iframe element itself
+    iframe.dispatchEvent(event);
+  }
+  
+  // Alternative approach: simulate click on the iframe areas
+  // Keynote presentations often respond to clicks on left/right sides
+  if (iframe.contentWindow) {
+    try {
+      const iframeDoc = iframe.contentWindow.document;
+      const clickEvent = new MouseEvent('click', {
+        clientX: direction === 'next' ? iframeDoc.body.offsetWidth * 0.8 : iframeDoc.body.offsetWidth * 0.2,
+        clientY: iframeDoc.body.offsetHeight * 0.5,
+        bubbles: true
+      });
+      iframeDoc.body.dispatchEvent(clickEvent);
+    } catch (e) {
+      console.log('Cross-origin restriction - using keyboard events');
+    }
+  }
+}
+
+function toggleExpanded(containerId) {
+  const container = document.getElementById(containerId);
+  const button = container.querySelector('.expand-btn');
+  const buttonText = button.querySelector('.btn-text');
+  const buttonIcon = button.querySelector('svg');
+  
+  if (container.classList.contains('expanded')) {
+    // Collapse
+    container.classList.remove('expanded');
+    container.style.top = '';
+    container.style.height = '';
+    
+    const iframe = container.querySelector('iframe');
+    iframe.style.height = '{{ .Get "height" | default "750px" }}';
+    
+    buttonText.textContent = 'Expand';
+    buttonIcon.innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
+  } else {
+    // Expand - calculate navigation height
+    const nav = document.querySelector('nav') || 
+                document.querySelector('header') || 
+                document.querySelector('.nav') ||
+                document.querySelector('.navbar');
+    const navHeight = nav ? nav.offsetHeight : 60;
+    
+    container.classList.add('expanded');
+    container.style.top = navHeight + 'px';
+    container.style.height = `calc(100vh - ${navHeight}px)`;
+    
+    const iframe = container.querySelector('iframe');
+    iframe.style.height = `calc(100vh - ${navHeight + 100}px)`; // Extra space for buttons
+    
+    buttonText.textContent = 'Close';
+    buttonIcon.innerHTML = '<path d="M18 6L6 18M6 6l12 12"/>';
+  }
+}
+
+// Close on ESC key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const expandedContainer = document.querySelector('.keynote-container.expanded');
+    if (expandedContainer) {
+      expandedContainer.classList.remove('expanded');
+      expandedContainer.style.top = '';
+      expandedContainer.style.height = '';
+      
+      const iframe = expandedContainer.querySelector('iframe');
+      iframe.style.height = '{{ .Get "height" | default "750px" }}';
+      
+      const button = expandedContainer.querySelector('.expand-btn');
+      const buttonText = button.querySelector('.btn-text');
+      const buttonIcon = button.querySelector('svg');
+      buttonText.textContent = 'Expand';
+      buttonIcon.innerHTML = '<path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>';
+    }
+  }
+});
+
+// Global keyboard navigation (when not in expanded mode)
+document.addEventListener('keydown', function(e) {
+  // Only handle if we're not in an input field and not expanded
+  if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && 
+      !document.querySelector('.keynote-container.expanded')) {
+    
+    const iframes = document.querySelectorAll('[id^="keynote-iframe-"]');
+    if (iframes.length > 0) {
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        const direction = e.key === 'ArrowRight' ? 'next' : 'prev';
+        navigateSlide(iframes[0].id, direction);
+      }
+    }
+  }
+});
+</script>
