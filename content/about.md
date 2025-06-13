@@ -23,7 +23,7 @@ You can also find me on [GitHub](https://github.com/EthanRosenthal), ~~[Twitter]
 
 Having suffered through years of dry physics talks during my academic days, I'm on a mission to give data science talks that are engaging and interesting while still delivering technical insights for the audience.
 
-- [Building a Data Foundation for Multimodal Foundation Models]({{< ref "/talks/2025-data-council" >}}), Data Council 2025, ([slides]({{< ref "/talks/2025-data-council" >}}), [video](https://youtu.be/6kf58xD5s3Q?si=3vYEH9EXeAKb4KAI)).
+- [Building a Data Foundation for Multimodal Foundation Models]({{< ref "/talks/2025-data-council" >}}), Data Council 2025, ([slides](/keynotes/data_council_2025/ethan_data_council.pdf)), [video](https://youtu.be/6kf58xD5s3Q?si=3vYEH9EXeAKb4KAI)).
 - [Machine Learning Engineering's Arrested Development]({{< ref "/talks/2025-prefect" >}}), Prefect 2025, ([slides]({{< ref "/talks/2025-prefect" >}}), [video](https://www.prefect.io/summit-machine-learning-engineering-arrested-development)).
 - [Ethan Rosenthal and the M1 misadventure]({{< ref "/talks/2022-normconf" >}}), NormConf 2022, ([slides]({{< ref "/talks/2022-normconf" >}}), [video](https://www.youtube.com/watch?v=I4wkCSd7iMM)).
 - [Navigating the Full Stack of Machine Learning](https://outerbounds.com/blog/full-stack-machine-learning-skills/), Outerbound Fireside Chat 2022.

@@ -9,4 +9,6 @@ slides: true
 
 Talk for [Data Council 2025](https://www.datacouncil.ai/talks25/building-a-data-foundation-for-multimodal-foundation-models?hsLang=en) ([video](https://youtu.be/6kf58xD5s3Q?si=3vYEH9EXeAKb4KAI)).
 
+[Download slides](/keynotes/data_council_2025/ethan_data_council.pdf)
+
 {{< keynote src="/keynotes/data_council_2025/" height="450px" width="800px">}}
