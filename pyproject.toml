@@ -1,17 +1,15 @@
-[tool.poetry]
+[project]
 name = "website-source"
 version = "0.1.0"
-description = ""
-authors = ["Ethan Rosenthal <ethan@ethanrosenthal.com>"]
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.8,<3.9"
+dependencies = [
+    "nbconvert==5.6.1",
+    "nbhugoexporter",
+    "traitlets==4.3.3",
+    "jinja2==3.0.1",
+]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-nbconvert = "5.6.1"
-traitlets = "4.3.3"
-nbhugoexporter = {git = "ssh://git@github.com/EthanRosenthal/nb_hugo_exporter.git", rev = "fix-images"}
-
-[tool.poetry.dev-dependencies]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.uv.sources]
+nbhugoexporter = { git = "ssh://git@github.com/EthanRosenthal/nb_hugo_exporter", branch = "fix-images" }
