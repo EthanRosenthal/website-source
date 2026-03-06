@@ -3,10 +3,10 @@ This repository is the source code for my personal website located at [ethanrose
 
 ## Converting Notebooks to Hugo Markdown
 
-Install this repo's Python package with poetry:
+Install this repo's Python package with `uv``:
 
 ```commandline
-poetry install
+uv sync
 ```
 
 This will install my fork of [nb_hugo_exporter](https://github.com/jbandlow/nb_hugo_exporter).
@@ -41,7 +41,7 @@ Add a `hugo` section to the notebook metadata with the following tags. You can a
 Convert the jupyter notebook to hugo-compatible markdown, e.g.
 
 ```bash
-python -m nbconvert notebooks/2018-12-07-spacecutter-ordinal-regression.ipynb --to hugo --output-dir content/blog/spacecutter-ordinal-regression
+uv run python -m nbconvert notebooks/2018-12-07-spacecutter-ordinal-regression.ipynb --to hugo --output-dir content/blog/spacecutter-ordinal-regression
 ```
 
 Deal with the inevitable `katex`/`latex` issues that arise :(
